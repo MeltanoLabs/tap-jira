@@ -35,10 +35,14 @@ class Taptap-jira-sdk(Tap):
             description="The earliest record date to sync",
         ),
         th.Property(
-            "api_url",
+            "api_version",
             th.StringType,
-            default="https://api.mysample.com",
-            description="The url for the API service",
+            description="The Jira API version",
+        ),
+        th.Property(
+            "domain",
+            th.StringType,
+            description="The domain name for the API service",
         ),
     ).to_dict()
 
@@ -49,8 +53,8 @@ class Taptap-jira-sdk(Tap):
             A list of discovered streams.
         """
         return [
-            streams.GroupsStream(self),
             streams.UsersStream(self),
+            streams.FieldStream(self),
         ]
 
 

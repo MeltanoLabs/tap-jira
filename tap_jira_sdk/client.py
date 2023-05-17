@@ -20,9 +20,10 @@ class tap-jira-sdkStream(RESTStream):
 
     @property
     def url_base(self) -> str:
-        """Return the API URL root, configurable via tap settings."""
-        # TODO: hardcode a value here, or retrieve it from self.config
-        return "https://api.mysample.com"
+        domain = self.config.get("domain", "")
+        version = self.config.get("api_version", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/2"#.format(domain, version)
+        return base_url
 
     records_jsonpath = "$[*]"  # Or override `parse_response`.
 
