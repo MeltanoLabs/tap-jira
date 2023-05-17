@@ -20,8 +20,8 @@ class tap-jira-sdkStream(RESTStream):
 
     @property
     def url_base(self) -> str:
-        domain = self.config.get("domain", "")
-        version = self.config.get("api_version", "")
+        #domain = self.config.get("domain", "")
+        #version = self.config.get("api_version", "")
         base_url = "https://ryan-miranda.atlassian.net:443/rest/api/2"#.format(domain, version)
         return base_url
 
