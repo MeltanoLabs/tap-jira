@@ -56,6 +56,9 @@ class TapJira(Tap):
             #streams.UsersStream(self),
             streams.FieldStream(self),
             streams.ServerInfoStream(self),
+            streams.IssueTypeStream(self),
+            streams.ProjectStreamStream(self),
+            streams.StatusStreamStream(self),
         ]
 
 
