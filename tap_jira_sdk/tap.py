@@ -9,7 +9,7 @@ from singer_sdk import typing as th  # JSON schema typing helpers
 from tap_jira_sdk import streams
 
 
-class Taptap-jira-sdk(Tap):
+class TapJira(Tap):
     """tap-jira-sdk tap class."""
 
     name = "tap-jira-sdk"
@@ -53,10 +53,11 @@ class Taptap-jira-sdk(Tap):
             A list of discovered streams.
         """
         return [
-            streams.UsersStream(self),
+            #streams.UsersStream(self),
             streams.FieldStream(self),
+            streams.ServerInfoStream(self),
         ]
 
 
 if __name__ == "__main__":
-    Taptap-jira-sdk.cli()
+    TapJira.cli()
