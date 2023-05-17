@@ -36,7 +36,7 @@ class UsersStream(tap-jira-sdkStream):
         Property("accountType", StringType),
         Property("avatarUrls", StringType),
         Property("displayName", StringType),
-        Property("active", StringType),
+        Property("active", BooleanType),
         Property("timeZone", StringType),
         Property("locale", StringType),
         Property("groups", StringType),
@@ -94,7 +94,7 @@ class FieldStream(tap-jira-sdkStream):
     """Define custom stream."""
 
     columns = """
-                 id, key, name, untranslatedName, custom, orderable, navigate, searchable, clauseNames, schema
+                 id, key, name, untranslatedName, custom, orderable, navigate, searchable, clauseNames, schema, array
               """
 
     name = "field"
@@ -108,7 +108,8 @@ class FieldStream(tap-jira-sdkStream):
         Property("key", StringType),
         Property("name", StringType),
         Property("untranslatedname", StringType),
-        Property("custom", StringType),
+        Property("custom", BooleanType),
+        Property("array", BooleanType),
         Property("orderable", StringType),
         Property("navigate", StringType),
         Property("searchable", StringType),
@@ -177,9 +178,9 @@ class ServerInfoStream(tap-jira-sdkStream):
     schema = PropertiesList(
         Property("baseUrl", StringType),
         Property("version", StringType),
-        Property("versionNumbers", StringType),
+        Property("versionNumbers", ArrayType),
         Property("deploymentType", StringType),
-        Property("buildNumber", StringType),
+        Property("buildNumber", IntegerType),
         Property("buildDate", StringType),
         Property("serverTime", StringType),
         Property("scmInfo", StringType),
@@ -249,14 +250,14 @@ class IssueTypeStream(tap-jira-sdkStream):
 
     schema = PropertiesList(
         Property("self", StringType),
-        Property("id", StringType),
+        Property("id", IntegerType),
         Property("description", StringType),
         Property("iconUrl", StringType),
         Property("name", StringType),
         Property("untranslatedName", StringType),
         Property("subtask", StringType),
-        Property("avatarId", StringType),
-        Property("hierarchyLevel", StringType),
+        Property("avatarId", IntegerType),
+        Property("hierarchyLevel", IntegerType),
         Property("scope", StringType),
 
 
@@ -327,7 +328,7 @@ class StatusStream(tap-jira-sdkStream):
         Property("iconUrl", StringType),
         Property("name", StringType),
         Property("untranslatedName", StringType),
-        Property("id", StringType),
+        Property("id", IntegerType),
         Property("statusCategory", StringType)
         Property("scope", StringType),
 
@@ -396,12 +397,12 @@ class ProjectStream(tap-jira-sdkStream):
     schema = PropertiesList(
         Property("expand", StringType),
         Property("self", StringType),
-        Property("id", StringType),
+        Property("id", IntegerType),
         Property("key", StringType),
         Property("name", StringType),
         Property("avatarUrls", StringType),
         Property("projectTypeKey", StringType),
-        Property("simplified", StringType)
+        Property("simplified", BooleanType)
         Property("style", StringType),
         Property("isPrivate", StringType),
         Property("properties", StringType),
