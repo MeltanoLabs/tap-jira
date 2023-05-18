@@ -19,15 +19,9 @@ class TapJira(Tap):
         th.Property(
             "auth_token",
             th.StringType,
-            required=True,
+            #required=True,
             secret=True,  # Flag config as protected.
             description="The token to authenticate against the API service",
-        ),
-        th.Property(
-            "project_ids",
-            th.ArrayType(th.StringType),
-            required=True,
-            description="Project IDs to replicate",
         ),
         th.Property(
             "start_date",
@@ -46,7 +40,7 @@ class TapJira(Tap):
         ),
     ).to_dict()
 
-    def discover_streams(self) -> list[streams.tap-jira-sdkStream]:
+    def discover_streams(self) -> list[streams.JiraStream]:
         """Return a list of discovered streams.
 
         Returns:
@@ -57,8 +51,8 @@ class TapJira(Tap):
             streams.FieldStream(self),
             streams.ServerInfoStream(self),
             streams.IssueTypeStream(self),
-            streams.ProjectStreamStream(self),
-            streams.StatusStreamStream(self),
+            streams.ProjectStream(self),
+            streams.StatusStream(self),
         ]
 
 
