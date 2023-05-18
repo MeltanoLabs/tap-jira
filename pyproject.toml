@@ -52,4 +52,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 # CLI declaration
-tap-jira-sdk = 'tap_jira_sdk.tap:Taptap-jira-sdk.cli'
+tap-jira-sdk = 'tap_jira_sdk.tap:TapJira.cli'

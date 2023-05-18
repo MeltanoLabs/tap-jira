@@ -9,7 +9,7 @@ from singer_sdk import typing as th  # JSON schema typing helpers
 from tap_jira_sdk import streams
 
 
-class Taptap-jira-sdk(Tap):
+class TapJira(Tap):
     """tap-jira-sdk tap class."""
 
     name = "tap-jira-sdk"
@@ -19,15 +19,9 @@ class Taptap-jira-sdk(Tap):
         th.Property(
             "auth_token",
             th.StringType,
-            required=True,
+            #required=True,
             secret=True,  # Flag config as protected.
             description="The token to authenticate against the API service",
-        ),
-        th.Property(
-            "project_ids",
-            th.ArrayType(th.StringType),
-            required=True,
-            description="Project IDs to replicate",
         ),
         th.Property(
             "start_date",
@@ -35,24 +29,42 @@ class Taptap-jira-sdk(Tap):
             description="The earliest record date to sync",
         ),
         th.Property(
-            "api_url",
+            "api_version",
             th.StringType,
-            default="https://api.mysample.com",
-            description="The url for the API service",
+            description="The Jira API version",
+        ),
+        th.Property(
+            "domain",
+            th.StringType,
+            description="The domain name for the API service",
+        ),
+        th.Property(
+            "username",
+            th.StringType,
+            description="The Jira API username",
+        ),
+        th.Property(
+            "password",
+            th.StringType,
+            description="The Jira API password",
         ),
     ).to_dict()
 
-    def discover_streams(self) -> list[streams.tap-jira-sdkStream]:
+    def discover_streams(self) -> list[streams.JiraStream]:
         """Return a list of discovered streams.
 
         Returns:
             A list of discovered streams.
         """
         return [
-            streams.GroupsStream(self),
             streams.UsersStream(self),
+            streams.FieldStream(self),
+            streams.ServerInfoStream(self),
+            streams.IssueTypeStream(self),
+            streams.ProjectStream(self),
+            streams.StatusStream(self),
         ]
 
 
 if __name__ == "__main__":
-    Taptap-jira-sdk.cli()
+    TapJira.cli()
