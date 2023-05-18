@@ -27,8 +27,8 @@ class UsersStream(JiraStream):
     name = "user"
     path = "/user?accountId=62851352222d36006fb739dc"
     primary_keys = ["accountId"]
-    replication_key = "accountId"
-    replication_method = "incremental"
+    #replication_key = "accountId"
+    #replication_method = "incremental"
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -100,8 +100,8 @@ class FieldStream(JiraStream):
     name = "field"
     path = "/field"
     primary_keys = ["id"]
-    replication_key = "LastModifiedDate"
-    replication_method = "incremental"
+    #replication_key = "LastModifiedDate"
+    #replication_method = "incremental"
 
     schema = PropertiesList(
         Property("id", StringType),
@@ -172,8 +172,8 @@ class ServerInfoStream(JiraStream):
     name = "serverInfo"
     path = "/serverInfo"
     primary_keys = ["baseUrl"]
-    replication_key = "serverTime"
-    replication_method = "incremental"
+    #replication_key = "serverTime"
+    #replication_method = "incremental"
 
     schema = PropertiesList(
         Property("baseUrl", StringType),
@@ -245,8 +245,8 @@ class IssueTypeStream(JiraStream):
     name = "IssueType"
     path = "/issuetype"
     primary_keys = ["id"]
-    replication_key = "self"
-    replication_method = "incremental"
+    #replication_key = "self"
+    #replication_method = "incremental"
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -319,8 +319,8 @@ class StatusStream(JiraStream):
     name = "Status"
     path = "/status"
     primary_keys = ["id"]
-    replication_key = "self"
-    replication_method = "incremental"
+    #replication_key = "self"
+    #replication_method = "incremental"
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -391,8 +391,8 @@ class ProjectStream(JiraStream):
     name = "Project"
     path = "/project"
     primary_keys = ["id"]
-    replication_key = "self"
-    replication_method = "incremental"
+    #replication_key = "self"
+    #replication_method = "incremental"
 
     schema = PropertiesList(
         Property("expand", StringType),
