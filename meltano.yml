@@ -17,7 +17,9 @@ plugins:
       start_date: '2023-01-01T00:00:00Z'
     settings:
     - name: username
+      value: ${TAP_JIRA_USERNAME}
     - name: password
+      value: ${TAP_JIRA_PASSWORD}
       kind: password
     - name: start_date
       value: '2010-01-01T00:00:00Z'
