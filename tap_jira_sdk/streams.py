@@ -69,26 +69,6 @@ class UsersStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("records") is not None:
-            results = resp_json["records"]
-        else:
-            results = resp_json
-
-        yield from results
 
 class FieldStream(JiraStream):
     """Define custom stream."""
