@@ -49,10 +49,10 @@ class TapJira(Tap):
         return [
             #streams.UsersStream(self),
             streams.FieldStream(self),
-            #streams.ServerInfoStream(self),
+            streams.ServerInfoStream(self),
             streams.IssueTypeStream(self),
-            #streams.ProjectStream(self),
-            #streams.StatusStream(self),
+            streams.ProjectStream(self),
+            streams.StatusStream(self),
         ]
 
 
