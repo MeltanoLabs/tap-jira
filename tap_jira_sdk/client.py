@@ -15,7 +15,7 @@ _Auth = Callable[[requests.PreparedRequest], requests.PreparedRequest]
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
 
-class tap-jira-sdkStream(RESTStream):
+class JiraStream(RESTStream):
     """tap-jira-sdk stream class."""
 
     @property

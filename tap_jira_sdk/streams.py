@@ -6,7 +6,7 @@ from pathlib import Path
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
 
-from tap_jira_sdk.client import tapJirasdkStream
+from tap_jira_sdk.client import JiraStream
 
 PropertiesList = th.PropertiesList
 Property = th.Property
@@ -17,7 +17,7 @@ ArrayType = th.ArrayType
 BooleanType = th.BooleanType
 IntegerType = th.IntegerType
 
-class UsersStream(tap-jira-sdkStream):
+class UsersStream(JiraStream):
     """Define custom stream."""
 
     columns = """
@@ -90,7 +90,7 @@ class UsersStream(tap-jira-sdkStream):
 
         yield from results
 
-class FieldStream(tap-jira-sdkStream):
+class FieldStream(JiraStream):
     """Define custom stream."""
 
     columns = """
@@ -162,7 +162,7 @@ class FieldStream(tap-jira-sdkStream):
             results = resp_json
 
         yield from results
-class ServerInfoStream(tap-jira-sdkStream):
+class ServerInfoStream(JiraStream):
     """Define custom stream."""
 
     columns = """
@@ -178,7 +178,7 @@ class ServerInfoStream(tap-jira-sdkStream):
     schema = PropertiesList(
         Property("baseUrl", StringType),
         Property("version", StringType),
-        Property("versionNumbers", ArrayType),
+        Property("versionNumbers", StringType),
         Property("deploymentType", StringType),
         Property("buildNumber", IntegerType),
         Property("buildDate", StringType),
@@ -235,7 +235,7 @@ class ServerInfoStream(tap-jira-sdkStream):
 
         yield from results
 
-class IssueTypeStream(tap-jira-sdkStream):
+class IssueTypeStream(JiraStream):
     """Define custom stream."""
 
     columns = """
@@ -309,7 +309,7 @@ class IssueTypeStream(tap-jira-sdkStream):
         yield from results
 
 
-class StatusStream(tap-jira-sdkStream):
+class StatusStream(JiraStream):
     """Define custom stream."""
 
     columns = """
@@ -329,7 +329,7 @@ class StatusStream(tap-jira-sdkStream):
         Property("name", StringType),
         Property("untranslatedName", StringType),
         Property("id", IntegerType),
-        Property("statusCategory", StringType)
+        Property("statusCategory", StringType),
         Property("scope", StringType),
 
 
@@ -381,7 +381,7 @@ class StatusStream(tap-jira-sdkStream):
         yield from results
 
 
-class ProjectStream(tap-jira-sdkStream):
+class ProjectStream(JiraStream):
     """Define custom stream."""
 
     columns = """
@@ -402,7 +402,7 @@ class ProjectStream(tap-jira-sdkStream):
         Property("name", StringType),
         Property("avatarUrls", StringType),
         Property("projectTypeKey", StringType),
-        Property("simplified", BooleanType)
+        Property("simplified", BooleanType),
         Property("style", StringType),
         Property("isPrivate", StringType),
         Property("properties", StringType),
