@@ -31,7 +31,7 @@ plugins:
     variant: hotgluexyz
     pip_url: git+https://github.com/hotgluexyz/target-csv.git@0.3.3
     config:
-      destination_path: /Users/neilgorman/Documents/GitHub/tap-linkedin-sdk/output
+      destination_path: $MELTANO_PROJECT_ROOT/output
   - name: target-snowflake
     variant: transferwise
     pip_url: pipelinewise-target-snowflake
