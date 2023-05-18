@@ -38,6 +38,17 @@ class TapJira(Tap):
             th.StringType,
             description="The domain name for the API service",
         ),
+        th.Property(
+            "username",
+            th.StringType,
+            description="The username for Jira",
+        ),
+        th.Property(
+            "password",
+            th.StringType,
+            description="The password for Jira",
+        ),
+
     ).to_dict()
 
     def discover_streams(self) -> list[streams.JiraStream]:
@@ -49,10 +60,10 @@ class TapJira(Tap):
         return [
             #streams.UsersStream(self),
             streams.FieldStream(self),
-            streams.ServerInfoStream(self),
-            streams.IssueTypeStream(self),
-            streams.ProjectStream(self),
-            streams.StatusStream(self),
+            #streams.ServerInfoStream(self),
+            #streams.IssueTypeStream(self),
+            #streams.ProjectStream(self),
+            #streams.StatusStream(self),
         ]
 
 
