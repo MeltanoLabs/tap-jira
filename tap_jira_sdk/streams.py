@@ -6,7 +6,7 @@ from pathlib import Path
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
 
-from tap_jira_sdk.client import tap-jira-sdkStream
+from tap_jira_sdk.client import tapJirasdkStream
 
 PropertiesList = th.PropertiesList
 Property = th.Property
