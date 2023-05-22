@@ -25,7 +25,7 @@ class UsersStream(JiraStream):
               """
 
     name = "user"
-    path = "/user?accountId=62851352222d36006fb739dc"
+    path = "2/user?accountId=62851352222d36006fb739dc"
     primary_keys = ["accountId"]
     #replication_key = "accountId"
     #replication_method = "incremental"
@@ -48,7 +48,7 @@ class UsersStream(JiraStream):
 
     def get_url_params(
             self,
-            context: dict | None,  # noqa: ARG002
+            context: dict | None,
             next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
@@ -78,7 +78,7 @@ class FieldStream(JiraStream):
               """
 
     name = "field"
-    path = "/field"
+    path = "2/field"
     primary_keys = ["id"]
     #replication_key = "LastModifiedDate"
     #replication_method = "incremental"
@@ -101,7 +101,7 @@ class FieldStream(JiraStream):
 
     def get_url_params(
             self,
-            context: dict | None,  # noqa: ARG002
+            context: dict | None,
             next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
@@ -150,7 +150,7 @@ class ServerInfoStream(JiraStream):
               """
 
     name = "serverInfo"
-    path = "/serverInfo"
+    path = "2/serverInfo"
     primary_keys = ["baseUrl"]
     #replication_key = "serverTime"
     #replication_method = "incremental"
@@ -173,7 +173,7 @@ class ServerInfoStream(JiraStream):
 
     def get_url_params(
             self,
-            context: dict | None,  # noqa: ARG002
+            context: dict | None,
             next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
@@ -203,7 +203,7 @@ class IssueTypeStream(JiraStream):
               """
 
     name = "IssueType"
-    path = "/issuetype"
+    path = "2/issuetype"
     primary_keys = ["id"]
     #replication_key = "self"
     #replication_method = "incremental"
@@ -226,7 +226,7 @@ class IssueTypeStream(JiraStream):
 
     def get_url_params(
             self,
-            context: dict | None,  # noqa: ARG002
+            context: dict | None,
             next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
@@ -277,7 +277,7 @@ class StatusStream(JiraStream):
               """
 
     name = "Status"
-    path = "/status"
+    path = "2/status"
     primary_keys = ["id"]
     #replication_key = "self"
     #replication_method = "incremental"
@@ -298,7 +298,7 @@ class StatusStream(JiraStream):
 
     def get_url_params(
             self,
-            context: dict | None,  # noqa: ARG002
+            context: dict | None,
             next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
@@ -328,7 +328,7 @@ class ProjectStream(JiraStream):
               """
 
     name = "Project"
-    path = "/project"
+    path = "2/project"
     primary_keys = ["id"]
     #replication_key = "self"
     #replication_method = "incremental"
@@ -354,7 +354,7 @@ class ProjectStream(JiraStream):
 
     def get_url_params(
             self,
-            context: dict | None,  # noqa: ARG002
+            context: dict | None,
             next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
@@ -405,7 +405,7 @@ class IssueStream(JiraStream):
               """
 
     name = "Issue"
-    path = "/issue/OUT-17"
+    path = "2/issue/OUT-17"
     primary_keys = ["id"]
     #replication_key = "self"
     #replication_method = "incremental"
@@ -421,7 +421,94 @@ class IssueStream(JiraStream):
 
     def get_url_params(
             self,
-            context: dict | None,  # noqa: ARG002
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key
+
+        return params
+
+class SearchStream(JiraStream):
+    """Define custom stream."""
+
+    columns = """
+                 expand, startAt, maxResults, total, issues
+              """
+
+    name = "Search"
+    path = "2/search"
+    primary_keys = ["total"]
+    #replication_key = "self"
+    #replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("expand", StringType),
+        Property("startAt", IntegerType),
+        Property("maxResults", IntegerType),
+        Property("total", IntegerType),
+        Property("issues", StringType),
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key
+
+        return params
+
+
+class PermissionStream(JiraStream):
+    """Define custom stream."""
+
+    columns = """
+                 permissions
+              """
+
+    name = "Permission"
+    path = "3/permissions"
+    primary_keys = ["permissions"]
+    #replication_key = "self"
+    #replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("permissions", StringType),
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
             next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
