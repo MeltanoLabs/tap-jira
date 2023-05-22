@@ -395,3 +395,49 @@ class ProjectStream(JiraStream):
             results = resp_json
 
         yield from results
+
+
+class IssueStream(JiraStream):
+    """Define custom stream."""
+
+    columns = """
+                 expand, id, self, key, fields
+              """
+
+    name = "Issue"
+    path = "/issue/OUT-17"
+    primary_keys = ["id"]
+    #replication_key = "self"
+    #replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("expand", StringType),
+        Property("id", IntegerType),
+        Property("self", StringType),
+        Property("key", StringType),
+        Property("fields", StringType),
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,  # noqa: ARG002
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key
+
+        return params
