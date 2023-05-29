@@ -22,7 +22,7 @@ class JiraStream(RESTStream):
     def url_base(self) -> str:
         #domain = self.config.get("domain", "")
         #version = self.config.get("api_version", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/2"#.format(domain, version)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/"#.format(domain, version)
         return base_url
 
     records_jsonpath = "$[*]"  # Or override `parse_response`.
@@ -74,7 +74,7 @@ class JiraStream(RESTStream):
 
     def get_url_params(
         self,
-        context: dict | None,  # noqa: ARG002
+        context: dict | None,
         next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
@@ -96,8 +96,8 @@ class JiraStream(RESTStream):
 
     def prepare_request_payload(
         self,
-        context: dict | None,  # noqa: ARG002
-        next_page_token: Any | None,  # noqa: ARG002
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict | None:
         """Prepare the data payload for the REST API request.
 
@@ -128,7 +128,7 @@ class JiraStream(RESTStream):
     def post_process(
         self,
         row: dict,
-        context: dict | None = None,  # noqa: ARG002
+        context: dict | None = None,
     ) -> dict | None:
         """As needed, append or transform raw data to match expected structure.
 
