@@ -20,9 +20,8 @@ class JiraStream(RESTStream):
 
     @property
     def url_base(self) -> str:
-        #domain = self.config.get("domain", "")
-        #version = self.config.get("api_version", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/"#.format(domain, version)
+        version = self.config.get("api_version_2", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
         return base_url
 
     records_jsonpath = "$[*]"  # Or override `parse_response`.
