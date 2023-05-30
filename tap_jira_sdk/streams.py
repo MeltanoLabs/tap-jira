@@ -18,14 +18,13 @@ BooleanType = th.BooleanType
 IntegerType = th.IntegerType
 
 class UsersStream(JiraStream):
-    """Define custom stream."""
 
     columns = """
                  self, accountId, accountType, avatarUrls, displayName, active, timeZone, locale, groups, applicationRoles, expand
               """
 
     name = "user"
-    path = "2/user?accountId=62851352222d36006fb739dc"
+    path = "/user?accountId=62851352222d36006fb739dc"
     primary_keys = ["accountId"]
     #replication_key = "accountId"
     #replication_method = "incremental"
@@ -42,7 +41,6 @@ class UsersStream(JiraStream):
         Property("groups", StringType),
         Property("applicationRoles", StringType),
         Property("expand", StringType),
-
 
     ).to_dict()
 
@@ -71,14 +69,13 @@ class UsersStream(JiraStream):
 
 
 class FieldStream(JiraStream):
-    """Define custom stream."""
 
     columns = """
                  id, key, name, untranslatedName, custom, orderable, navigate, searchable, clauseNames, schema, array
               """
 
     name = "field"
-    path = "2/field"
+    path = "/field"
     primary_keys = ["id"]
     #replication_key = "LastModifiedDate"
     #replication_method = "incremental"
@@ -95,7 +92,6 @@ class FieldStream(JiraStream):
         Property("searchable", StringType),
         Property("clauseNames", StringType),
         Property("schema", StringType),
-
 
     ).to_dict()
 
@@ -143,15 +139,15 @@ class FieldStream(JiraStream):
 
         yield from results
 
+
 class ServerInfoStream(JiraStream):
-    """Define custom stream."""
 
     columns = """
                  baseUrl, version, versionNumbers, deploymentType, buildNumber, buildDate, serverTime, scmInfo, serverTitle, defaultLocale
               """
 
     name = "serverInfo"
-    path = "2/serverInfo"
+    path = "/serverInfo"
     primary_keys = ["baseUrl"]
     #replication_key = "serverTime"
     #replication_method = "incremental"
@@ -167,8 +163,6 @@ class ServerInfoStream(JiraStream):
         Property("scmInfo", StringType),
         Property("serverTitle", StringType),
         Property("defaultLocale", StringType),
-
-
 
     ).to_dict()
 
@@ -197,14 +191,13 @@ class ServerInfoStream(JiraStream):
     
 
 class IssueTypeStream(JiraStream):
-    """Define custom stream."""
 
     columns = """
                  self, id, description, iconUrl, name, untranslatedName, subtask, avatarId, hierarchyLevel, scope
               """
 
     name = "IssueType"
-    path = "2/issuetype"
+    path = "/issuetype"
     primary_keys = ["id"]
     #replication_key = "self"
     #replication_method = "incremental"
@@ -220,8 +213,6 @@ class IssueTypeStream(JiraStream):
         Property("avatarId", IntegerType),
         Property("hierarchyLevel", IntegerType),
         Property("scope", StringType),
-
-
 
     ).to_dict()
 
@@ -278,7 +269,7 @@ class StatusStream(JiraStream):
               """
 
     name = "Status"
-    path = "2/status"
+    path = "/status"
     primary_keys = ["id"]
     #replication_key = "self"
     #replication_method = "incremental"
@@ -322,14 +313,13 @@ class StatusStream(JiraStream):
 
 
 class ProjectStream(JiraStream):
-    """Define custom stream."""
 
     columns = """
                  expand, self, id, key, name, avatarUrls, projectTypeKey, simplified, style, isPrivate, properties, entityId, uuid
               """
 
     name = "Project"
-    path = "2/project"
+    path = "/project"
     primary_keys = ["id"]
     #replication_key = "self"
     #replication_method = "incremental"
@@ -348,8 +338,6 @@ class ProjectStream(JiraStream):
         Property("properties", StringType),
         Property("entityId", StringType),
         Property("uuid", StringType),
-
-
 
     ).to_dict()
 
@@ -399,7 +387,6 @@ class ProjectStream(JiraStream):
 
 
 class IssueStream(JiraStream):
-    """Define custom stream."""
 
     columns = """
                  expand, id, self, key, fields
@@ -445,10 +432,9 @@ class IssueStream(JiraStream):
     
     
 class SearchStream(JiraStream):
-    """Define custom stream."""
 
     name = "Search"
-    path = "2/search"
+    path = "/search"
     primary_keys = ["id"]
     replication_key = "updated"
     replication_method = "incremental"
@@ -520,14 +506,13 @@ class SearchStream(JiraStream):
 
 
 class PermissionStream(JiraStream):
-    """Define custom stream."""
 
     columns = """
                  permissions
               """
 
     name = "Permission"
-    path = "3/permissions"
+    path = "/permissions"
     primary_keys = ["permissions"]
     #replication_key = "self"
     #replication_method = "incremental"
@@ -536,6 +521,12 @@ class PermissionStream(JiraStream):
         Property("permissions", StringType),
 
     ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        version = self.config.get("api_version_3", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        return base_url
 
     def get_url_params(
             self,
@@ -564,7 +555,7 @@ class PermissionStream(JiraStream):
 class ProjectRoleStream(JiraStream):
 
     name = "projectrole"
-    path = "3/role"
+    path = "/role"
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
@@ -578,6 +569,12 @@ class ProjectRoleStream(JiraStream):
         Property("actors", ArrayType(StringType)),
 
     ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        version = self.config.get("api_version_3", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        return base_url
 
     def get_url_params(
             self,
@@ -606,7 +603,7 @@ class ProjectRoleStream(JiraStream):
 class PriorityStream(JiraStream):
 
     name = "priority"
-    path = "3/priority"
+    path = "/priority"
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
@@ -620,6 +617,12 @@ class PriorityStream(JiraStream):
         Property("id", IntegerType),
 
     ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        version = self.config.get("api_version_3", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        return base_url
 
     def get_url_params(
             self,
@@ -644,4 +647,297 @@ class PriorityStream(JiraStream):
 
         return params
     
+
+class PermissionHolderStream(JiraStream):
+
+    name = "permissionholder"
+    path = "/permissionscheme"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", IntegerType),
+        Property("self", StringType),
+        Property("holder", StringType),
+        Property("permission", StringType),
+
+    ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        version = self.config.get("api_version_3", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        return base_url
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key
+
+        return params
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("permissionSchemes") is not None:
+            results = resp_json["permissionSchemes"][0].get("permissions")
+        else:
+            results = resp_json
+
+        yield from results
+
+
+class SprintStream(JiraStream):
+
+    name = "sprint"
+    path = "/sprint"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", IntegerType),
+        Property("self", StringType),
+        Property("state", StringType),
+        Property("name", StringType),
+        Property("startDate", StringType),
+        Property("endDate", StringType),
+        Property("completeDate", StringType),
+        Property("originBoardId", StringType),
+        Property("goal", StringType),
+
+    ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        version = self.config.get("agile_version", "")
+        board_id = self.config.get("board_id", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/{}/board/{}".format(version, board_id)
+        return base_url
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key
+
+        return params
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("values") is not None:
+            results = resp_json["values"]
+        else:
+            results = resp_json
+
+        yield from results
+
+
+class UserGroupJiraSoftwareStream(JiraStream):
+    
+    group_name = "jira-software-users"
+    name = "usergroupjirasoftware"
+    path = "/group/member?groupname={}".format(group_name)
+    #primary_keys = ["user_id"]
+    replication_key = "user_id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("self", StringType),
+        Property("user_id", StringType),
+        Property("avatarUrls", StringType),
+        Property("displayName", StringType),
+        Property("active", StringType),
+        Property("timeZone", StringType),
+        Property("accountType", StringType),
+        Property("group_name", StringType),
+
+    ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        version = self.config.get("api_version_3", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        return base_url
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key
+
+        return params
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif len(resp_json.get("values")) !=0:
+            results = resp_json["values"]    
+        else:
+            results = [resp_json]
+
+        yield from results
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+
+        try:
+            row["group_name"] = self.group_name
+            row["user_id"] = row["accountId"]
+        except:
+            pass
         
+        return super().post_process(row, context)
+    
+
+class UserGroupConfluenceStream(UserGroupJiraSoftwareStream):
+    
+    group_name = "confluence-users"
+    name = "usergroupconfluence"
+    path = "/group/member?groupname={}".format(group_name)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+
+        try:
+            row["group_name"] = self.group_name
+            row["user_id"] = row["accountId"]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+    
+
+class UserGroupSiteAdminsStream(UserGroupJiraSoftwareStream):
+    
+    group_name = "site-admins"
+    name = "usergroupsiteadmins"
+    path = "/group/member?groupname={}".format(group_name)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+
+        try:
+            row["group_name"] = self.group_name
+            row["user_id"] = row["accountId"]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+    
+
+class UserGroupTrustedStream(UserGroupJiraSoftwareStream):
+    
+    group_name = "trusted-users-c10b9164-2085-42b7-96c3-2ec6c1102bad"
+    name = "usergroup"
+    path = "/group/member?groupname={}".format(group_name)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+
+        try:
+            row["group_name"] = self.group_name
+            row["user_id"] = row["accountId"]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+    
+    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        jira_software = UserGroupJiraSoftwareStream(
+            self._tap, schema={"properties": {}}
+        )
+        confluence = UserGroupConfluenceStream(
+            self._tap, schema={"properties": {}}
+        )
+        site_admin = UserGroupSiteAdminsStream(
+            self._tap, schema={"properties": {}}
+        )
+        jira_records = list(jira_software.get_records(context)) + list(confluence.get_records(context)) + list(site_admin.get_records(context)) + list(super().get_records(context))
+            
+        return jira_records
+    
+
+    
+    
+        
+       
+    
+    
