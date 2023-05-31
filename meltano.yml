@@ -32,7 +32,9 @@ plugins:
     - name: agile_version
       value: '1.0'
     - name: board_id
-      value: '63'          
+      value: '63'
+    - name: account_id
+      value:  ${TAP_JIRA_ACCOUNT_ID}            
   loaders:
   - name: target-jsonl
     variant: andyh1203
