@@ -24,7 +24,7 @@ class UsersStream(JiraStream):
               """
 
     name = "user"
-    path = "/user?accountId=62851352222d36006fb739dc"
+    path = "/user"
     primary_keys = ["accountId"]
     #replication_key = "accountId"
     #replication_method = "incremental"
@@ -58,12 +58,17 @@ class UsersStream(JiraStream):
         Returns:
             A dictionary of URL query parameters.
         """
+        
+        account_id = self.config.get("account_id", "")
+
         params: dict = {}
         if next_page_token:
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
+
+        params["accountId"] = account_id    
 
         return params
 
@@ -386,24 +391,95 @@ class ProjectStream(JiraStream):
         yield from results
 
 
-class IssueStream(JiraStream):
+class IssueOut1Stream(JiraStream):
 
-    columns = """
-                 expand, id, self, key, fields
-              """
+    issues_out = "OUT-1"
 
-    name = "Issue"
-    path = "2/issue/OUT-17"
+    name = "issueout1"
+    path = "/issue/{}".format(issues_out)
     primary_keys = ["id"]
-    #replication_key = "self"
-    #replication_method = "incremental"
+    replication_key = "updated"
+    replication_method = "incremental"
 
     schema = PropertiesList(
-        Property("expand", StringType),
-        Property("id", IntegerType),
-        Property("self", StringType),
+        Property("statuscategorychangedate", StringType),
+        Property("issuetype", StringType),
+        Property("timespent", StringType),
+        Property("customfield_10030", StringType),
+        Property("customfield_10031", StringType),
+        Property("project", StringType),
+        Property("customfield_10032", ArrayType(StringType)),
+        Property("fixVersions", ArrayType(StringType)),
+        Property("customfield_10033", StringType),
+        Property("customfield_10034", StringType),
+        Property("aggregatetimespent", StringType),
+        Property("customfield_10035", StringType),
+        Property("resolution", StringType),
+        Property("customfield_10036", StringType),
+        Property("customfield_10037", StringType),
+        Property("resolutiondate", StringType),
+        Property("workratio", StringType),
+        Property("watches", StringType),
+        Property("issuerestriction", StringType),
+        Property("lastViewed", StringType),
+        Property("created", StringType),
+        Property("customfield_10020", StringType),
+        Property("customfield_10021", StringType),
+        Property("customfield_10022", StringType),
+        Property("customfield_10023", StringType),
+        Property("priority", StringType),
+        Property("customfield_10024", StringType),
+        Property("customfield_10025", StringType),
+        Property("labels", ArrayType(StringType)),
+        Property("customfield_10016", StringType),
+        Property("customfield_10017", StringType),
+        Property("customfield_10018", StringType),
+        Property("customfield_10019", StringType),
+        Property("timeestimate", StringType),
+        Property("aggregatetimeoriginalestimate", StringType),
+        Property("versions", ArrayType(StringType)),
+        Property("issuelinks", ArrayType(StringType)),
+        Property("assignee", StringType),
+        Property("updated", StringType),
+        Property("status", StringType),
+        Property("components", ArrayType(StringType)),
+        Property("timeoriginalestimate", StringType),
+        Property("description", StringType),
+        Property("customfield_10010", StringType),
+        Property("customfield_10014", StringType),
+        Property("timetracking", StringType),
+        Property("customfield_10015", StringType),
+        Property("customfield_10005", StringType),
+        Property("customfield_10006", StringType),
+        Property("customfield_10007", StringType),
+        Property("security", StringType),
+        Property("customfield_10008", StringType),
+        Property("aggregatetimeestimate", StringType),
+        Property("customfield_10009", StringType),
+        Property("attachment", ArrayType(StringType)),
+        Property("summary", StringType),
+        Property("creator", StringType),
+        Property("subtasks", ArrayType(StringType)),
+        Property("customfield_10041", StringType),
+        Property("reporter", StringType),
+        Property("customfield_10043", StringType),
+        Property("customfield_10044", StringType),
+        Property("aggregateprogress", StringType),
+        Property("customfield_10045", StringType),
+        Property("customfield_10001", StringType),
+        Property("customfield_10002", StringType),
+        Property("customfield_10003", StringType),
+        Property("customfield_10004", StringType),
+        Property("customfield_10038", StringType),
+        Property("customfield_10039", StringType),
+        Property("environment", StringType),
+        Property("duedate", StringType),
+        Property("progress", StringType),
+        Property("comment", StringType),
+        Property("votes", StringType),
+        Property("worklog", StringType),
         Property("key", StringType),
-        Property("fields", StringType),
+        Property("id", IntegerType),
 
     ).to_dict()
 
@@ -426,9 +502,549 @@ class IssueStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key
+            params["order_by"] = self.replication_key    
 
-        return params    
+        return params
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("fields") is not None:
+            results = [resp_json["fields"]]
+        else:
+            results = resp_json
+
+        yield from results
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut4Stream(IssueOut1Stream):
+
+    issues_out = "OUT-4"
+
+    name = "issueout4"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut5Stream(IssueOut1Stream):
+
+    issues_out = "OUT-5"
+
+    name = "issueout5"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut6Stream(IssueOut1Stream):
+
+    issues_out = "OUT-6"
+
+    name = "issueout6"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+    
+
+class IssueOut8Stream(IssueOut1Stream):
+
+    issues_out = "OUT-8"
+
+    name = "issueout8"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut9Stream(IssueOut1Stream):
+
+    issues_out = "OUT-9"
+
+    name = "issueout9"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut10Stream(IssueOut1Stream):
+
+    issues_out = "OUT-10"
+
+    name = "issueout10"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)        
+
+
+class IssueOut11Stream(IssueOut1Stream):
+
+    issues_out = "OUT-11"
+
+    name = "issuesout11"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut12Stream(IssueOut1Stream):
+
+    issues_out = "OUT-12"
+
+    name = "issueout12"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+    
+
+class IssueOut14Stream(IssueOut1Stream):
+
+    issues_out = "OUT-14"
+
+    name = "issueout14"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut15Stream(IssueOut1Stream):
+
+    issues_out = "OUT-15"
+
+    name = "issueout15"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut17Stream(IssueOut1Stream):
+
+    issues_out = "OUT-17"
+
+    name = "issueout17"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut18Stream(IssueOut1Stream):
+
+    issues_out = "OUT-18"
+
+    name = "issueout18"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut19Stream(IssueOut1Stream):
+
+    issues_out = "OUT-19"
+
+    name = "issueout19"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut20Stream(IssueOut1Stream):
+
+    issues_out = "OUT-20"
+
+    name = "issueout20"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut21Stream(IssueOut1Stream):
+
+    issues_out = "OUT-21"
+
+    name = "issueout21"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut22Stream(IssueOut1Stream):
+
+    issues_out = "OUT-22"
+
+    name = "issueout22"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut23Stream(IssueOut1Stream):
+
+    issues_out = "OUT-23"
+
+    name = "issueout23"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut24Stream(IssueOut1Stream):
+
+    issues_out = "OUT-24"
+
+    name = "issueout24"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut25Stream(IssueOut1Stream):
+
+    issues_out = "OUT-25"
+
+    name = "issueout25"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut26Stream(IssueOut1Stream):
+
+    issues_out = "OUT-26"
+
+    name = "issue"
+    path = "/issue/{}".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row.get("comment").get("self").split("/")[7]
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        issue_out1 = IssueOut1Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out4 = IssueOut4Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out5 = IssueOut5Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out6 = IssueOut6Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out8 = IssueOut8Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out9 = IssueOut9Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out10 = IssueOut10Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out11 = IssueOut11Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out12 = IssueOut12Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out14 = IssueOut14Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out15 = IssueOut15Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out17 = IssueOut17Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out18 = IssueOut18Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out19 = IssueOut19Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out20 = IssueOut20Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out21 = IssueOut21Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out22 = IssueOut22Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out23 = IssueOut23Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out24 = IssueOut24Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out25 = IssueOut25Stream(
+            self._tap, schema={"properties": {}}
+        )
+        issueout_records = list(issue_out1.get_records(context)) + list(issue_out4.get_records(context)) + list(issue_out5.get_records(context)) + list(issue_out6.get_records(context)) + list(issue_out8.get_records(context)) + list(issue_out9.get_records(context))+ list(issue_out10.get_records(context)) + list(issue_out11.get_records(context)) + list(issue_out12.get_records(context)) + list(issue_out14.get_records(context)) + list(issue_out15.get_records(context)) + list(issue_out17.get_records(context)) + list(issue_out18.get_records(context)) + list(issue_out19.get_records(context)) + list(issue_out20.get_records(context)) + list(issue_out21.get_records(context)) + list(issue_out22.get_records(context)) + list(issue_out23.get_records(context)) + list(issue_out24.get_records(context)) + list(issue_out25.get_records(context)) + list(super().get_records(context))
+            
+        return issueout_records                                                
     
     
 class SearchStream(JiraStream):
@@ -934,7 +1550,7 @@ class UserGroupTrustedStream(UserGroupJiraSoftwareStream):
             
         return jira_records
     
-
+    
     
     
         
