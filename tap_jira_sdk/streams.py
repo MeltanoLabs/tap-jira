@@ -8,6 +8,8 @@ from singer_sdk import typing as th  # JSON Schema typing helpers
 
 from tap_jira_sdk.client import JiraStream
 
+import json, requests
+
 PropertiesList = th.PropertiesList
 Property = th.Property
 ObjectType = th.ObjectType
@@ -16,6 +18,7 @@ StringType = th.StringType
 ArrayType = th.ArrayType
 BooleanType = th.BooleanType
 IntegerType = th.IntegerType
+role = {}
 
 class UsersStream(JiraStream):
 
@@ -480,6 +483,8 @@ class IssueOut1Stream(JiraStream):
         Property("worklog", StringType),
         Property("key", StringType),
         Property("id", IntegerType),
+        Property("editmeta", StringType),
+        Property("histories", StringType),
 
     ).to_dict()
 
@@ -502,7 +507,9 @@ class IssueOut1Stream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key    
+            params["order_by"] = self.replication_key
+            
+        params["expand"] = "editmeta,changelog"        
 
         return params
     
@@ -520,7 +527,9 @@ class IssueOut1Stream(JiraStream):
 
         if isinstance(resp_json, list):
             results = resp_json
-        elif resp_json.get("fields") is not None:
+        elif resp_json.get("fields") is not None: 
+            resp_json["fields"]["editmeta"] = resp_json.get("editmeta")
+            resp_json["fields"]["histories"] = resp_json.get("changelog").get("histories")
             results = [resp_json["fields"]]
         else:
             results = resp_json
@@ -1549,6 +1558,226 @@ class UserGroupTrustedStream(UserGroupJiraSoftwareStream):
         jira_records = list(jira_software.get_records(context)) + list(confluence.get_records(context)) + list(site_admin.get_records(context)) + list(super().get_records(context))
             
         return jira_records
+
+
+class ProjectRoleAdminActorStream(JiraStream):
+    
+    name = "projectroleadminactor"
+    path = None
+
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("self", StringType),
+        Property("name", StringType),
+        Property("id", StringType),
+        Property("description", StringType),
+        Property("actors", StringType),
+        Property("scope", StringType),
+
+    ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        version = self.config.get("api_version_3", "")
+        project_id = self.config.get("project_id", "")
+        admin = self.config.get("role_admin_id", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, admin)
+        return base_url
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params     
+    
+
+class ProjectRoleViewerActorStream(ProjectRoleAdminActorStream):
+    
+    name = "projectrolevieweractor"
+    path = None
+
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("self", StringType),
+        Property("name", StringType),
+        Property("id", StringType),
+        Property("description", StringType),
+        Property("actors", StringType),
+        Property("scope", StringType),
+
+    ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        version = self.config.get("api_version_3", "")
+        project_id = self.config.get("project_id", "")
+        viewer = self.config.get("role_viewer_id", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, viewer)
+        return base_url
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+
+
+class ProjectRoleMemberActorStream(ProjectRoleAdminActorStream):
+    
+    name = "projectrolememberactor"
+    path = None
+
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("self", StringType),
+        Property("name", StringType),
+        Property("id", StringType),
+        Property("description", StringType),
+        Property("actors", StringType),
+        Property("scope", StringType),
+
+    ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        version = self.config.get("api_version_3", "")
+        project_id = self.config.get("project_id", "")
+        member = self.config.get("role_member_id", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, member)
+        return base_url
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+
+
+class ProjectRoleAltasianActorStream(ProjectRoleAdminActorStream):
+    
+    name = "projectroleactor"
+    path = None
+
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("self", StringType),
+        Property("name", StringType),
+        Property("id", StringType),
+        Property("description", StringType),
+        Property("actors", StringType),
+        Property("scope", StringType),
+
+    ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        version = self.config.get("api_version_3", "")
+        project_id = self.config.get("project_id", "")
+        altasian = self.config.get("role_altasian_id", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, altasian)
+        return base_url
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+    
+    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        admin = ProjectRoleAdminActorStream(
+            self._tap, schema={"properties": {}}
+        )
+        viewer = ProjectRoleViewerActorStream(
+            self._tap, schema={"properties": {}}
+        )
+        member = ProjectRoleMemberActorStream(
+            self._tap, schema={"properties": {}}
+        )
+        role_records = list(admin.get_records(context)) + list(viewer.get_records(context)) + list(member.get_records(context)) + list(super().get_records(context))
+            
+        return role_records
+    
+
     
     
     
