@@ -22,6 +22,19 @@ role = {}
 
 class UsersStream(JiraStream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
+
     columns = """
                  self, accountId, accountType, avatarUrls, displayName, active, timeZone, locale, groups, applicationRoles, expand
               """
@@ -77,6 +90,19 @@ class UsersStream(JiraStream):
 
 
 class FieldStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
 
     columns = """
                  id, key, name, untranslatedName, custom, orderable, navigate, searchable, clauseNames, schema, array
@@ -150,6 +176,19 @@ class FieldStream(JiraStream):
 
 class ServerInfoStream(JiraStream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-server-info/#api-rest-api-3-serverinfo-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
+
     columns = """
                  baseUrl, version, versionNumbers, deploymentType, buildNumber, buildDate, serverTime, scmInfo, serverTitle, defaultLocale
               """
@@ -200,11 +239,24 @@ class ServerInfoStream(JiraStream):
 
 class IssueTypeStream(JiraStream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
+
     columns = """
                  self, id, description, iconUrl, name, untranslatedName, subtask, avatarId, hierarchyLevel, scope
               """
 
-    name = "IssueType"
+    name = "issuetype"
     path = "/issuetype"
     primary_keys = ["id"]
     #replication_key = "self"
@@ -270,13 +322,25 @@ class IssueTypeStream(JiraStream):
 
 
 class StatusStream(JiraStream):
-    """Define custom stream."""
+    
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-rest-api-3-statuses-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
 
     columns = """
                  self, description, iconUrl, name, untranslatedName, id, statusCategory, scope
               """
 
-    name = "Status"
+    name = "status"
     path = "/status"
     primary_keys = ["id"]
     #replication_key = "self"
@@ -322,11 +386,24 @@ class StatusStream(JiraStream):
 
 class ProjectStream(JiraStream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
+
     columns = """
                  expand, self, id, key, name, avatarUrls, projectTypeKey, simplified, style, isPrivate, properties, entityId, uuid
               """
 
-    name = "Project"
+    name = "project"
     path = "/project"
     primary_keys = ["id"]
     #replication_key = "self"
@@ -395,6 +472,20 @@ class ProjectStream(JiraStream):
 
 
 class IssueOut1Stream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
 
     issues_out = "OUT-1"
 
@@ -553,6 +644,20 @@ class IssueOut1Stream(JiraStream):
 
 class IssueOut4Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-4"
 
     name = "issueout4"
@@ -574,6 +679,20 @@ class IssueOut4Stream(IssueOut1Stream):
 
 
 class IssueOut5Stream(IssueOut1Stream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
 
     issues_out = "OUT-5"
 
@@ -597,6 +716,20 @@ class IssueOut5Stream(IssueOut1Stream):
 
 class IssueOut6Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-6"
 
     name = "issueout6"
@@ -618,6 +751,20 @@ class IssueOut6Stream(IssueOut1Stream):
     
 
 class IssueOut8Stream(IssueOut1Stream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
 
     issues_out = "OUT-8"
 
@@ -641,6 +788,20 @@ class IssueOut8Stream(IssueOut1Stream):
 
 class IssueOut9Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-9"
 
     name = "issueout9"
@@ -662,6 +823,20 @@ class IssueOut9Stream(IssueOut1Stream):
 
 
 class IssueOut10Stream(IssueOut1Stream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
 
     issues_out = "OUT-10"
 
@@ -685,6 +860,20 @@ class IssueOut10Stream(IssueOut1Stream):
 
 class IssueOut11Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-11"
 
     name = "issuesout11"
@@ -706,6 +895,20 @@ class IssueOut11Stream(IssueOut1Stream):
 
 
 class IssueOut12Stream(IssueOut1Stream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
 
     issues_out = "OUT-12"
 
@@ -729,6 +932,20 @@ class IssueOut12Stream(IssueOut1Stream):
 
 class IssueOut14Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-14"
 
     name = "issueout14"
@@ -750,6 +967,20 @@ class IssueOut14Stream(IssueOut1Stream):
 
 
 class IssueOut15Stream(IssueOut1Stream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
 
     issues_out = "OUT-15"
 
@@ -773,6 +1004,20 @@ class IssueOut15Stream(IssueOut1Stream):
 
 class IssueOut17Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-17"
 
     name = "issueout17"
@@ -794,6 +1039,20 @@ class IssueOut17Stream(IssueOut1Stream):
 
 
 class IssueOut18Stream(IssueOut1Stream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
 
     issues_out = "OUT-18"
 
@@ -817,6 +1076,20 @@ class IssueOut18Stream(IssueOut1Stream):
 
 class IssueOut19Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-19"
 
     name = "issueout19"
@@ -838,6 +1111,20 @@ class IssueOut19Stream(IssueOut1Stream):
 
 
 class IssueOut20Stream(IssueOut1Stream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
 
     issues_out = "OUT-20"
 
@@ -861,6 +1148,20 @@ class IssueOut20Stream(IssueOut1Stream):
 
 class IssueOut21Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-21"
 
     name = "issueout21"
@@ -882,6 +1183,20 @@ class IssueOut21Stream(IssueOut1Stream):
 
 
 class IssueOut22Stream(IssueOut1Stream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
 
     issues_out = "OUT-22"
 
@@ -905,6 +1220,20 @@ class IssueOut22Stream(IssueOut1Stream):
 
 class IssueOut23Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-23"
 
     name = "issueout23"
@@ -926,6 +1255,20 @@ class IssueOut23Stream(IssueOut1Stream):
 
 
 class IssueOut24Stream(IssueOut1Stream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
 
     issues_out = "OUT-24"
 
@@ -949,6 +1292,20 @@ class IssueOut24Stream(IssueOut1Stream):
 
 class IssueOut25Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-25"
 
     name = "issueout25"
@@ -971,6 +1328,20 @@ class IssueOut25Stream(IssueOut1Stream):
 
 class IssueOut26Stream(IssueOut1Stream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issues_out: issue out value
+    """
+
     issues_out = "OUT-26"
 
     name = "issue"
@@ -991,6 +1362,10 @@ class IssueOut26Stream(IssueOut1Stream):
         return super().post_process(row, context)
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        """
+        We have out values from OUT-1 to OUT-26, we have records for each out value
+        We can get records for each out value in a child class and then we can join them with get records function
+        """
         issue_out1 = IssueOut1Stream(
             self._tap, schema={"properties": {}}
         )
@@ -1058,7 +1433,20 @@ class IssueOut26Stream(IssueOut1Stream):
     
 class SearchStream(JiraStream):
 
-    name = "Search"
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
+
+    name = "search"
     path = "/search"
     primary_keys = ["id"]
     replication_key = "updated"
@@ -1132,11 +1520,24 @@ class SearchStream(JiraStream):
 
 class PermissionStream(JiraStream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
+
     columns = """
                  permissions
               """
 
-    name = "Permission"
+    name = "permission"
     path = "/permissions"
     primary_keys = ["permissions"]
     #replication_key = "self"
@@ -1178,6 +1579,19 @@ class PermissionStream(JiraStream):
     
 
 class ProjectRoleStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-role-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
 
     name = "projectrole"
     path = "/role"
@@ -1227,6 +1641,19 @@ class ProjectRoleStream(JiraStream):
 
 class PriorityStream(JiraStream):
 
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-priorities/#api-rest-api-3-priority-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
+
     name = "priority"
     path = "/priority"
     primary_keys = ["id"]
@@ -1274,6 +1701,19 @@ class PriorityStream(JiraStream):
     
 
 class PermissionHolderStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
 
     name = "permissionholder"
     path = "/permissionscheme"
@@ -1341,6 +1781,19 @@ class PermissionHolderStream(JiraStream):
 
 
 class SprintStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference/#sprint
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
 
     name = "sprint"
     path = "/sprint"
@@ -1414,6 +1867,19 @@ class SprintStream(JiraStream):
 
 
 class UserGroupJiraSoftwareStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
     
     group_name = "jira-software-users"
     name = "usergroupjirasoftware"
@@ -1496,6 +1962,19 @@ class UserGroupJiraSoftwareStream(JiraStream):
     
 
 class UserGroupConfluenceStream(UserGroupJiraSoftwareStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
     
     group_name = "confluence-users"
     name = "usergroupconfluence"
@@ -1513,6 +1992,19 @@ class UserGroupConfluenceStream(UserGroupJiraSoftwareStream):
     
 
 class UserGroupSiteAdminsStream(UserGroupJiraSoftwareStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
     
     group_name = "site-admins"
     name = "usergroupsiteadmins"
@@ -1530,6 +2022,19 @@ class UserGroupSiteAdminsStream(UserGroupJiraSoftwareStream):
     
 
 class UserGroupTrustedStream(UserGroupJiraSoftwareStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
     
     group_name = "trusted-users-c10b9164-2085-42b7-96c3-2ec6c1102bad"
     name = "usergroup"
@@ -1561,6 +2066,19 @@ class UserGroupTrustedStream(UserGroupJiraSoftwareStream):
 
 
 class ProjectRoleAdminActorStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
     
     name = "projectroleadminactor"
     path = None
@@ -1612,6 +2130,19 @@ class ProjectRoleAdminActorStream(JiraStream):
     
 
 class ProjectRoleViewerActorStream(ProjectRoleAdminActorStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
     
     name = "projectrolevieweractor"
     path = None
@@ -1663,6 +2194,19 @@ class ProjectRoleViewerActorStream(ProjectRoleAdminActorStream):
 
 
 class ProjectRoleMemberActorStream(ProjectRoleAdminActorStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
     
     name = "projectrolememberactor"
     path = None
@@ -1714,6 +2258,19 @@ class ProjectRoleMemberActorStream(ProjectRoleAdminActorStream):
 
 
 class ProjectRoleAltasianActorStream(ProjectRoleAdminActorStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    """
     
     name = "projectroleactor"
     path = None
@@ -1764,6 +2321,10 @@ class ProjectRoleAltasianActorStream(ProjectRoleAdminActorStream):
         return params
     
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        """
+        We have records for each role actor
+        We can get records for each role actor in a child class and then we can join them with get records function
+        """
         admin = ProjectRoleAdminActorStream(
             self._tap, schema={"properties": {}}
         )
@@ -1776,6 +2337,871 @@ class ProjectRoleAltasianActorStream(ProjectRoleAdminActorStream):
         role_records = list(admin.get_records(context)) + list(viewer.get_records(context)) + list(member.get_records(context)) + list(super().get_records(context))
             
         return role_records
+    
+
+class IssueOut1WatcherStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-1"
+
+    name = "issueout1watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+    replication_key = "user_id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("self", StringType),
+        Property("isWatching", BooleanType),
+        Property("watchCount", IntegerType),
+        Property("watchers", StringType),
+        Property("displayName", StringType),
+        Property("active", BooleanType),
+        Property("timeZone", StringType),
+        Property("accountType", StringType),
+        Property("user_id", StringType),
+        Property("key", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut4WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-4"
+
+    name = "issueout4watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut5WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-5"
+
+    name = "issueout5watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut6WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-6"
+
+    name = "issueout6watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+    
+
+class IssueOut8WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-8"
+
+    name = "issueout8watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut9WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-9"
+
+    name = "issueout9watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut10WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-10"
+
+    name = "issueout10watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)        
+
+
+class IssueOut11WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-11"
+
+    name = "issueout11watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut12WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-12"
+
+    name = "issueout12watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+    
+
+class IssueOut14WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-14"
+
+    name = "issueout14watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut15WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-15"
+
+    name = "issueout15watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut17WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-17"
+
+    name = "issueout17watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut18WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-18"
+
+    name = "issueout18watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut19WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-19"
+
+    name = "issueout19watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut20WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-20"
+
+    name = "issueout20watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["id"] = row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut21WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-21"
+
+    name = "issueout21watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut22WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-22"
+
+    name = "issueout22watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut23WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-23"
+
+    name = "issueout23watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut24WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-24"
+
+    name = "issueout24watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut25WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-25"
+
+    name = "issueout25watcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+
+class IssueOut26WatcherStream(IssueOut1WatcherStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    issues_out = "OUT-26"
+
+    name = "issuewatcher"
+    path = "/issue/{}/watchers".format(issues_out)
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+
+    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        """
+        We have out values from OUT-1 to OUT-26, we have records for each out value
+        We can get records for each out value in a child class and then we can join them with get records function
+        """
+        issue_out1 = IssueOut1WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out4 = IssueOut4WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out5 = IssueOut5WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out6 = IssueOut6WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out8 = IssueOut8WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out9 = IssueOut9WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out10 = IssueOut10WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out11 = IssueOut11WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out12 = IssueOut12WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out14 = IssueOut14WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out15 = IssueOut15WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out17 = IssueOut17WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out18 = IssueOut18WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out19 = IssueOut19WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out20 = IssueOut20WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out21 = IssueOut21WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out22 = IssueOut22WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out23 = IssueOut23WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out24 = IssueOut24WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issue_out25 = IssueOut25WatcherStream(
+            self._tap, schema={"properties": {}}
+        )
+        issuewatcher_records = list(issue_out1.get_records(context)) + list(issue_out4.get_records(context)) + list(issue_out5.get_records(context)) + list(issue_out6.get_records(context)) + list(issue_out8.get_records(context)) + list(issue_out9.get_records(context))+ list(issue_out10.get_records(context)) + list(issue_out11.get_records(context)) + list(issue_out12.get_records(context)) + list(issue_out14.get_records(context)) + list(issue_out15.get_records(context)) + list(issue_out17.get_records(context)) + list(issue_out18.get_records(context)) + list(issue_out19.get_records(context)) + list(issue_out20.get_records(context)) + list(issue_out21.get_records(context)) + list(issue_out22.get_records(context)) + list(issue_out23.get_records(context)) + list(issue_out24.get_records(context)) + list(issue_out25.get_records(context)) + list(super().get_records(context))
+            
+        return issuewatcher_records    
     
 
     
