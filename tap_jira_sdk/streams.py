@@ -2257,7 +2257,7 @@ class ProjectRoleMemberActorStream(ProjectRoleAdminActorStream):
         return params
 
 
-class ProjectRoleatlassianActorStream(ProjectRoleAdminActorStream):
+class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
 
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
