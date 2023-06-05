@@ -2257,7 +2257,7 @@ class ProjectRoleMemberActorStream(ProjectRoleAdminActorStream):
         return params
 
 
-class ProjectRoleAltasianActorStream(ProjectRoleAdminActorStream):
+class ProjectRoleatlassianActorStream(ProjectRoleAdminActorStream):
 
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
@@ -2293,8 +2293,8 @@ class ProjectRoleAltasianActorStream(ProjectRoleAdminActorStream):
     def url_base(self) -> str:
         version = self.config.get("api_version_3", "")
         project_id = self.config.get("project_id", "")
-        altasian = self.config.get("role_altasian_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, altasian)
+        atlassian = self.config.get("role_atlassian_id", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, atlassian)
         return base_url
 
     def get_url_params(

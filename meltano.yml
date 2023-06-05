@@ -41,7 +41,7 @@ plugins:
       value: '10146'
     - name: role_member_id 
       value: '10147'
-    - name: role_altasian_id 
+    - name: role_atlassian_id
       value: '10148'    
   loaders:
   - name: target-jsonl
