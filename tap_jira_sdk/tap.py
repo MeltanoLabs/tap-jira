@@ -57,7 +57,7 @@ class TapJira(Tap):
             A list of discovered streams.
         """
         return [
-            streams.UsersStream(self),
+            #streams.UsersStream(self),
             streams.FieldStream(self),
             streams.ServerInfoStream(self),
             streams.IssueTypeStream(self),
