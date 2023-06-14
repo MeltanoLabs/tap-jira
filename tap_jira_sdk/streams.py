@@ -2281,9 +2281,9 @@ class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
     schema = PropertiesList(
         Property("self", StringType),
         Property("name", StringType),
-        Property("id", StringType),
+        Property("id", IntegerType),
         Property("description", StringType),
-        Property("actors", StringType),
+        Property("actors", ArrayType(StringType)),
         Property("scope", StringType),
 
     ).to_dict()
