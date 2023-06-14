@@ -2366,10 +2366,6 @@ class IssueOut1WatcherStream(JiraStream):
         Property("isWatching", BooleanType),
         Property("watchCount", IntegerType),
         Property("watchers", ArrayType(StringType)),
-        Property("displayName", StringType),
-        Property("active", BooleanType),
-        Property("timeZone", StringType),
-        Property("accountType", StringType),
         Property("user_id", StringType),
         Property("key", StringType),
         
