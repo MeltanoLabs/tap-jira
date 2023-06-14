@@ -263,12 +263,12 @@ class IssueTypeStream(JiraStream):
 
     schema = PropertiesList(
         Property("self", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
         Property("description", StringType),
         Property("iconUrl", StringType),
         Property("name", StringType),
         Property("untranslatedName", StringType),
-        Property("subtask", StringType),
+        Property("subtask", BooleanType),
         Property("avatarId", IntegerType),
         Property("hierarchyLevel", IntegerType),
         Property("scope", StringType),
