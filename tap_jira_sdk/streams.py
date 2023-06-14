@@ -51,7 +51,7 @@ class UsersStream(JiraStream):
         Property("accountType", StringType),
         Property("avatarUrls", StringType),
         Property("displayName", StringType),
-        Property("active", StringType),
+        Property("active", BooleanType),
         Property("timeZone", StringType),
         Property("locale", StringType),
         Property("groups", StringType),
@@ -351,7 +351,7 @@ class StatusStream(JiraStream):
         Property("iconUrl", StringType),
         Property("name", StringType),
         Property("untranslatedName", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
         Property("statusCategory", StringType),
         Property("scope", StringType),
 
@@ -1808,7 +1808,7 @@ class SprintStream(JiraStream):
         Property("startDate", StringType),
         Property("endDate", StringType),
         Property("completeDate", StringType),
-        Property("originBoardId", StringType),
+        Property("originBoardId", IntegerType),
         Property("goal", StringType),
 
     ).to_dict()
@@ -1892,7 +1892,7 @@ class UserGroupJiraSoftwareStream(JiraStream):
         Property("user_id", StringType),
         Property("avatarUrls", StringType),
         Property("displayName", StringType),
-        Property("active", StringType),
+        Property("active", BooleanType),
         Property("timeZone", StringType),
         Property("accountType", StringType),
         Property("group_name", StringType),
