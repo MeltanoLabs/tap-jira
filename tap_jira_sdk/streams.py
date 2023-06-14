@@ -201,7 +201,7 @@ class ServerInfoStream(JiraStream):
     schema = PropertiesList(
         Property("baseUrl", StringType),
         Property("version", StringType),
-        Property("versionNumbers", StringType),
+        Property("versionNumbers", ArrayType(IntegerType)),
         Property("deploymentType", StringType),
         Property("buildNumber", IntegerType),
         Property("buildDate", StringType),
@@ -1453,7 +1453,7 @@ class SearchStream(JiraStream):
 
     schema = PropertiesList(
         Property("expand", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
         Property("self", StringType),
         Property("key", StringType),
         Property("fields", StringType),
