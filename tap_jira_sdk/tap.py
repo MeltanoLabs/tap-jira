@@ -57,22 +57,22 @@ class TapJira(Tap):
             A list of discovered streams.
         """
         return [
-            streams.UsersStream(self),
-            streams.FieldStream(self),
-            streams.ServerInfoStream(self),
-            streams.IssueTypeStream(self),
-            streams.ProjectStream(self),
-            streams.StatusStream(self),
+            #streams.UsersStream(self),
+            #streams.FieldStream(self),
+            #streams.ServerInfoStream(self),
+            #streams.IssueTypeStream(self),
+            #streams.ProjectStream(self),
+            #streams.StatusStream(self),
             streams.IssueOut26Stream(self),
-            streams.SearchStream(self),
-            streams.PermissionStream(self),
-            streams.ProjectRoleStream(self),
-            streams.PriorityStream(self),
-            streams.PermissionHolderStream(self),
-            streams.SprintStream(self),
-            streams.UserGroupTrustedStream(self),
-            streams.ProjectRoleAtlassianActorStream(self),
-            streams.IssueOut26WatcherStream(self),
+            #streams.SearchStream(self),
+            #streams.PermissionStream(self),
+            #streams.ProjectRoleStream(self),
+            #streams.PriorityStream(self),
+            #streams.PermissionHolderStream(self),
+            #streams.SprintStream(self),
+            #streams.UserGroupTrustedStream(self),
+            #streams.ProjectRoleAtlassianActorStream(self),
+            #streams.IssueOut26WatcherStream(self),
         ]
 
 

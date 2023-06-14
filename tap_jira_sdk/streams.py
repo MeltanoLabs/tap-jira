@@ -105,7 +105,7 @@ class FieldStream(JiraStream):
     """
 
     columns = """
-                 id, key, name, untranslatedName, custom, orderable, navigate, searchable, clauseNames, schema, array
+                 id, key, name, untranslatedName, custom, orderable, navigable, searchable, clauseNames, schema, untranslatedName
               """
 
     name = "field"
@@ -118,12 +118,11 @@ class FieldStream(JiraStream):
         Property("id", StringType),
         Property("key", StringType),
         Property("name", StringType),
-        Property("untranslatedname", StringType),
-        Property("custom", StringType),
-        Property("array", StringType),
-        Property("orderable", StringType),
-        Property("navigate", StringType),
-        Property("searchable", StringType),
+        Property("untranslatedName", StringType),
+        Property("custom", BooleanType),
+        Property("orderable", BooleanType),
+        Property("navigable", BooleanType),
+        Property("searchable", BooleanType),
         Property("clauseNames", StringType),
         Property("schema", StringType),
 
@@ -512,7 +511,7 @@ class IssueOut1Stream(JiraStream):
         Property("customfield_10036", StringType),
         Property("customfield_10037", StringType),
         Property("resolutiondate", StringType),
-        Property("workratio", StringType),
+        Property("workratio", IntegerType),
         Property("watches", StringType),
         Property("issuerestriction", StringType),
         Property("lastViewed", StringType),
