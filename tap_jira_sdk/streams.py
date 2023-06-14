@@ -36,7 +36,7 @@ class UsersStream(JiraStream):
     """
 
     columns = """
-                 self, accountId, accountType, avatarUrls, displayName, active, timeZone, locale, groups, applicationRoles, expand
+                 self, accountId, accountType, name, emailAddress, avatarUrls, displayName, active, timeZone, locale, groups, applicationRoles, expand
               """
 
     name = "user"
@@ -49,6 +49,8 @@ class UsersStream(JiraStream):
         Property("self", StringType),
         Property("accountId", StringType),
         Property("accountType", StringType),
+        Property("name", StringType),
+        Property("emailAddress", StringType),
         Property("avatarUrls", StringType),
         Property("displayName", StringType),
         Property("active", BooleanType),
