@@ -411,14 +411,14 @@ class ProjectStream(JiraStream):
     schema = PropertiesList(
         Property("expand", StringType),
         Property("self", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
         Property("key", StringType),
         Property("name", StringType),
         Property("avatarUrls", StringType),
         Property("projectTypeKey", StringType),
-        Property("simplified", StringType),
+        Property("simplified", BooleanType),
         Property("style", StringType),
-        Property("isPrivate", StringType),
+        Property("isPrivate", BooleanType),
         Property("properties", StringType),
         Property("entityId", StringType),
         Property("uuid", StringType),
@@ -1665,7 +1665,7 @@ class PriorityStream(JiraStream):
         Property("description", StringType),
         Property("iconUrl", StringType),
         Property("name", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
 
     ).to_dict()
 
@@ -2365,7 +2365,7 @@ class IssueOut1WatcherStream(JiraStream):
         Property("self", StringType),
         Property("isWatching", BooleanType),
         Property("watchCount", IntegerType),
-        Property("watchers", StringType),
+        Property("watchers", ArrayType(StringType)),
         Property("displayName", StringType),
         Property("active", BooleanType),
         Property("timeZone", StringType),
