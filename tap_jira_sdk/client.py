@@ -8,8 +8,9 @@ from typing import Any, Callable, Iterable
 import requests
 from singer_sdk.authenticators import BasicAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
-from singer_sdk.pagination import BaseAPIPaginator  # noqa: TCH002
+from singer_sdk.pagination import BaseAPIPaginator  
 from singer_sdk.streams import RESTStream
+from requests.auth import HTTPBasicAuth
 
 _Auth = Callable[[requests.PreparedRequest], requests.PreparedRequest]
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
@@ -27,21 +28,30 @@ class JiraStream(RESTStream):
     records_jsonpath = "$[*]"  # Or override `parse_response`.
 
     # Set this value or override `get_new_paginator`.
-    next_page_token_jsonpath = "$.next_page"  # noqa: S105
+    next_page_token_jsonpath = "$.next_page"  
 
     @property
-    def authenticator(self) -> BasicAuthenticator:
+    def authenticator(self) -> _Auth:
         """Return a new authenticator object.
 
         Returns:
             An authenticator instance.
         """
-        return BasicAuthenticator.create_for_stream(
-            self,
-            username=self.config.get("username", ""),
-            password=self.config.get("password", ""),
-        )
+        auth_type = self.config.get("auth_type")
 
+        if auth_type == "basic":
+            return BasicAuthenticator.create_for_stream(
+                   self,
+                   username=self.config.get("username", ""),
+                   password=self.config.get("password", ""),
+            )
+    
+        elif auth_type == "http":
+            return HTTPBasicAuth( 
+                   username=self.config.get("username", ""),
+                   password=self.config.get("password", ""),
+                )
+        
     @property
     def http_headers(self) -> dict:
         """Return the http headers needed.
