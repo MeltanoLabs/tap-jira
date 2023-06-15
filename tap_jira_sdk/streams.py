@@ -36,7 +36,7 @@ class UsersStream(JiraStream):
     """
 
     columns = """
-                 self, accountId, accountType, avatarUrls, displayName, active, timeZone, locale, groups, applicationRoles, expand
+                 self, accountId, accountType, name, emailAddress, avatarUrls, displayName, active, timeZone, locale, groups, applicationRoles, expand
               """
 
     name = "user"
@@ -49,9 +49,11 @@ class UsersStream(JiraStream):
         Property("self", StringType),
         Property("accountId", StringType),
         Property("accountType", StringType),
+        Property("name", StringType),
+        Property("emailAddress", StringType),
         Property("avatarUrls", StringType),
         Property("displayName", StringType),
-        Property("active", StringType),
+        Property("active", BooleanType),
         Property("timeZone", StringType),
         Property("locale", StringType),
         Property("groups", StringType),
@@ -105,7 +107,7 @@ class FieldStream(JiraStream):
     """
 
     columns = """
-                 id, key, name, untranslatedName, custom, orderable, navigate, searchable, clauseNames, schema, array
+                 id, key, name, untranslatedName, custom, orderable, navigable, searchable, clauseNames, schema, untranslatedName
               """
 
     name = "field"
@@ -118,12 +120,11 @@ class FieldStream(JiraStream):
         Property("id", StringType),
         Property("key", StringType),
         Property("name", StringType),
-        Property("untranslatedname", StringType),
-        Property("custom", StringType),
-        Property("array", StringType),
-        Property("orderable", StringType),
-        Property("navigate", StringType),
-        Property("searchable", StringType),
+        Property("untranslatedName", StringType),
+        Property("custom", BooleanType),
+        Property("orderable", BooleanType),
+        Property("navigable", BooleanType),
+        Property("searchable", BooleanType),
         Property("clauseNames", StringType),
         Property("schema", StringType),
 
@@ -202,7 +203,7 @@ class ServerInfoStream(JiraStream):
     schema = PropertiesList(
         Property("baseUrl", StringType),
         Property("version", StringType),
-        Property("versionNumbers", StringType),
+        Property("versionNumbers", ArrayType(IntegerType)),
         Property("deploymentType", StringType),
         Property("buildNumber", IntegerType),
         Property("buildDate", StringType),
@@ -264,12 +265,12 @@ class IssueTypeStream(JiraStream):
 
     schema = PropertiesList(
         Property("self", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
         Property("description", StringType),
         Property("iconUrl", StringType),
         Property("name", StringType),
         Property("untranslatedName", StringType),
-        Property("subtask", StringType),
+        Property("subtask", BooleanType),
         Property("avatarId", IntegerType),
         Property("hierarchyLevel", IntegerType),
         Property("scope", StringType),
@@ -352,7 +353,7 @@ class StatusStream(JiraStream):
         Property("iconUrl", StringType),
         Property("name", StringType),
         Property("untranslatedName", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
         Property("statusCategory", StringType),
         Property("scope", StringType),
 
@@ -412,14 +413,14 @@ class ProjectStream(JiraStream):
     schema = PropertiesList(
         Property("expand", StringType),
         Property("self", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
         Property("key", StringType),
         Property("name", StringType),
         Property("avatarUrls", StringType),
         Property("projectTypeKey", StringType),
-        Property("simplified", StringType),
+        Property("simplified", BooleanType),
         Property("style", StringType),
-        Property("isPrivate", StringType),
+        Property("isPrivate", BooleanType),
         Property("properties", StringType),
         Property("entityId", StringType),
         Property("uuid", StringType),
@@ -512,7 +513,7 @@ class IssueOut1Stream(JiraStream):
         Property("customfield_10036", StringType),
         Property("customfield_10037", StringType),
         Property("resolutiondate", StringType),
-        Property("workratio", StringType),
+        Property("workratio", IntegerType),
         Property("watches", StringType),
         Property("issuerestriction", StringType),
         Property("lastViewed", StringType),
@@ -1454,7 +1455,7 @@ class SearchStream(JiraStream):
 
     schema = PropertiesList(
         Property("expand", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
         Property("self", StringType),
         Property("key", StringType),
         Property("fields", StringType),
@@ -1666,7 +1667,7 @@ class PriorityStream(JiraStream):
         Property("description", StringType),
         Property("iconUrl", StringType),
         Property("name", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
 
     ).to_dict()
 
@@ -1809,7 +1810,7 @@ class SprintStream(JiraStream):
         Property("startDate", StringType),
         Property("endDate", StringType),
         Property("completeDate", StringType),
-        Property("originBoardId", StringType),
+        Property("originBoardId", IntegerType),
         Property("goal", StringType),
 
     ).to_dict()
@@ -1893,7 +1894,7 @@ class UserGroupJiraSoftwareStream(JiraStream):
         Property("user_id", StringType),
         Property("avatarUrls", StringType),
         Property("displayName", StringType),
-        Property("active", StringType),
+        Property("active", BooleanType),
         Property("timeZone", StringType),
         Property("accountType", StringType),
         Property("group_name", StringType),
@@ -2282,9 +2283,9 @@ class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
     schema = PropertiesList(
         Property("self", StringType),
         Property("name", StringType),
-        Property("id", StringType),
+        Property("id", IntegerType),
         Property("description", StringType),
-        Property("actors", StringType),
+        Property("actors", ArrayType(StringType)),
         Property("scope", StringType),
 
     ).to_dict()
@@ -2366,11 +2367,7 @@ class IssueOut1WatcherStream(JiraStream):
         Property("self", StringType),
         Property("isWatching", BooleanType),
         Property("watchCount", IntegerType),
-        Property("watchers", StringType),
-        Property("displayName", StringType),
-        Property("active", BooleanType),
-        Property("timeZone", StringType),
-        Property("accountType", StringType),
+        Property("watchers", ArrayType(StringType)),
         Property("user_id", StringType),
         Property("key", StringType),
         
