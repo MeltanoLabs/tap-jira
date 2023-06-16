@@ -8,7 +8,7 @@ from singer_sdk import typing as th  # JSON Schema typing helpers
 
 from tap_jira_sdk.client import JiraStream
 
-import json, requests
+import requests
 
 PropertiesList = th.PropertiesList
 Property = th.Property
@@ -1509,6 +1509,9 @@ class SearchStream(JiraStream):
         yield from results
 
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add created and updated time columns from field column
+        """
 
         try:
             row["created"] = row.get("fields").get("created")
@@ -1952,6 +1955,9 @@ class UserGroupJiraSoftwareStream(JiraStream):
         yield from results
 
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a group name column with group name variable and a user id column  with account id column
+        """
 
         try:
             row["group_name"] = self.group_name
@@ -1982,6 +1988,9 @@ class UserGroupConfluenceStream(UserGroupJiraSoftwareStream):
     path = "/group/member?groupname={}".format(group_name)
 
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a group name column with group name variable and a user id column  with account id column
+        """
 
         try:
             row["group_name"] = self.group_name
@@ -2012,6 +2021,9 @@ class UserGroupSiteAdminsStream(UserGroupJiraSoftwareStream):
     path = "/group/member?groupname={}".format(group_name)
 
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a group name column with group name variable and a user id column  with account id column
+        """
 
         try:
             row["group_name"] = self.group_name
@@ -2042,6 +2054,9 @@ class UserGroupTrustedStream(UserGroupJiraSoftwareStream):
     path = "/group/member?groupname={}".format(group_name)
 
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a group name column with group name variable and a user id column  with account id column
+        """
 
         try:
             row["group_name"] = self.group_name
@@ -2052,6 +2067,9 @@ class UserGroupTrustedStream(UserGroupJiraSoftwareStream):
         return super().post_process(row, context)
     
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        """
+        We can get records for each group value in a child class and then we can join them with get records function
+        """
         jira_software = UserGroupJiraSoftwareStream(
             self._tap, schema={"properties": {}}
         )
@@ -2148,10 +2166,6 @@ class ProjectRoleViewerActorStream(ProjectRoleAdminActorStream):
     name = "projectrolevieweractor"
     path = None
 
-    primary_keys = ["id"]
-    replication_key = "id"
-    replication_method = "incremental"
-
     schema = PropertiesList(
         Property("self", StringType),
         Property("name", StringType),
@@ -2211,10 +2225,6 @@ class ProjectRoleMemberActorStream(ProjectRoleAdminActorStream):
     
     name = "projectrolememberactor"
     path = None
-
-    primary_keys = ["id"]
-    replication_key = "id"
-    replication_method = "incremental"
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -2276,10 +2286,6 @@ class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
     name = "projectroleactor"
     path = None
 
-    primary_keys = ["id"]
-    replication_key = "id"
-    replication_method = "incremental"
-
     schema = PropertiesList(
         Property("self", StringType),
         Property("name", StringType),
@@ -2294,7 +2300,7 @@ class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
     def url_base(self) -> str:
         version = self.config.get("api_version_3", "")
         project_id = self.config.get("project_id", "")
-        atlassian = self.config.get("role_atlassian_id", "")
+        atlassian = self.config.get("role_altasian_id", "")
         base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, atlassian)
         return base_url
 
