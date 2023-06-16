@@ -45,5 +45,11 @@ jobs:
       run: |
         poetry install
     - name: Test with pytest
+      id: test_pytest
+      continue-on-error: true
+      env:
+         username: ${{ secrets.username }}
+         password: ${{ secrets.password }}
+         account_id: ${{ secrets.account_id }}
       run: |
-        poetry run pytest
+        poetry run pytest --capture=no

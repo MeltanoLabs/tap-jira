@@ -1,5 +1,7 @@
 # tap-jira-sdk
  
+# tap-jira-sdk
+ 
 `tap-jira` is a Singer tap for tap-jira.
 
 Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
@@ -19,30 +21,46 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
 | Setting             | Required | Default | Description |
 |:--------------------|:--------:|:-------:|:------------|
-| access_token        | True     | None    | The token to authenticate against the API service |
-| api_version_1       | True    | v1.0    | The API version to request data from. |
+| username            | True    | None    | The username to authenticate against the API service |
+| password            | True    | None    | The password to authenticate against the API service |
 | api_version_2       | True    | v2.0    | The API version to request data from. |
 | api_version_3       | True    | v3.0    | The API version to request data from. |
-| api_version_4       | True    | v4.0    | The API version to request data from. |
-| start_date          | False    | None    | The earliest record date to sync |
-| end_date            | False    | None    | The latest record date to sync |
-| stream_maps         | False    | None    | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). |
-| stream_map_config   | False    | None    | User-defined config values to be used within map expressions. |
-| flattening_enabled  | False    | None    | 'True' to enable schema flattening and automatically expand nested properties. |
-| flattening_max_depth| False    | None    | The max depth to flatten schemas. |
+| agile_version       | True    | v1.0    | The Agile version to request data from. |
+| board_id            | True    | 63      | The Jira board id to request data from. |
+| account_id          | True    | None    | The Jira account id. |
+| project_id          | True    | None    | The Jira project id. |
+| role_admin_id       | True    | None    | The Jira role admin id. |
+| role_viewer_id      | True    | None    | The Jira role viewer id. |
+| role_member_id      | True    | None    | The Jira role member id. |
+| role_altasian_id    | True    | None    | The Jira role altasian id. |
+| auth_type           | True    | basic   | The auth type to select authentication (basic/http). |
+| start_date          | False   | None    | The earliest record date to sync |
+| end_date            | False   | None    | The latest record date to sync |
+| stream_maps         | False   | None    | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). |
+| stream_map_config   | False   | None    | User-defined config values to be used within map expressions. |
+| flattening_enabled  | False   | None    | 'True' to enable schema flattening and automatically expand nested properties. |
+| flattening_max_depth| False   | None    | The max depth to flatten schemas. |
 
 ### Meltano Variables
 
 The following config values need to be set in order to use with Meltano. These can be set in `meltano.yml`, via
 ```meltano config tap-jira set --interactive```, or via the env var mappings shown above.
 
-- `access_token:` access token from TAP_HUBSPOT_ACCESS_TOKEN variable
+- `username:` username from TAP_JIRA_USERNAME variable
+- `password:` password from TAP_JIRA_PASSWORD variable
 - `start_date:` start date
 - `end_date:` end_date
-- `api_version_1:` api version
 - `api_version_2:` api version
 - `api_version_3:` api version
-- `api_version_4:` api version
+- `agile_version:` agile version
+- `board_id:` board id
+- `account_id:` account id
+- `project_id:` project id
+- `role_admin_id:` role admin id
+- `role_viewer_id:` role viewer id
+- `role_member_id:` role member id
+- `role_altasian_id:` role altasian id
+- `auth_type:` auth type
 
 A full list of supported settings and capabilities for this tap is available by running:
 
@@ -68,7 +86,7 @@ environment variable is set either in the terminal context or in the `.env` file
 
 ### Source Authentication and Authorization
 
-A Hubspot access token is required to make API requests. (See [Jira API](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/) docs for more info)
+A Jira username and password are required to make API requests. (See [Jira API](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/) docs for more info)
 
 ## Usage
 
