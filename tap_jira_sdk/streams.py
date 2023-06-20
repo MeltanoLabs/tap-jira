@@ -3207,11 +3207,109 @@ class IssueOut26WatcherStream(IssueOut1WatcherStream):
         return issuewatcher_records    
     
 
-    
-    
-    
-    
+class IssueKeyWatcherStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "issuekeywatcher"
+    path = "/watchers"
+    replication_key = "user_id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("self", StringType),
+        Property("isWatching", BooleanType),
+        Property("watchCount", IntegerType),
+        Property("watchers", ArrayType(StringType)),
+        Property("user_id", StringType),
+        Property("key", StringType),
         
+
+    ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        """
+        Returns base url
+        """
+        version = self.config.get("api_version_2", "")
+        self.issues_out = self.config.get("jira_issue_keys", "").split(",")[0]
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/issue/{}".format(version, self.issues_out)
+        return base_url
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        """
+        We can add a key column which have out value
+        We can get the user id column from watchers column
+        """
+
+        try:
+            row["key"] = self.issues_out
+            row["user_id"] = row.get("watchers")[0].get("accountId")
+        except:
+            pass
+        
+        return super().post_process(row, context)
+    
+    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        """
+        We have out values from OUT-1 to OUT-26, we have records for each out value
+        We can get records for each out value in a child class and then we can join them with get records function
+        """
+
+        jira_keys = self.config.get("jira_issue_keys", "").split(",")
+        
+        """
+        issue_key_records_list = []
+     
+        for i in (jira_keys):
+            issue_key = type('IssueKey'+i+'Stream', (IssueKeyWatcherStream,), {"issues_out": i, "name": "issuewatcher"})
+            issue_key_stream = issue_key(
+                self._tap, schema={"properties": {}}    
+            )
+            issuekey_records = list(issue_key_stream.get_records(context))
+            issue_key_records_list.append(issuekey_records)
+        """
+            
+        return issuekey_records
+    
+    
+    
        
     
     
