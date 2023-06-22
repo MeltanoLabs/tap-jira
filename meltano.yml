@@ -44,7 +44,7 @@ plugins:
     - name: role_altasian_id 
       value: '10148'
     - name: auth_type 
-      value: 'basic'      
+      value: 'basic'        
   loaders:
   - name: target-jsonl
     variant: andyh1203
