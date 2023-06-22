@@ -401,7 +401,7 @@ class ProjectStream(JiraStream):
     """
 
     columns = """
-                 expand, self, id, key, name, avatarUrls, projectTypeKey, simplified, style, isPrivate, properties, entityId, uuid
+                 expand, self, id, key, name, avatarUrls, projectCategory, projectTypeKey, simplified, style, isPrivate, properties, entityId, uuid
               """
 
     name = "project"
@@ -417,6 +417,7 @@ class ProjectStream(JiraStream):
         Property("key", StringType),
         Property("name", StringType),
         Property("avatarUrls", StringType),
+        Property("projectCategory", StringType),
         Property("projectTypeKey", StringType),
         Property("simplified", BooleanType),
         Property("style", StringType),
@@ -644,7 +645,7 @@ class IssueStream(JiraStream):
         jira_issue_records = []
 
         for record in list(super().get_records(context)):
-            jira_issue_key.append(record.get("key"))    
+            jira_issue_key.append(record.get("key"))
 
         for key in jira_issue_key:
 
