@@ -44,9 +44,7 @@ plugins:
     - name: role_altasian_id 
       value: '10148'
     - name: auth_type 
-      value: 'basic'
-    - name: jira_issue_keys 
-      value: 'OUT-1,OUT-4,OUT-5,OUT-6,OUT-8,OUT-9,OUT-10,OUT-11,OUT-12,OUT-14,OUT-15,OUT-17,OUT-18,OUT-19,OUT-20,OUT-21,OUT-22,OUT-23,OUT-24,OUT-25,OUT-26'        
+      value: 'basic'        
   loaders:
   - name: target-jsonl
     variant: andyh1203
