@@ -42,8 +42,8 @@ class UsersStream(JiraStream):
     name = "user"
     path = "/user"
     primary_keys = ["accountId"]
-    #replication_key = "accountId"
-    #replication_method = "incremental"
+    replication_key = "accountId"
+    replication_method = "incremental"
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -113,8 +113,8 @@ class FieldStream(JiraStream):
     name = "field"
     path = "/field"
     primary_keys = ["id"]
-    #replication_key = "id"
-    #replication_method = "incremental"
+    replication_key = "id"
+    replication_method = "incremental"
 
     schema = PropertiesList(
         Property("id", StringType),
@@ -197,8 +197,8 @@ class ServerInfoStream(JiraStream):
     name = "serverInfo"
     path = "/serverInfo"
     primary_keys = ["baseUrl"]
-    #replication_key = "serverTime"
-    #replication_method = "incremental"
+    replication_key = "serverTime"
+    replication_method = "incremental"
 
     schema = PropertiesList(
         Property("baseUrl", StringType),
@@ -260,8 +260,8 @@ class IssueTypeStream(JiraStream):
     name = "issuetype"
     path = "/issuetype"
     primary_keys = ["id"]
-    #replication_key = "id"
-    #replication_method = "incremental"
+    replication_key = "id"
+    replication_method = "incremental"
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -344,8 +344,8 @@ class StatusStream(JiraStream):
     name = "status"
     path = "/status"
     primary_keys = ["id"]
-    #replication_key = "self"
-    #replication_method = "incremental"
+    replication_key = "self"
+    replication_method = "incremental"
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -407,8 +407,8 @@ class ProjectStream(JiraStream):
     name = "project"
     path = "/project"
     primary_keys = ["id"]
-    #replication_key = "id"
-    #replication_method = "incremental"
+    replication_key = "id"
+    replication_method = "incremental"
 
     schema = PropertiesList(
         Property("expand", StringType),
@@ -847,8 +847,8 @@ class PermissionStream(JiraStream):
     name = "permission"
     path = "/permissions"
     primary_keys = ["permissions"]
-    #replication_key = "permissions"
-    #replication_method = "incremental"
+    replication_key = "permissions"
+    replication_method = "incremental"
 
     schema = PropertiesList(
         Property("permissions", StringType),
