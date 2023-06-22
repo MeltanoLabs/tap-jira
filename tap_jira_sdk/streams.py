@@ -113,7 +113,7 @@ class FieldStream(JiraStream):
     name = "field"
     path = "/field"
     primary_keys = ["id"]
-    #replication_key = "LastModifiedDate"
+    #replication_key = "id"
     #replication_method = "incremental"
 
     schema = PropertiesList(
@@ -260,7 +260,7 @@ class IssueTypeStream(JiraStream):
     name = "issuetype"
     path = "/issuetype"
     primary_keys = ["id"]
-    #replication_key = "self"
+    #replication_key = "id"
     #replication_method = "incremental"
 
     schema = PropertiesList(
@@ -407,7 +407,7 @@ class ProjectStream(JiraStream):
     name = "project"
     path = "/project"
     primary_keys = ["id"]
-    #replication_key = "self"
+    #replication_key = "id"
     #replication_method = "incremental"
 
     schema = PropertiesList(
@@ -472,7 +472,7 @@ class ProjectStream(JiraStream):
         yield from results
 
 
-class IssueOut1Stream(JiraStream):
+class IssueStream(JiraStream):
 
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
@@ -485,14 +485,12 @@ class IssueOut1Stream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issues_out: issue out value
+    issue_out: issue out value
     """
 
-    issues_out = "OUT-1"
-
-    name = "issueout1"
-    path = "/issue/{}".format(issues_out)
-    primary_keys = ["id"]
+    name = "issue"
+    path = "/search"
+    #primary_keys = ["id"]
     replication_key = "updated"
     replication_method = "incremental"
 
@@ -577,8 +575,18 @@ class IssueOut1Stream(JiraStream):
         Property("id", IntegerType),
         Property("editmeta", StringType),
         Property("histories", StringType),
+        
 
     ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        """
+        Returns base url
+        """
+        version = self.config.get("api_version_3", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/".format(version)
+        return base_url
 
     def get_url_params(
             self,
@@ -599,12 +607,10 @@ class IssueOut1Stream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-            
-        params["expand"] = "editmeta,changelog"        
+            params["order_by"] = self.replication_key        
 
         return params
-    
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
@@ -619,817 +625,114 @@ class IssueOut1Stream(JiraStream):
 
         if isinstance(resp_json, list):
             results = resp_json
-        elif resp_json.get("fields") is not None: 
-            resp_json["fields"]["editmeta"] = resp_json.get("editmeta")
-            resp_json["fields"]["histories"] = resp_json.get("changelog").get("histories")
-            results = [resp_json["fields"]]
+        elif resp_json.get("issues") is not None:
+            results = resp_json["issues"]
         else:
             results = resp_json
 
         yield from results
 
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut4Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-4"
-
-    name = "issueout4"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut5Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-5"
-
-    name = "issueout5"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut6Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-6"
-
-    name = "issueout6"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-    
-
-class IssueOut8Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-8"
-
-    name = "issueout8"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut9Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-9"
-
-    name = "issueout9"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut10Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-10"
-
-    name = "issueout10"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)        
-
-
-class IssueOut11Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-11"
-
-    name = "issuesout11"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut12Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-12"
-
-    name = "issueout12"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-    
-
-class IssueOut14Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-14"
-
-    name = "issueout14"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut15Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-15"
-
-    name = "issueout15"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut17Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-17"
-
-    name = "issueout17"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut18Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-18"
-
-    name = "issueout18"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut19Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-19"
-
-    name = "issueout19"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut20Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-20"
-
-    name = "issueout20"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut21Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-21"
-
-    name = "issueout21"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut22Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-22"
-
-    name = "issueout22"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut23Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-23"
-
-    name = "issueout23"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut24Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-24"
-
-    name = "issueout24"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut25Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-25"
-
-    name = "issueout25"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
-
-class IssueOut26Stream(IssueOut1Stream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issues_out: issue out value
-    """
-
-    issues_out = "OUT-26"
-
-    name = "issue"
-    path = "/issue/{}".format(issues_out)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a key column which have out value
-        We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
-        """
-
-        try:
-            row["key"] = self.issues_out
-            row["id"] = row.get("comment").get("self").split("/")[7]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
-        We have out values from OUT-1 to OUT-26, we have records for each out value
-        We can get records for each out value in a child class and then we can join them with get records function
+        We have key values for issues (OUT-1 to OUT-26), we have records for each key value
+        We can get the records with these key values from the parent IssueSearchWatcherStream and add them to jira_issue_key list
+        We can traverse through these key values with a for loop and create a child class for them
+        We can get the records for each key value in a child class and then we can join each of them with get records function and add them to jira_issue_records list
         """
-        issue_out1 = IssueOut1Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out4 = IssueOut4Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out5 = IssueOut5Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out6 = IssueOut6Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out8 = IssueOut8Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out9 = IssueOut9Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out10 = IssueOut10Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out11 = IssueOut11Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out12 = IssueOut12Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out14 = IssueOut14Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out15 = IssueOut15Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out17 = IssueOut17Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out18 = IssueOut18Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out19 = IssueOut19Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out20 = IssueOut20Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out21 = IssueOut21Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out22 = IssueOut22Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out23 = IssueOut23Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out24 = IssueOut24Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issue_out25 = IssueOut25Stream(
-            self._tap, schema={"properties": {}}
-        )
-        issueout_records = list(issue_out1.get_records(context)) + list(issue_out4.get_records(context)) + list(issue_out5.get_records(context)) + list(issue_out6.get_records(context)) + list(issue_out8.get_records(context)) + list(issue_out9.get_records(context))+ list(issue_out10.get_records(context)) + list(issue_out11.get_records(context)) + list(issue_out12.get_records(context)) + list(issue_out14.get_records(context)) + list(issue_out15.get_records(context)) + list(issue_out17.get_records(context)) + list(issue_out18.get_records(context)) + list(issue_out19.get_records(context)) + list(issue_out20.get_records(context)) + list(issue_out21.get_records(context)) + list(issue_out22.get_records(context)) + list(issue_out23.get_records(context)) + list(issue_out24.get_records(context)) + list(issue_out25.get_records(context)) + list(super().get_records(context))
+
+        jira_issue_key = []
+        jira_issue_records = []
+
+        for record in list(super().get_records(context)):
+            jira_issue_key.append(record.get("key"))    
+
+        for key in jira_issue_key:
+
+            class IssueKey(JiraStream):
+                issues_out = key
+                name = "issue"
+                path = "/issue/{}/".format(issues_out)
+                
+                @property
+                def url_base(self) -> str:
+                    """
+                    Returns base url
+                    """
+                    version = self.config.get("api_version_2", "")
+                    base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+                    return base_url
+
+                def get_url_params(
+                        self,
+                        context: dict | None,
+                        next_page_token: Any | None,
+                ) -> dict[str, Any]:
+                    """Return a dictionary of values to be used in URL parameterization.
+
+                    Args:
+                        context: The stream context.
+                        next_page_token: The next page index or value.
+
+                    Returns:
+                        A dictionary of URL query parameters.
+                    """
+                    params: dict = {}
+                    if next_page_token:
+                        params["page"] = next_page_token
+                    if self.replication_key:
+                        params["sort"] = "asc"
+                    params["order_by"] = self.replication_key
             
-        return issueout_records                                                
+                    params["expand"] = "editmeta,changelog"        
+
+                    return params
+    
+                def parse_response(self, response: requests.Response) -> Iterable[dict]:
+                    """Parse the response and return an iterator of result records.
+
+                    Args:
+                        response: The HTTP ``requests.Response`` object.
+
+                    Yields:
+                        Each record from the source.
+                    """
+
+                    resp_json = response.json()
+
+                    if isinstance(resp_json, list):
+                        results = resp_json
+                    elif resp_json.get("fields") is not None: 
+                        resp_json["fields"]["editmeta"] = resp_json.get("editmeta")
+                        resp_json["fields"]["histories"] = resp_json.get("changelog").get("histories")
+                        results = [resp_json["fields"]]
+                    else:
+                        results = resp_json
+
+                    yield from results
+
+                def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+                    """
+                    We can add a key column which have out value
+                    We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
+                    """
+
+                    try:
+                        row["key"] = self.issues_out
+                        row["id"] = row.get("comment").get("self").split("/")[7]
+                    except:
+                        pass
+        
+                    return super().post_process(row, context)
+
+            issue_search_key = IssueKey(
+                self._tap, schema={"properties": {}}
+            )
+
+            jira_issue_records.append(list(issue_search_key.get_records(context)))
+        
+        issue_records = sum(jira_issue_records, []) 
+            
+        return issue_records                                                
     
     
 class SearchStream(JiraStream):
@@ -1544,7 +847,7 @@ class PermissionStream(JiraStream):
     name = "permission"
     path = "/permissions"
     primary_keys = ["permissions"]
-    #replication_key = "self"
+    #replication_key = "permissions"
     #replication_method = "incremental"
 
     schema = PropertiesList(
@@ -2344,9 +1647,9 @@ class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
         role_records = list(admin.get_records(context)) + list(viewer.get_records(context)) + list(member.get_records(context)) + list(super().get_records(context))
             
         return role_records    
-    
 
-class IssueKeyWatcherStream(JiraStream):
+
+class IssueWatcherStream(JiraStream):
 
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
@@ -2362,8 +1665,9 @@ class IssueKeyWatcherStream(JiraStream):
     issue_out: issue out value
     """
 
-    name = "issuekeywatcher"
-    path = "/watchers"
+    name = "issuewatcher"
+    path = "/search"
+    #primary_keys = ["id"]
     replication_key = "user_id"
     replication_method = "incremental"
 
@@ -2383,9 +1687,8 @@ class IssueKeyWatcherStream(JiraStream):
         """
         Returns base url
         """
-        version = self.config.get("api_version_2", "")
-        self.issues_out = self.config.get("jira_issue_keys", "").split(",")[0]
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/issue/{}".format(version, self.issues_out)
+        version = self.config.get("api_version_3", "")
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/".format(version)
         return base_url
 
     def get_url_params(
@@ -2411,50 +1714,44 @@ class IssueKeyWatcherStream(JiraStream):
 
         return params
 
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
         """
-        We can add a key column which have out value
-        We can get the user id column from watchers column
-        """
 
-        try:
-            row["key"] = self.issues_out
-            row["user_id"] = row.get("watchers")[0].get("accountId")
-        except:
-            pass
-        
-        return super().post_process(row, context)
-    
+        resp_json = response.json()
 
-class IssueKeyWatcherSubStream(IssueKeyWatcherStream):
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("issues") is not None:
+            results = resp_json["issues"]
+        else:
+            results = resp_json
 
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-group-issue-watchers
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    issue_out: issue out value
-    """
+        yield from results
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
-        We have out values from OUT-1 to OUT-26, we have records for each out value
-        We can get the records for each out value in a child class and then we can join each of them with get records function
+        We have key values for issues (OUT-1 to OUT-26), we have records for each key value
+        We can get the records with these key values from the parent IssueSearchWatcherStream and add them to jira_issue_key list
+        We can traverse through these key values with a for loop and create a child class for them
+        We can get the records for each key value in a child class and then we can join each of them with get records function and add them to jira_issue_records list
         """
-    
-        jira_keys = self.config.get("jira_issue_keys", "").split(",")[1:]
 
+        jira_issue_key = []
         jira_issue_records = []
 
-        for key in jira_keys:
+        for record in list(super().get_records(context)):
+            jira_issue_key.append(record.get("key"))    
 
-            class IssueKeyWatcher(IssueKeyWatcherStream):
+        for key in jira_issue_key:
+
+            class IssueKeyWatcher(JiraStream):
                 issues_out = key
                 name = "issuewatcher"
                 path = "/issue/{}/watchers".format(issues_out)
@@ -2482,15 +1779,17 @@ class IssueKeyWatcherSubStream(IssueKeyWatcherStream):
         
                     return super().post_process(row, context)
 
-            issue_watcher_sub = IssueKeyWatcher(
+            issue_search_key_watcher = IssueKeyWatcher(
                 self._tap, schema={"properties": {}}
             )
 
-            jira_issue_records.append(list(issue_watcher_sub.get_records(context)))
+            jira_issue_records.append(list(issue_search_key_watcher.get_records(context)))
         
-        issuekey_records = sum(jira_issue_records, list(super().get_records(context))) 
+        issuewatcher_records = sum(jira_issue_records, []) 
             
-        return issuekey_records
+        return issuewatcher_records
+
+                
 
 
     
