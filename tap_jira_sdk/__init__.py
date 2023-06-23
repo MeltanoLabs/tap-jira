@@ -1,1 +1,1 @@
-"""Tap for tap-jira-sdk."""
+"""Tap for tap-jira."""

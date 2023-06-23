@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "tap-jira-sdk"
+name = "tap-jira"
 version = "0.0.1"
-description = "`tap-jira-sdk` is a Singer tap for tap-jira-sdk, built with the Meltano Singer SDK."
+description = "`tap-jira` is a Singer tap for tap-jira, built with the Meltano Singer SDK."
 readme = "README.md"
 authors = ["Ethan Stein"]
 keywords = [
     "ELT",
-    "tap-jira-sdk",
+    "tap-jira",
 ]
 license = "Apache 2.0"
 
@@ -36,7 +36,7 @@ ignore = [
     "ANN102",  # missing-type-cls
 ]
 select = ["ALL"]
-src = ["tap_jira_sdk"]
+src = ["tap_jira"]
 target-version = "py37"
 
 
@@ -44,7 +44,7 @@ target-version = "py37"
 allow-star-arg-any = true
 
 [tool.ruff.isort]
-known-first-party = ["tap_jira_sdk"]
+known-first-party = ["tap_jira"]
 
 [tool.ruff.pydocstyle]
 convention = "google"
@@ -55,4 +55,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 # CLI declaration
-tap-jira-sdk = 'tap_jira_sdk.tap:TapJira.cli'
+tap-jira = 'tap_jira.tap:TapJira.cli'

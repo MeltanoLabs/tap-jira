@@ -4,7 +4,7 @@ import datetime
 
 from singer_sdk.testing import get_tap_test_class
 
-from tap_jira_sdk.tap import Taptap-jira-sdk
+from tap_jira.tap import Taptap-jira
 
 SAMPLE_CONFIG = {
     "start_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"),
@@ -13,8 +13,8 @@ SAMPLE_CONFIG = {
 
 
 # Run standard built-in tap tests from the SDK:
-TestTaptap-jira-sdk = get_tap_test_class(
-    tap_class=Taptap-jira-sdk,
+TestTaptap-jira = get_tap_test_class(
+    tap_class=Taptap-jira,
     config=SAMPLE_CONFIG,
 )
 

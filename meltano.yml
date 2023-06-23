@@ -1,11 +1,11 @@
 version: 1
 send_anonymous_usage_stats: true
-project_id: "tap-jira-sdk"
+project_id: "tap-jira"
 default_environment: dev
 plugins:
   extractors:
-  - name: "tap-jira-sdk"
-    namespace: "tap_jira_sdk"
+  - name: "tap-jira"
+    namespace: "tap_jira"
     pip_url: -e .
     capabilities:
     - state
