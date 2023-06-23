@@ -1,4 +1,4 @@
-"""Stream type classes for tap-jira-sdk."""
+"""Stream type classes for tap-jira."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from pathlib import Path
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
 
-from tap_jira_sdk.client import JiraStream
+from tap_jira.client import JiraStream
 
 import requests
 

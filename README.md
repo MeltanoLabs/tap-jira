@@ -1,6 +1,6 @@
-# tap-jira-sdk
+# tap-jira
  
-# tap-jira-sdk
+# tap-jira
  
 `tap-jira` is a Singer tap for tap-jira.
 
@@ -75,7 +75,7 @@ The licensor grants you a non-exclusive, royalty-free, worldwide, non-sublicensa
 ## Installation
 
 ```bash
-pipx install git+https://github.com/ryan-miranda-partners/tap-jira-sdk.git
+pipx install git+https://github.com/ryan-miranda-partners/tap-jira.git
 ```
 
 ### Configure using environment variables

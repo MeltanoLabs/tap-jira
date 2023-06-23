@@ -1,4 +1,4 @@
-"""REST client handling, including tap-jira-sdkStream base class."""
+"""REST client handling, including tap-jiraStream base class."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
 
 class JiraStream(RESTStream):
-    """tap-jira-sdk stream class."""
+    """tap-jira stream class."""
 
     @property
     def url_base(self) -> str:

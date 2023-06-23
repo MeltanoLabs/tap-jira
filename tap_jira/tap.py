@@ -1,17 +1,17 @@
-"""tap-jira-sdk tap class."""
+"""tap-jira tap class."""
 
 from __future__ import annotations
 
 from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
-from tap_jira_sdk import streams
+from tap_jira import streams
 
 
 class TapJira(Tap):
-    """tap-jira-sdk tap class."""
+    """tap-jira tap class."""
 
-    name = "tap-jira-sdk"
+    name = "tap-jira"
 
     config_jsonschema = th.PropertiesList(
         th.Property(
