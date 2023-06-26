@@ -41,26 +41,6 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 | flattening_enabled  | False   | None    | 'True' to enable schema flattening and automatically expand nested properties. |
 | flattening_max_depth| False   | None    | The max depth to flatten schemas. |
 
-### Meltano Variables
-
-The following config values need to be set in order to use with Meltano. These can be set in `meltano.yml`, via
-```meltano config tap-jira set --interactive```, or via the env var mappings shown above.
-
-- `username:` username from TAP_JIRA_USERNAME variable
-- `password:` password from TAP_JIRA_PASSWORD variable
-- `start_date:` start date
-- `end_date:` end_date
-- `api_version_2:` api version
-- `api_version_3:` api version
-- `agile_version:` agile version
-- `board_id:` board id
-- `account_id:` account id
-- `project_id:` project id
-- `role_admin_id:` role admin id
-- `role_viewer_id:` role viewer id
-- `role_member_id:` role member id
-- `role_altasian_id:` role altasian id
-- `auth_type:` auth type
 
 A full list of supported settings and capabilities for this tap is available by running:
 
