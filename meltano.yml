@@ -23,28 +23,20 @@ plugins:
       value: '2010-01-01T00:00:00Z'
     - name: end_date
       value: '2023-05-020T00:00:00Z'
-    - name: api_version_2
-      value: '2'
-    - name: api_version_3
-      value: '3'
-    - name: agile_version
-      value: '1.0'
     - name: board_id
-      value: '63' 
+      value: ${TAP_JIRA_BOARD_ID} 
     - name: account_id 
       value:  ${TAP_JIRA_ACCOUNT_ID}
     - name: project_id 
-      value: '10055'
+      value: ${TAP_JIRA_PROJECT_ID}
     - name: role_admin_id 
-      value: '10145'
+      value: ${TAP_JIRA_ROLE_ADMIN_ID}
     - name: role_viewer_id 
-      value: '10146'
+      value: ${TAP_JIRA_ROLE_VIEWER_ID}
     - name: role_member_id 
-      value: '10147'
+      value: ${TAP_JIRA_ROLE_MEMBER_ID}
     - name: role_altasian_id 
-      value: '10148'
-    - name: auth_type 
-      value: 'basic'        
+      value: ${TAP_JIRA_ROLE_ALTASIAN_ID}      
   loaders:
   - name: target-jsonl
     variant: andyh1203

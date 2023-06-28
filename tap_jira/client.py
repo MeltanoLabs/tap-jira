@@ -10,7 +10,6 @@ from singer_sdk.authenticators import BasicAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.pagination import BaseAPIPaginator  
 from singer_sdk.streams import RESTStream
-from requests.auth import HTTPBasicAuth
 
 _Auth = Callable[[requests.PreparedRequest], requests.PreparedRequest]
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
@@ -24,8 +23,7 @@ class JiraStream(RESTStream):
         """
         Returns base url
         """
-        version = self.config.get("api_version_2", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/2"
         return base_url
 
     records_jsonpath = "$[*]"  # Or override `parse_response`.
@@ -40,20 +38,12 @@ class JiraStream(RESTStream):
         Returns:
             An authenticator instance.
         """
-        auth_type = self.config.get("auth_type")
 
-        if auth_type == "basic":
-            return BasicAuthenticator.create_for_stream(
-                   self,
-                   username=self.config.get("username", ""),
-                   password=self.config.get("password", ""),
-            )
-    
-        elif auth_type == "http":
-            return HTTPBasicAuth( 
-                   username=self.config.get("username", ""),
-                   password=self.config.get("password", ""),
-                )
+        return BasicAuthenticator.create_for_stream(
+               self,
+               username=self.config.get("username", ""),
+               password=self.config.get("password", ""),
+        )
         
     @property
     def http_headers(self) -> dict:

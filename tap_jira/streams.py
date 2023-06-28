@@ -584,8 +584,7 @@ class IssueStream(JiraStream):
         """
         Returns base url
         """
-        version = self.config.get("api_version_3", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/".format(version)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/"
         return base_url
 
     def get_url_params(
@@ -658,8 +657,7 @@ class IssueStream(JiraStream):
                     """
                     Returns base url
                     """
-                    version = self.config.get("api_version_2", "")
-                    base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+                    base_url = "https://ryan-miranda.atlassian.net:443/rest/api/2"
                     return base_url
 
                 def get_url_params(
@@ -857,8 +855,7 @@ class PermissionStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        version = self.config.get("api_version_3", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
         return base_url
 
     def get_url_params(
@@ -918,8 +915,7 @@ class ProjectRoleStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        version = self.config.get("api_version_3", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
         return base_url
 
     def get_url_params(
@@ -979,8 +975,7 @@ class PriorityStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        version = self.config.get("api_version_3", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
         return base_url
 
     def get_url_params(
@@ -1038,8 +1033,7 @@ class PermissionHolderStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        version = self.config.get("api_version_3", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
         return base_url
 
     def get_url_params(
@@ -1123,9 +1117,8 @@ class SprintStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        version = self.config.get("agile_version", "")
         board_id = self.config.get("board_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/{}/board/{}".format(version, board_id)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/1.0/board/{}".format(board_id)
         return base_url
 
     def get_url_params(
@@ -1209,8 +1202,7 @@ class UserGroupJiraSoftwareStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        version = self.config.get("api_version_3", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
         return base_url
 
     def get_url_params(
@@ -1421,10 +1413,9 @@ class ProjectRoleAdminActorStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        version = self.config.get("api_version_3", "")
         project_id = self.config.get("project_id", "")
         admin = self.config.get("role_admin_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, admin)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/project/{}/role/{}".format(project_id, admin)
         return base_url
 
     def get_url_params(
@@ -1481,10 +1472,9 @@ class ProjectRoleViewerActorStream(ProjectRoleAdminActorStream):
 
     @property
     def url_base(self) -> str:
-        version = self.config.get("api_version_3", "")
         project_id = self.config.get("project_id", "")
         viewer = self.config.get("role_viewer_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, viewer)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/project/{}/role/{}".format(project_id, viewer)
         return base_url
 
     def get_url_params(
@@ -1541,10 +1531,9 @@ class ProjectRoleMemberActorStream(ProjectRoleAdminActorStream):
 
     @property
     def url_base(self) -> str:
-        version = self.config.get("api_version_3", "")
         project_id = self.config.get("project_id", "")
         member = self.config.get("role_member_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, member)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/project/{}/role/{}".format(project_id, member)
         return base_url
 
     def get_url_params(
@@ -1601,10 +1590,9 @@ class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
 
     @property
     def url_base(self) -> str:
-        version = self.config.get("api_version_3", "")
         project_id = self.config.get("project_id", "")
         atlassian = self.config.get("role_altasian_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/project/{}/role/{}".format(version, project_id, atlassian)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/project/{}/role/{}".format(project_id, atlassian)
         return base_url
 
     def get_url_params(
@@ -1687,8 +1675,7 @@ class IssueWatcherStream(JiraStream):
         """
         Returns base url
         """
-        version = self.config.get("api_version_3", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}/".format(version)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/"
         return base_url
 
     def get_url_params(
@@ -1761,8 +1748,7 @@ class IssueWatcherStream(JiraStream):
                     """
                     Returns base url
                     """
-                    version = self.config.get("api_version_2", "")
-                    base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+                    base_url = "https://ryan-miranda.atlassian.net:443/rest/api/2"
                     return base_url
 
                 def post_process(self, row: dict, context: dict | None = None) -> dict | None:

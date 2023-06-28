@@ -15,26 +15,9 @@ class TapJira(Tap):
 
     config_jsonschema = th.PropertiesList(
         th.Property(
-            "auth_token",
-            th.StringType,
-            #required=True,
-            secret=True,  # Flag config as protected.
-            description="The token to authenticate against the API service",
-        ),
-        th.Property(
             "start_date",
             th.DateTimeType,
             description="The earliest record date to sync",
-        ),
-        th.Property(
-            "api_version",
-            th.StringType,
-            description="The Jira API version",
-        ),
-        th.Property(
-            "domain",
-            th.StringType,
-            description="The domain name for the API service",
         ),
         th.Property(
             "username",
@@ -45,6 +28,41 @@ class TapJira(Tap):
             "password",
             th.StringType,
             description="The Jira API password",
+        ),
+        th.Property(
+            "account_id",
+            th.StringType,
+            description="The Jira API accound id",
+        ),
+        th.Property(
+            "board_id",
+            th.StringType,
+            description="The Jira API board id",
+        ),
+        th.Property(
+            "project_id",
+            th.StringType,
+            description="The Jira API project id",
+        ),
+        th.Property(
+            "role_admin_id",
+            th.StringType,
+            description="The Jira API role admin id",
+        ),
+        th.Property(
+            "role_viewer_id",
+            th.StringType,
+            description="The Jira API role admin id",
+        ),
+        th.Property(
+            "role_member_id",
+            th.StringType,
+            description="The Jira API role admin id",
+        ),
+        th.Property(
+            "role_altasian_id",
+            th.StringType,
+            description="The Jira API role admin id",
         ),
     ).to_dict()
 

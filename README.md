@@ -33,7 +33,6 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 | role_viewer_id      | True    | None    | The Jira role viewer id. |
 | role_member_id      | True    | None    | The Jira role member id. |
 | role_altasian_id    | True    | None    | The Jira role altasian id. |
-| auth_type           | True    | basic   | The auth type to select authentication (basic/http). |
 | start_date          | False   | None    | The earliest record date to sync |
 | end_date            | False   | None    | The latest record date to sync |
 | stream_maps         | False   | None    | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). |
