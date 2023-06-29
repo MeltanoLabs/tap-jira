@@ -76,8 +76,6 @@ class TapJira(Tap):
             streams.GroupsPickerStream(self),
             streams.LicenseStream(self),
             streams.ScreensStream(self),
-            streams.ScreenTabsStream(self),
-            streams.ScreenTabFieldsStream(self),
             streams.ScreenSchemesStream(self),
             streams.StatusesSearchStream(self),
             streams.WorkflowStream(self),
