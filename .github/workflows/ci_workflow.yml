@@ -51,11 +51,5 @@ jobs:
          TAP_JIRA_USERNAME: ${{ secrets.username }}
          TAP_JIRA_PASSWORD: ${{ secrets.password }}
          TAP_JIRA_ACCOUNT_ID: ${{ secrets.account_id }}
-         TAP_JIRA_BOARD_ID: ${{ secrets.board_id }}
-         TAP_JIRA_PROJECT_ID: ${{ secrets.project_id }}
-         TAP_JIRA_ROLE_ADMIN_ID: ${{ secrets.role_admin_id }}
-         TAP_JIRA_ROLE_VIEWER_ID: ${{ secrets.role_viewer_id }}
-         TAP_JIRA_ROLE_MEMBER_ID: ${{ secrets.role_member_id }}
-         TAP_JIRA_ROLE_ALTASIAN_ID: ${{ secrets.role_altasian_id }}
       run: |
         poetry run pytest --capture=no
