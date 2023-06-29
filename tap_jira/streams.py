@@ -2085,7 +2085,7 @@ class GroupsPickerStream(JiraStream):
         yield from results
 
 
-class InstanceStream(JiraStream):
+class LicenseStream(JiraStream):
 
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-license-metrics/#api-rest-api-3-instance-license-get
@@ -2101,7 +2101,7 @@ class InstanceStream(JiraStream):
     issue_out: issue out value
     """
 
-    name = "instance"
+    name = "license"
     path = "/instance/license"
     primary_keys = ["id"]
     replication_key = "id"
