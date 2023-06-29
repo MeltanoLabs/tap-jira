@@ -194,7 +194,7 @@ class ServerInfoStream(JiraStream):
                  baseUrl, version, versionNumbers, deploymentType, buildNumber, buildDate, serverTime, scmInfo, serverTitle, defaultLocale
               """
 
-    name = "serverInfo"
+    name = "server_info"
     path = "/serverInfo"
     primary_keys = ["baseUrl"]
     replication_key = "serverTime"
@@ -257,7 +257,7 @@ class IssueTypeStream(JiraStream):
                  self, id, description, iconUrl, name, untranslatedName, subtask, avatarId, hierarchyLevel, scope
               """
 
-    name = "issuetype"
+    name = "issue_type"
     path = "/issuetype"
     primary_keys = ["id"]
     replication_key = "id"
@@ -490,7 +490,7 @@ class IssueStream(JiraStream):
 
     name = "issue"
     path = "/search"
-    #primary_keys = ["id"]
+    primary_keys = ["id"]
     replication_key = "updated"
     replication_method = "incremental"
 
@@ -579,14 +579,6 @@ class IssueStream(JiraStream):
 
     ).to_dict()
 
-    @property
-    def url_base(self) -> str:
-        """
-        Returns base url
-        """
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/"
-        return base_url
-
     def get_url_params(
             self,
             context: dict | None,
@@ -651,14 +643,6 @@ class IssueStream(JiraStream):
                 issues_out = key
                 name = "issue"
                 path = "/issue/{}/".format(issues_out)
-                
-                @property
-                def url_base(self) -> str:
-                    """
-                    Returns base url
-                    """
-                    base_url = "https://ryan-miranda.atlassian.net:443/rest/api/2"
-                    return base_url
 
                 def get_url_params(
                         self,
@@ -853,11 +837,6 @@ class PermissionStream(JiraStream):
 
     ).to_dict()
 
-    @property
-    def url_base(self) -> str:
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
-        return base_url
-
     def get_url_params(
             self,
             context: dict | None,
@@ -897,7 +876,7 @@ class ProjectRoleStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "projectrole"
+    name = "project_role"
     path = "/role"
     primary_keys = ["id"]
     replication_key = "id"
@@ -912,11 +891,6 @@ class ProjectRoleStream(JiraStream):
         Property("actors", ArrayType(StringType)),
 
     ).to_dict()
-
-    @property
-    def url_base(self) -> str:
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
-        return base_url
 
     def get_url_params(
             self,
@@ -973,11 +947,6 @@ class PriorityStream(JiraStream):
 
     ).to_dict()
 
-    @property
-    def url_base(self) -> str:
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
-        return base_url
-
     def get_url_params(
             self,
             context: dict | None,
@@ -1017,7 +986,7 @@ class PermissionHolderStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "permissionholder"
+    name = "permission_holder"
     path = "/permissionscheme"
     primary_keys = ["id"]
     replication_key = "id"
@@ -1030,11 +999,6 @@ class PermissionHolderStream(JiraStream):
         Property("permission", StringType),
 
     ).to_dict()
-
-    @property
-    def url_base(self) -> str:
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
-        return base_url
 
     def get_url_params(
             self,
@@ -1182,9 +1146,9 @@ class UserGroupJiraSoftwareStream(JiraStream):
     """
     
     group_name = "jira-software-users"
-    name = "usergroupjirasoftware"
+    name = "user_group_jira_software"
     path = "/group/member?groupname={}".format(group_name)
-    #primary_keys = ["user_id"]
+    primary_keys = ["self"]
     replication_key = "user_id"
     replication_method = "incremental"
 
@@ -1199,11 +1163,6 @@ class UserGroupJiraSoftwareStream(JiraStream):
         Property("group_name", StringType),
 
     ).to_dict()
-
-    @property
-    def url_base(self) -> str:
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
-        return base_url
 
     def get_url_params(
             self,
@@ -1279,7 +1238,7 @@ class UserGroupConfluenceStream(UserGroupJiraSoftwareStream):
     """
     
     group_name = "confluence-users"
-    name = "usergroupconfluence"
+    name = "user_group_confluence"
     path = "/group/member?groupname={}".format(group_name)
 
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
@@ -1312,7 +1271,7 @@ class UserGroupSiteAdminsStream(UserGroupJiraSoftwareStream):
     """
     
     group_name = "site-admins"
-    name = "usergroupsiteadmins"
+    name = "user_group_site_admins"
     path = "/group/member?groupname={}".format(group_name)
 
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
@@ -1345,7 +1304,7 @@ class UserGroupTrustedStream(UserGroupJiraSoftwareStream):
     """
     
     group_name = "trusted-users-c10b9164-2085-42b7-96c3-2ec6c1102bad"
-    name = "usergroup"
+    name = "user_group"
     path = "/group/member?groupname={}".format(group_name)
 
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
@@ -1394,7 +1353,7 @@ class ProjectRoleAdminActorStream(JiraStream):
     replication_key = datetime keys for replication
     """
     
-    name = "projectroleadminactor"
+    name = "project_role_admin_actor"
     path = None
 
     primary_keys = ["id"]
@@ -1457,7 +1416,7 @@ class ProjectRoleViewerActorStream(ProjectRoleAdminActorStream):
     replication_key = datetime keys for replication
     """
     
-    name = "projectrolevieweractor"
+    name = "project_role_viewer_actor"
     path = None
 
     schema = PropertiesList(
@@ -1516,7 +1475,7 @@ class ProjectRoleMemberActorStream(ProjectRoleAdminActorStream):
     replication_key = datetime keys for replication
     """
     
-    name = "projectrolememberactor"
+    name = "project_role_member_actor"
     path = None
 
     schema = PropertiesList(
@@ -1575,7 +1534,7 @@ class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
     replication_key = datetime keys for replication
     """
     
-    name = "projectroleactor"
+    name = "project_role_actor"
     path = None
 
     schema = PropertiesList(
@@ -1653,9 +1612,9 @@ class IssueWatcherStream(JiraStream):
     issue_out: issue out value
     """
 
-    name = "issuewatcher"
+    name = "issue_watcher"
     path = "/search"
-    #primary_keys = ["id"]
+    primary_keys = ["key"]
     replication_key = "user_id"
     replication_method = "incremental"
 
@@ -1669,14 +1628,6 @@ class IssueWatcherStream(JiraStream):
         
 
     ).to_dict()
-
-    @property
-    def url_base(self) -> str:
-        """
-        Returns base url
-        """
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/"
-        return base_url
 
     def get_url_params(
             self,
@@ -1740,16 +1691,8 @@ class IssueWatcherStream(JiraStream):
 
             class IssueKeyWatcher(JiraStream):
                 issues_out = key
-                name = "issuewatcher"
+                name = "issue_watcher"
                 path = "/issue/{}/watchers".format(issues_out)
-                
-                @property
-                def url_base(self) -> str:
-                    """
-                    Returns base url
-                    """
-                    base_url = "https://ryan-miranda.atlassian.net:443/rest/api/2"
-                    return base_url
 
                 def post_process(self, row: dict, context: dict | None = None) -> dict | None:
                     """
@@ -1774,6 +1717,1046 @@ class IssueWatcherStream(JiraStream):
         issuewatcher_records = sum(jira_issue_records, []) 
             
         return issuewatcher_records
+    
+
+class AuditingStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-audit-records/#api-rest-api-3-auditing-record-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "auditing"
+    path = "/auditing/record"
+    primary_keys = ["id"]
+    replication_key = "created"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", IntegerType),
+        Property("summary", StringType),
+        Property("created", StringType),
+        Property("category", StringType),
+        Property("eventSource", StringType),
+        Property("objectItem", StringType),
+        Property("changedValues", ArrayType(StringType)),
+        Property("associatedItems", ArrayType(StringType)),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("records") is not None:
+            results = resp_json["records"]
+        else:
+            results = resp_json
+
+        yield from results
+
+
+class DashboardStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "dashboard"
+    path = "/dashboard"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", StringType),
+        Property("isFavourite", BooleanType),
+        Property("name", StringType),
+        Property("popularity", IntegerType),
+        Property("self", StringType),
+        Property("sharePermissions", ArrayType(StringType)),
+        Property("editPermissions", ArrayType(StringType)),
+        Property("view", StringType),
+        Property("isWritable", BooleanType),
+        Property("systemDashboard", BooleanType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("dashboards") is not None:
+            results = resp_json["dashboards"]
+        else:
+            results = resp_json
+
+        yield from results
+
+
+class FilterSearchStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "filter_search"
+    path = "/filter/search"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("expand", StringType),
+        Property("self", StringType),
+        Property("id", StringType),
+        Property("name", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("values") is not None:
+            results = resp_json["values"]
+        else:
+            results = resp_json
+
+        yield from results
+
+
+class FilterDefaultShareScopeStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-defaultsharescope-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "filter_default_share_scope"
+    path = "/filter/defaultShareScope"
+    primary_keys = ["scope"]
+    replication_key = "scope"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("scope", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+    
+
+class GroupsPickerStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-groups-picker-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "groups_picker"
+    path = "/groups/picker"
+    primary_keys = ["groupId"]
+    replication_key = "groupId"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("name", StringType),
+        Property("html", StringType),
+        Property("labels", ArrayType(StringType)),
+        Property("groupId", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("groups") is not None:
+            results = resp_json["groups"]
+        else:
+            results = resp_json
+
+        yield from results
+
+
+class InstanceStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-license-metrics/#api-rest-api-3-instance-license-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "instance"
+    path = "/instance/license"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", StringType),
+        Property("plan", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("applications") is not None:
+            results = resp_json["applications"]
+        else:
+            results = resp_json
+
+        yield from results
+
+
+class ScreensStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "screens"
+    path = "/screens"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", IntegerType),
+        Property("name", StringType),
+        Property("description", StringType),
+        Property("scope", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("values") is not None:
+            results = resp_json["values"]
+        else:
+            results = resp_json
+
+        yield from results
+
+
+class ScreenTabsStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "screen_tabs"
+    path = "/screens"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", IntegerType),
+        Property("name", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("values") is not None:
+            results = resp_json["values"]
+        else:
+            results = resp_json
+
+        yield from results
+
+    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        """
+        We have screen ids for screens, we have records for each screen id
+        We can get the records with these screen ids from the parent ScreenTabsStream and add them to screend_id list
+        We can traverse through these screen ids with a for loop and create a child class for them
+        We can get the records for each screen ids in a child class and then we can join each of them with get records function and add them to screen_id_tab_records list
+        We have added a try except statment to create child streams for those ids which have data
+        """
+
+        screend_id = []
+        screen_id_tab_records = []
+
+        for record in list(super().get_records(context)):
+            screend_id.append(record.get("id"))    
+
+        for key in screend_id:
+
+            try:
+
+                class ScreenIdTab(JiraStream):
+                    screen_id = key
+                    name = "screen_tabs"
+                    path = "/screens/{}/tabs".format(screen_id)
+
+                screen_id_tab = ScreenIdTab(
+                    self._tap, schema={"properties": {}}
+                )
+
+                screen_id_tab_records.append(list(screen_id_tab.get_records(context)))
+
+            except:
+                pass
+        
+        screentabs_records = sum(screen_id_tab_records, []) 
+            
+        return screentabs_records
+
+
+class ScreenTabFieldsStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "screen_tab_fields"
+    path = "/screens"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", StringType),
+        Property("name", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("values") is not None:
+            results = resp_json["values"]
+        else:
+            results = resp_json
+
+        yield from results
+
+    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        """
+        We have screen ids for screens and tab ids for screen tabs, we have records for each pair of screen id and tab id
+        We can get the records with these screen ids from the parent ScreenTabFieldsStream and add them to screend_id list
+        We can get the records with these tab ids from the ScreenTabsStream and add them to screend_tabs_id list
+        We can traverse through these screen ids and tab ids with a for loop and create a child class for them
+        We can get the records for each screen ids and tab ids from their child class and then we can join each of them with get records function
+        We can add these records in a screen_id_tab_records list
+        We have added a try except statment to create child streams for those ids which have data
+        """
+        screend_id = []
+        screend_tabs_id = []
+        screen_tab_fields = []
+        
+        screentabs_stream = ScreenTabsStream(
+            self._tap, schema={"properties": {}}
+        )
+
+        for record in list(super().get_records(context)):
+            screend_id.append(record.get("id"))
+
+        for record in list(screentabs_stream.get_records(context)):
+            screend_tabs_id.append(record.get("id"))    
+
+        for screen_id, tab_id in zip(screend_id, screend_tabs_id):
+
+            try:
+
+                class ScreenIdTabIdFields(JiraStream):
+                    name = "screen_tab_fields"
+                    path = "/screens/{}/tabs/{}/fields".format(screen_id, tab_id)
+
+                screen_id_tab_id_fields = ScreenIdTabIdFields(
+                    self._tap, schema={"properties": {}}
+                )
+
+                screen_tab_fields.append(list(screen_id_tab_id_fields.get_records(context)))        
+
+            except:
+                pass
+        
+        screen_tab_fields_records = sum(screen_tab_fields, []) 
+            
+        return screen_tab_fields_records
+
+
+class ScreenSchemesStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "screen_schemes"
+    path = "/screenscheme"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", IntegerType),
+        Property("name", StringType),
+        Property("description", StringType),
+        Property("screens", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("values") is not None:
+            results = resp_json["values"]
+        else:
+            results = resp_json
+
+        yield from results
+
+
+class StatusesSearchStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "statuses_search"
+    path = "/statuses/search"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", StringType),
+        Property("name", StringType),
+        Property("statusCategory", StringType),
+        Property("scope", StringType),
+        Property("description", StringType),
+        Property("usages", ArrayType(StringType)),
+        Property("workflowUsages", ArrayType(StringType)),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("values") is not None:
+            results = resp_json["values"]
+        else:
+            results = resp_json
+
+        yield from results
+
+
+class WorkflowStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "workflow"
+    path = "/workflow"
+    primary_keys = ["name"]
+    replication_key = "lastModifiedDate"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("name", StringType),
+        Property("description", StringType),
+        Property("steps", IntegerType),
+        Property("default", BooleanType),
+        Property("lastModifiedDate", StringType),
+        Property("lastModifiedUser", StringType),
+        Property("lastModifiedUserAccountId", StringType),
+        Property("scope", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params        
+
+
+class WorkflowSearchStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
+    """
+
+    """
+    columns: columns which will be added to fields parameter in api
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    issue_out: issue out value
+    """
+
+    name = "workflow_search"
+    path = "/workflow/search"
+    primary_keys = ["id"]
+    replication_key = "updated"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("id", StringType),
+        Property("description", StringType),
+        Property("created", StringType),
+        Property("updated", StringType),
+        
+
+    ).to_dict()
+
+    def get_url_params(
+            self,
+            context: dict | None,
+            next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        params: dict = {}
+        if next_page_token:
+            params["page"] = next_page_token
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key        
+
+        return params
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        """Parse the response and return an iterator of result records.
+
+        Args:
+            response: The HTTP ``requests.Response`` object.
+
+        Yields:
+            Each record from the source.
+        """
+
+        resp_json = response.json()
+
+        if isinstance(resp_json, list):
+            results = resp_json
+        elif resp_json.get("values") is not None:
+            results = resp_json["values"]
+        else:
+            results = resp_json
+
+        yield from results
+
+                            
+                                    
+                        
 
                 
 

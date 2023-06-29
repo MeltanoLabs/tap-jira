@@ -23,7 +23,7 @@ class JiraStream(RESTStream):
         """
         Returns base url
         """
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/2"
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
         return base_url
 
     records_jsonpath = "$[*]"  # Or override `parse_response`.

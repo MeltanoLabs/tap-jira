@@ -89,6 +89,19 @@ class TapJira(Tap):
             streams.UserGroupTrustedStream(self),
             streams.ProjectRoleAtlassianActorStream(self),
             streams.IssueWatcherStream(self),
+            streams.AuditingStream(self),
+            streams.DashboardStream(self),
+            streams.FilterSearchStream(self),
+            streams.FilterDefaultShareScopeStream(self),
+            streams.GroupsPickerStream(self),
+            streams.InstanceStream(self),
+            streams.ScreensStream(self),
+            streams.ScreenTabsStream(self),
+            streams.ScreenTabFieldsStream(self),
+            streams.ScreenSchemesStream(self),
+            streams.StatusesSearchStream(self),
+            streams.WorkflowStream(self),
+            streams.WorkflowSearchStream(self),
         ]
 
 
