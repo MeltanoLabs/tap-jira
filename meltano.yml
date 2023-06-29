@@ -18,7 +18,9 @@ plugins:
     - name: password
       kind: password
     - name: start_date
-    - name: end_date      
+    - name: end_date
+    - name: access_token  
+    - name: auth_type
   loaders:
   - name: target-jsonl
     variant: andyh1203
