@@ -1061,13 +1061,13 @@ class SprintStream(JiraStream):
     """
 
     name = "sprint"
-    path = "/sprint"
+    path = "/board"
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
 
     schema = PropertiesList(
-        Property("id", IntegerType),
+        Property("id", StringType),
         Property("self", StringType),
         Property("state", StringType),
         Property("name", StringType),
@@ -1081,8 +1081,7 @@ class SprintStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        board_id = self.config.get("board_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/1.0/board/{}".format(board_id)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/1.0"
         return base_url
 
     def get_url_params(
@@ -1127,10 +1126,72 @@ class SprintStream(JiraStream):
         else:
             results = resp_json
 
-        yield from results
+        yield from results 
+
+    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        """
+        We have board ids for board, we have records for each board id
+        We can get the records with these board ids from the parent SprintStream and add them to board_id list
+        We can traverse through these board ids with a for loop and create a child class for them
+        We can get the records for each board ids in a child class and then we can join each of them with get records function and add them to sprint_records list
+        We have added a try except statment to create child streams for those ids which have data
+        """
+
+        board_id = []
+        sprint_records = []
+
+        for record in list(super().get_records(context)):
+            board_id.append(record.get("id"))    
+
+        for id in board_id:
+
+            try:
+
+                class Sprint(JiraStream):
+                    name = "sprint"
+                    path = "/sprint"
+
+                    @property
+                    def url_base(self) -> str:
+                        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/1.0/board/{}".format(id)
+                        return base_url
+
+                    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+                        """Parse the response and return an iterator of result records.
+
+                        Args:
+                            response: The HTTP ``requests.Response`` object.
+
+                        Yields:
+                            Each record from the source.
+                        """
+
+                        resp_json = response.json()
+
+                        if isinstance(resp_json, list):
+                            results = resp_json
+                        elif resp_json.get("values") is not None:
+                            results = resp_json["values"]
+                        else:
+                             results = resp_json
+
+                        yield from results    
+
+                sprint = Sprint(
+                    self._tap, schema={"properties": {}}
+                )
+
+                sprint_records.append(list(sprint.get_records(context)))
+
+            except:
+                pass
+        
+        sprint_records = sum(sprint_records, []) 
+            
+        return sprint_records
 
 
-class UserGroupJiraSoftwareStream(JiraStream):
+class UserGroupStream(JiraStream):
 
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
@@ -1145,9 +1206,8 @@ class UserGroupJiraSoftwareStream(JiraStream):
     replication_key = datetime keys for replication
     """
     
-    group_name = "jira-software-users"
-    name = "user_group_jira_software"
-    path = "/group/member?groupname={}".format(group_name)
+    name = "user_group"
+    path = "/user/groups"
     primary_keys = ["self"]
     replication_key = "user_id"
     replication_method = "incremental"
@@ -1161,6 +1221,7 @@ class UserGroupJiraSoftwareStream(JiraStream):
         Property("timeZone", StringType),
         Property("accountType", StringType),
         Property("group_name", StringType),
+        Property("name", StringType),
 
     ).to_dict()
 
@@ -1178,6 +1239,7 @@ class UserGroupJiraSoftwareStream(JiraStream):
         Returns:
             A dictionary of URL query parameters.
         """
+        account_id = self.config.get("account_id", "")
         params: dict = {}
         if next_page_token:
             params["page"] = next_page_token
@@ -1185,341 +1247,84 @@ class UserGroupJiraSoftwareStream(JiraStream):
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
 
+        params["accountId"] = account_id    
+
         return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif len(resp_json.get("values")) !=0:
-            results = resp_json["values"]    
-        else:
-            results = [resp_json]
-
-        yield from results
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a group name column with group name variable and a user id column  with account id column
-        """
-
-        try:
-            row["group_name"] = self.group_name
-            row["user_id"] = row["accountId"]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-    
-
-class UserGroupConfluenceStream(UserGroupJiraSoftwareStream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    """
-    
-    group_name = "confluence-users"
-    name = "user_group_confluence"
-    path = "/group/member?groupname={}".format(group_name)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a group name column with group name variable and a user id column  with account id column
-        """
-
-        try:
-            row["group_name"] = self.group_name
-            row["user_id"] = row["accountId"]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-    
-
-class UserGroupSiteAdminsStream(UserGroupJiraSoftwareStream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    """
-    
-    group_name = "site-admins"
-    name = "user_group_site_admins"
-    path = "/group/member?groupname={}".format(group_name)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a group name column with group name variable and a user id column  with account id column
-        """
-
-        try:
-            row["group_name"] = self.group_name
-            row["user_id"] = row["accountId"]
-        except:
-            pass
-        
-        return super().post_process(row, context)
-    
-
-class UserGroupTrustedStream(UserGroupJiraSoftwareStream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    """
-    
-    group_name = "trusted-users-c10b9164-2085-42b7-96c3-2ec6c1102bad"
-    name = "user_group"
-    path = "/group/member?groupname={}".format(group_name)
-
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add a group name column with group name variable and a user id column  with account id column
-        """
-
-        try:
-            row["group_name"] = self.group_name
-            row["user_id"] = row["accountId"]
-        except:
-            pass
-        
-        return super().post_process(row, context)
     
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
-        We can get records for each group value in a child class and then we can join them with get records function
+        We have group names for users, we have records for each group name
+        We can get the records with these group names from the parent UserGroupStream and add them to user_group_name list
+        We can traverse through these group names with a for loop and create a child class for them
+        We can get the records for each group names in a child class and then we can join each of them with get records function and add them to group_records list
+        We have added a try except statment to create child streams for those ids which have data
         """
-        jira_software = UserGroupJiraSoftwareStream(
-            self._tap, schema={"properties": {}}
-        )
-        confluence = UserGroupConfluenceStream(
-            self._tap, schema={"properties": {}}
-        )
-        site_admin = UserGroupSiteAdminsStream(
-            self._tap, schema={"properties": {}}
-        )
-        jira_records = list(jira_software.get_records(context)) + list(confluence.get_records(context)) + list(site_admin.get_records(context)) + list(super().get_records(context))
+
+        user_group_name = []
+        group_records = []
+
+        for record in list(super().get_records(context)):
+            user_group_name.append(record.get("name"))    
+
+        for name in user_group_name:
+
+            group_name = name
+
+            try:
+
+                class UserGroup(JiraStream):
+                    name = "user_group"
+                    path = "/group/member?groupname={}".format(group_name)
+
+                    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+                        """Parse the response and return an iterator of result records.
+
+                        Args:
+                            response: The HTTP ``requests.Response`` object.
+
+                        Yields:
+                            Each record from the source.
+                        """
+
+                        resp_json = response.json()
+
+                        if isinstance(resp_json, list):
+                            results = resp_json
+                        elif len(resp_json.get("values")) !=0:
+                            results = resp_json["values"]    
+                        else:
+                            results = [resp_json]
+
+                        yield from results
+
+                    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+                        """
+                        We can add a group name column with group name variable and a user id column  with account id column
+                        """
+
+                        try:
+                            row["group_name"] = group_name
+                            row["user_id"] = row["accountId"]
+                        except:
+                            pass
+        
+                        return super().post_process(row, context)
+
+                user_group = UserGroup(
+                    self._tap, schema={"properties": {}}
+                )
+
+                group_records.append(list(user_group.get_records(context)))
+
+            except:
+                pass
+        
+        usergroup_records = sum(group_records, []) 
             
-        return jira_records
+        return usergroup_records
 
 
-class ProjectRoleAdminActorStream(JiraStream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    """
-    
-    name = "project_role_admin_actor"
-    path = None
-
-    primary_keys = ["id"]
-    replication_key = "id"
-    replication_method = "incremental"
-
-    schema = PropertiesList(
-        Property("self", StringType),
-        Property("name", StringType),
-        Property("id", StringType),
-        Property("description", StringType),
-        Property("actors", StringType),
-        Property("scope", StringType),
-
-    ).to_dict()
-
-    @property
-    def url_base(self) -> str:
-        project_id = self.config.get("project_id", "")
-        admin = self.config.get("role_admin_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/project/{}/role/{}".format(project_id, admin)
-        return base_url
-
-    def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["page"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
-
-        return params     
-    
-
-class ProjectRoleViewerActorStream(ProjectRoleAdminActorStream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    """
-    
-    name = "project_role_viewer_actor"
-    path = None
-
-    schema = PropertiesList(
-        Property("self", StringType),
-        Property("name", StringType),
-        Property("id", StringType),
-        Property("description", StringType),
-        Property("actors", StringType),
-        Property("scope", StringType),
-
-    ).to_dict()
-
-    @property
-    def url_base(self) -> str:
-        project_id = self.config.get("project_id", "")
-        viewer = self.config.get("role_viewer_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/project/{}/role/{}".format(project_id, viewer)
-        return base_url
-
-    def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["page"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
-
-        return params
-
-
-class ProjectRoleMemberActorStream(ProjectRoleAdminActorStream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
-    """
-
-    """
-    columns: columns which will be added to fields parameter in api
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    """
-    
-    name = "project_role_member_actor"
-    path = None
-
-    schema = PropertiesList(
-        Property("self", StringType),
-        Property("name", StringType),
-        Property("id", StringType),
-        Property("description", StringType),
-        Property("actors", StringType),
-        Property("scope", StringType),
-
-    ).to_dict()
-
-    @property
-    def url_base(self) -> str:
-        project_id = self.config.get("project_id", "")
-        member = self.config.get("role_member_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/project/{}/role/{}".format(project_id, member)
-        return base_url
-
-    def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["page"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
-
-        return params
-
-
-class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
+class ProjectRoleActorStream(JiraStream):
 
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
@@ -1535,24 +1340,21 @@ class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
     """
     
     name = "project_role_actor"
-    path = None
+    path = "/role"
+
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "incremental"
 
     schema = PropertiesList(
         Property("self", StringType),
         Property("name", StringType),
-        Property("id", IntegerType),
+        Property("id", StringType),
         Property("description", StringType),
-        Property("actors", ArrayType(StringType)),
+        Property("actors", StringType),
         Property("scope", StringType),
 
     ).to_dict()
-
-    @property
-    def url_base(self) -> str:
-        project_id = self.config.get("project_id", "")
-        atlassian = self.config.get("role_altasian_id", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3/project/{}/role/{}".format(project_id, atlassian)
-        return base_url
 
     def get_url_params(
             self,
@@ -1576,24 +1378,53 @@ class ProjectRoleAtlassianActorStream(ProjectRoleAdminActorStream):
             params["order_by"] = self.replication_key        
 
         return params
-    
+
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
-        We have records for each role actor
-        We can get records for each role actor in a child class and then we can join them with get records function
+        We have role ids for project, we have records for each role id
+        We can get the records with these role ids from the parent ProjectRoleActorStream and add them to role_id list
+        We can traverse through these role ids with a for loop and create a child class for them
+        We can get the records for each role ids in a child class and then we can join each of them with get records function and add them to role_actor_records list
+        We have added a try except statment to create child streams for those ids which have data
         """
-        admin = ProjectRoleAdminActorStream(
+
+        role_id = []
+        project_id = []
+        role_actor_records = []
+
+        project = ProjectStream(
             self._tap, schema={"properties": {}}
         )
-        viewer = ProjectRoleViewerActorStream(
-            self._tap, schema={"properties": {}}
-        )
-        member = ProjectRoleMemberActorStream(
-            self._tap, schema={"properties": {}}
-        )
-        role_records = list(admin.get_records(context)) + list(viewer.get_records(context)) + list(member.get_records(context)) + list(super().get_records(context))
+
+        for record in list(super().get_records(context)):
+            role_id.append(record.get("id"))
+
+        for record in list(project.get_records(context)):
+            project_id.append(record.get("id"))        
+
+        for pid in project_id:
+            for role in role_id:
+
+                try:
+
+                    class ProjectRoleActor(JiraStream):
+                        role_id = role
+                        project_id = pid
+                        name = "project_role_actor"
+                        path = "/project/{}/role/{}".format(project_id, role_id)
+
+                    project_role_actor = ProjectRoleActor(
+                        self._tap, schema={"properties": {}}
+                    )
+
+                    role_actor_records.append(list(project_role_actor.get_records(context)))
+
+                except:
+                    pass
+        
+        project_role_actor_records = sum(role_actor_records, []) 
             
-        return role_records    
+        return project_role_actor_records    
 
 
 class IssueWatcherStream(JiraStream):
@@ -2752,6 +2583,10 @@ class WorkflowSearchStream(JiraStream):
             results = resp_json
 
         yield from results
+
+
+           
+            
 
                             
                                     
