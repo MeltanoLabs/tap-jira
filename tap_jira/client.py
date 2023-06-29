@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, Callable, Iterable
 
 import requests
-from singer_sdk.authenticators import BasicAuthenticator
+from singer_sdk.authenticators import BasicAuthenticator, BearerTokenAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.pagination import BaseAPIPaginator  
 from singer_sdk.streams import RESTStream
@@ -38,12 +38,17 @@ class JiraStream(RESTStream):
         Returns:
             An authenticator instance.
         """
+        auth_type = self.config.get("auth_type", "")
 
-        return BasicAuthenticator.create_for_stream(
-               self,
-               username=self.config.get("username", ""),
-               password=self.config.get("password", ""),
-        )
+        if auth_type == "oauth":
+            return BearerTokenAuthenticator.create_for_stream(self,
+                token=self.config.get("access_token", ""),)
+        else:
+            return BasicAuthenticator.create_for_stream(
+                self,
+                username=self.config.get("username", ""),
+                password=self.config.get("password", ""),
+            )
         
     @property
     def http_headers(self) -> dict:
