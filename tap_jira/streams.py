@@ -1841,7 +1841,7 @@ class ProjectRoleActorStream(JiraStream):
         Property("description", StringType),
         Property(
             "actors",
-            ObjectType(
+            ArrayType(ObjectType(
                 Property("id", IntegerType),
                 Property("displayName", StringType),
                 Property("type", StringType),
@@ -1850,6 +1850,7 @@ class ProjectRoleActorStream(JiraStream):
                     "actorUser",
                     ObjectType(
                         Property("accountId", StringType),
+                    ),
                     ),
                 ),
             ),
