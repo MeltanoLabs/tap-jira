@@ -2185,7 +2185,6 @@ class ScreensStream(JiraStream):
         Property("id", IntegerType),
         Property("name", StringType),
         Property("description", StringType),
-        Property("scope", StringType),
         
 
     ).to_dict()
