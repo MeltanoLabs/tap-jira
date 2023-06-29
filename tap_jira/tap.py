@@ -37,7 +37,7 @@ class TapJira(Tap):
         th.Property(
             "account_id",
             th.StringType,
-            description="Jira API accound id, used in Users Stream",
+            description="Jira API account id, used in Users Stream",
         ),
     ).to_dict()
 

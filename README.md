@@ -23,8 +23,6 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 |:--------------------|:--------:|:-------:|:------------|
 | username            | True    | None    | The username to authenticate against the API service |
 | password            | True    | None    | The password to authenticate against the API service |
-| api_version       | True    | v3.0    | The API version to request data from. |
-| agile_version       | True    | v1.0    | The Agile version to request data from. |
 | account_id          | True    | None    | The Jira account id. |
 | start_date          | False   | None    | The earliest record date to sync |
 | end_date            | False   | None    | The latest record date to sync |
