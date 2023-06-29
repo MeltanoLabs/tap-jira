@@ -51,7 +51,15 @@ class UsersStream(JiraStream):
         Property("accountType", StringType),
         Property("name", StringType),
         Property("emailAddress", StringType),
-        Property("avatarUrls", StringType),
+        Property(
+            "avatarUrls",
+             ObjectType(
+                Property("48x48", StringType),
+                Property("24x24", StringType),
+                Property("16x16", StringType),
+                Property("32x32", StringType),
+             ),
+        ),
         Property("displayName", StringType),
         Property("active", BooleanType),
         Property("timeZone", StringType),
@@ -125,8 +133,14 @@ class FieldStream(JiraStream):
         Property("orderable", BooleanType),
         Property("navigable", BooleanType),
         Property("searchable", BooleanType),
-        Property("clauseNames", StringType),
-        Property("schema", StringType),
+        Property("clauseNames", ArrayType(StringType)),
+        Property(
+            "schema",
+            ObjectType(
+                Property("type", StringType),
+                Property("system", StringType),
+            ),
+        ),
 
     ).to_dict()
 
@@ -210,7 +224,12 @@ class ServerInfoStream(JiraStream):
         Property("serverTime", StringType),
         Property("scmInfo", StringType),
         Property("serverTitle", StringType),
-        Property("defaultLocale", StringType),
+        Property(
+            "defaultLocale",
+            ObjectType(
+                Property("locale", StringType),
+            ),
+        ),
 
     ).to_dict()
 
@@ -354,10 +373,28 @@ class StatusStream(JiraStream):
         Property("name", StringType),
         Property("untranslatedName", StringType),
         Property("id", StringType),
-        Property("statusCategory", StringType),
-        Property("scope", StringType),
-
-
+        Property(
+            "statusCategory",
+            ObjectType(
+                Property("self", StringType),
+                Property("id", IntegerType),
+                Property("key", StringType),
+                Property("colorName", StringType),
+                Property("name", StringType),
+            ),
+        ),
+        Property(
+            "scope",
+            ObjectType(
+                Property("type", StringType),
+                Property(
+                    "project",
+                    ObjectType(
+                        Property("id", StringType),
+                    ),
+                ),
+            ),
+        ),
 
     ).to_dict()
 
@@ -416,7 +453,15 @@ class ProjectStream(JiraStream):
         Property("id", StringType),
         Property("key", StringType),
         Property("name", StringType),
-        Property("avatarUrls", StringType),
+        Property(
+            "avatarUrls",
+            ObjectType(
+                Property("48x48", StringType),
+                Property("24x24", StringType),
+                Property("16x16", StringType),
+                Property("32x32", StringType),
+            ),
+        ),
         Property("projectTypeKey", StringType),
         Property("simplified", BooleanType),
         Property("style", StringType),
@@ -496,12 +541,47 @@ class IssueStream(JiraStream):
 
     schema = PropertiesList(
         Property("statuscategorychangedate", StringType),
-        Property("issuetype", StringType),
+        Property(
+            "issuetype",
+            ObjectType(
+                Property("self", StringType),
+                Property("id", StringType),
+                Property("description", StringType),
+                Property("iconUrl", StringType),
+                Property("name", StringType),
+                Property("subtask", BooleanType),
+                Property("avatarId", IntegerType),
+                Property("entityId", StringType),
+                Property("hierarchyLevel", IntegerType),
+            ),
+        ),
         Property("timespent", StringType),
-        Property("customfield_10030", StringType),
-        Property("customfield_10031", StringType),
-        Property("project", StringType),
-        Property("customfield_10032", ArrayType(StringType)),
+        Property("customfield_10030", ArrayType(StringType)),
+        Property("customfield_10031", ArrayType(StringType)),
+        Property(
+            "project",
+            Property(
+                "issuetype",
+                ObjectType(
+                    Property("self", StringType),
+                    Property("id", StringType),
+                    Property("key", StringType),
+                    Property("name", StringType),
+                    Property("ProjectTypeKey", StringType),
+                    Property("simplified", BooleanType),
+                    Property(
+                        "avatarUrls",
+                        ObjectType(
+                            Property("48x48", StringType),
+                            Property("24x24", StringType),
+                            Property("16x16", StringType),
+                            Property("32x32", StringType),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        Property("customfield_10032", StringType),
         Property("fixVersions", ArrayType(StringType)),
         Property("customfield_10033", StringType),
         Property("customfield_10034", StringType),
@@ -512,7 +592,14 @@ class IssueStream(JiraStream):
         Property("customfield_10037", StringType),
         Property("resolutiondate", StringType),
         Property("workratio", IntegerType),
-        Property("watches", StringType),
+        Property(
+            "watches",
+            ObjectType(
+                Property("self", StringType),
+                Property("watchCount", IntegerType),
+                Property("isWatching", BooleanType),
+            ),
+        ),
         Property("issuerestriction", StringType),
         Property("lastViewed", StringType),
         Property("created", StringType),
@@ -520,24 +607,106 @@ class IssueStream(JiraStream):
         Property("customfield_10021", StringType),
         Property("customfield_10022", StringType),
         Property("customfield_10023", StringType),
-        Property("priority", StringType),
+        Property(
+            "priority",
+            ObjectType(
+                Property("self", StringType),
+                Property("iconUrl", StringType),
+                Property("name", StringType),
+                Property("id", StringType),
+            ),
+        ),
         Property("customfield_10024", StringType),
         Property("customfield_10025", StringType),
         Property("labels", ArrayType(StringType)),
         Property("customfield_10016", StringType),
         Property("customfield_10017", StringType),
-        Property("customfield_10018", StringType),
+        Property(
+            "customfield_10018",
+            ObjectType(
+                Property("hasEpicLinkFieldDependency", BooleanType),
+                Property("showField", BooleanType),
+                Property(
+                    "nonEditableReason",
+                    ObjectType(
+                        Property("reason", StringType),
+                        Property("message", StringType),
+                    ),
+                ),
+            ),
+        ),
         Property("customfield_10019", StringType),
         Property("timeestimate", StringType),
         Property("aggregatetimeoriginalestimate", StringType),
         Property("versions", ArrayType(StringType)),
         Property("issuelinks", ArrayType(StringType)),
-        Property("assignee", StringType),
+        Property(
+            "assignee",
+            ObjectType(
+                Property("self", StringType),
+                Property("accountId", StringType),
+                Property(
+                    "avatarUrls",
+                    ObjectType(
+                        Property("48x48", StringType),
+                        Property("24x24", StringType),
+                        Property("16x16", StringType),
+                        Property("32x32", StringType),
+                    ),
+                ),
+                Property("displayName", StringType),
+                Property("active", BooleanType),
+                Property("timeZone", StringType),
+                Property("accountType", StringType),
+            ),
+        ),
         Property("updated", StringType),
-        Property("status", StringType),
+        Property(
+            "status",
+            ObjectType(
+                Property("self", StringType),
+                Property("description", StringType),
+                Property("iconUrl", StringType),
+                Property("name", StringType),
+                Property("id", StringType),
+                Property(
+                    "statusCategory",
+                    ObjectType(
+                        Property("self", StringType),
+                        Property("id", IntegerType),
+                        Property("key", StringType),
+                        Property("colorName", StringType),
+                        Property("name", StringType),
+                    ),
+                ),
+            ),
+        ),
         Property("components", ArrayType(StringType)),
         Property("timeoriginalestimate", StringType),
-        Property("description", StringType),
+        Property(
+            "description",
+            ObjectType(
+                Property("version", IntegerType),
+                Property("type", StringType),
+                Property(
+                    "content",
+                    ArrayType(
+                        ObjectType(
+                            Property("type", StringType),
+                            Property("text", StringType),
+                            Property(
+                                "marks",
+                                ArrayType(
+                                    ObjectType(
+                                        Property("type", StringType),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
         Property("customfield_10010", StringType),
         Property("customfield_10014", StringType),
         Property("timetracking", StringType),
@@ -551,13 +720,58 @@ class IssueStream(JiraStream):
         Property("customfield_10009", StringType),
         Property("attachment", ArrayType(StringType)),
         Property("summary", StringType),
-        Property("creator", StringType),
+        Property(
+            "creator",
+            ObjectType(
+                Property("self", StringType),
+                Property("accountId", StringType),
+                Property(
+                    "avartarUrls",
+                    ObjectType(
+                        Property("48x48", StringType),
+                        Property("24x24", StringType),
+                        Property("16x16", StringType),
+                        Property("32x32", StringType),
+                    ),
+                ),
+                Property("displayName", StringType),
+                Property("active", BooleanType),
+                Property("timeZone", StringType),
+                Property("accountType", StringType),
+            ),
+        ),
         Property("subtasks", ArrayType(StringType)),
         Property("customfield_10041", StringType),
-        Property("reporter", StringType),
+        Property(
+            "reporter",
+            ObjectType(
+                Property("self", StringType),
+                Property("accountId", StringType),
+                Property("emailAddress", StringType),
+                Property(
+                    "avartarUrls",
+                    ObjectType(
+                        Property("48x48", StringType),
+                        Property("24x24", StringType),
+                        Property("16x16", StringType),
+                        Property("32x32", StringType),
+                    ),
+                ),
+                Property("displayName", StringType),
+                Property("active", BooleanType),
+                Property("timeZone", StringType),
+                Property("accountType", StringType),
+            ),
+        ),
         Property("customfield_10043", StringType),
         Property("customfield_10044", StringType),
-        Property("aggregateprogress", StringType),
+        Property(
+            "aggregateprogress",
+            ObjectType(
+                Property("progress", IntegerType),
+                Property("total", IntegerType),
+            ),
+        ),
         Property("customfield_10045", StringType),
         Property("customfield_10001", StringType),
         Property("customfield_10002", StringType),
@@ -567,15 +781,28 @@ class IssueStream(JiraStream):
         Property("customfield_10039", StringType),
         Property("environment", StringType),
         Property("duedate", StringType),
-        Property("progress", StringType),
+        Property(
+            "progress",
+            ObjectType(
+                Property("progress", IntegerType),
+                Property("total", IntegerType),
+            ),
+        ),
         Property("comment", StringType),
-        Property("votes", StringType),
+        Property(
+            "votes",
+            ObjectType(
+                Property("self", StringType),
+                Property("votes", IntegerType),
+                Property("hasVoted", BooleanType),
+            ),
+        ),
         Property("worklog", StringType),
         Property("key", StringType),
         Property("id", IntegerType),
         Property("editmeta", StringType),
         Property("histories", StringType),
-        
+
 
     ).to_dict()
 
@@ -635,7 +862,7 @@ class IssueStream(JiraStream):
         jira_issue_records = []
 
         for record in list(super().get_records(context)):
-            jira_issue_key.append(record.get("key"))    
+            jira_issue_key.append(record.get("key"))
 
         for key in jira_issue_key:
 
@@ -664,11 +891,11 @@ class IssueStream(JiraStream):
                     if self.replication_key:
                         params["sort"] = "asc"
                     params["order_by"] = self.replication_key
-            
-                    params["expand"] = "editmeta,changelog"        
+
+                    params["expand"] = "editmeta,changelog"
 
                     return params
-    
+
                 def parse_response(self, response: requests.Response) -> Iterable[dict]:
                     """Parse the response and return an iterator of result records.
 
@@ -683,7 +910,7 @@ class IssueStream(JiraStream):
 
                     if isinstance(resp_json, list):
                         results = resp_json
-                    elif resp_json.get("fields") is not None: 
+                    elif resp_json.get("fields") is not None:
                         resp_json["fields"]["editmeta"] = resp_json.get("editmeta")
                         resp_json["fields"]["histories"] = resp_json.get("changelog").get("histories")
                         results = [resp_json["fields"]]
@@ -703,7 +930,7 @@ class IssueStream(JiraStream):
                         row["id"] = row.get("comment").get("self").split("/")[7]
                     except:
                         pass
-        
+
                     return super().post_process(row, context)
 
             issue_search_key = IssueKey(
@@ -711,12 +938,12 @@ class IssueStream(JiraStream):
             )
 
             jira_issue_records.append(list(issue_search_key.get_records(context)))
-        
-        issue_records = sum(jira_issue_records, []) 
-            
-        return issue_records                                                
-    
-    
+
+        issue_records = sum(jira_issue_records, [])
+
+        return issue_records
+
+
 class SearchStream(JiraStream):
 
     """
@@ -743,7 +970,273 @@ class SearchStream(JiraStream):
         Property("id", StringType),
         Property("self", StringType),
         Property("key", StringType),
-        Property("fields", StringType),
+        Property(
+            "fields",
+            ObjectType(
+                Property("statuscategorychangedate", StringType),
+                Property(
+                    "issuetype",
+                    ObjectType(
+                        Property("self", StringType),
+                        Property("id", StringType),
+                        Property("description", StringType),
+                        Property("iconUrl", StringType),
+                        Property("name", StringType),
+                        Property("subtask", BooleanType),
+                        Property("avatarId", IntegerType),
+                        Property("entityId", StringType),
+                        Property("hierarchyLevel", IntegerType),
+                    ),
+                ),
+                Property("timespent", StringType),
+                Property("customfield_10030", ArrayType(StringType)),
+                Property("customfield_10031", ArrayType(StringType)),
+                Property(
+                    "project",
+                    Property(
+                        "issuetype",
+                        ObjectType(
+                            Property("self", StringType),
+                            Property("id", StringType),
+                            Property("key", StringType),
+                            Property("name", StringType),
+                            Property("ProjectTypeKey", StringType),
+                            Property("simplified", BooleanType),
+                            Property(
+                                "avatarUrls",
+                                ObjectType(
+                                    Property("48x48", StringType),
+                                    Property("24x24", StringType),
+                                    Property("16x16", StringType),
+                                    Property("32x32", StringType),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                Property("customfield_10032", StringType),
+                Property("fixVersions", ArrayType(StringType)),
+                Property("customfield_10033", StringType),
+                Property("customfield_10034", StringType),
+                Property("aggregatetimespent", StringType),
+                Property("customfield_10035", StringType),
+                Property("resolution", StringType),
+                Property("customfield_10036", StringType),
+                Property("customfield_10037", StringType),
+                Property("resolutiondate", StringType),
+                Property("workratio", IntegerType),
+                Property(
+                    "watches",
+                    ObjectType(
+                        Property("self", StringType),
+                        Property("watchCount", IntegerType),
+                        Property("isWatching", BooleanType),
+                    ),
+                ),
+                Property("issuerestriction", StringType),
+                Property("lastViewed", StringType),
+                Property("created", StringType),
+                Property("customfield_10020", StringType),
+                Property("customfield_10021", StringType),
+                Property("customfield_10022", StringType),
+                Property("customfield_10023", StringType),
+                Property(
+                    "priority",
+                    ObjectType(
+                        Property("self", StringType),
+                        Property("iconUrl", StringType),
+                        Property("name", StringType),
+                        Property("id", StringType),
+                    ),
+                ),
+                Property("customfield_10024", StringType),
+                Property("customfield_10025", StringType),
+                Property("labels", ArrayType(StringType)),
+                Property("customfield_10016", StringType),
+                Property("customfield_10017", StringType),
+                Property(
+                    "customfield_10018",
+                    ObjectType(
+                        Property("hasEpicLinkFieldDependency", BooleanType),
+                        Property("showField", BooleanType),
+                        Property(
+                            "nonEditableReason",
+                            ObjectType(
+                                Property("reason", StringType),
+                                Property("message", StringType),
+                            ),
+                        ),
+                    ),
+                ),
+                Property("customfield_10019", StringType),
+                Property("timeestimate", StringType),
+                Property("aggregatetimeoriginalestimate", StringType),
+                Property("versions", ArrayType(StringType)),
+                Property("issuelinks", ArrayType(StringType)),
+                Property(
+                    "assignee",
+                    ObjectType(
+                        Property("self", StringType),
+                        Property("accountId", StringType),
+                        Property(
+                            "avatarUrls",
+                            ObjectType(
+                                Property("48x48", StringType),
+                                Property("24x24", StringType),
+                                Property("16x16", StringType),
+                                Property("32x32", StringType),
+                            ),
+                        ),
+                        Property("displayName", StringType),
+                        Property("active", BooleanType),
+                        Property("timeZone", StringType),
+                        Property("accountType", StringType),
+                    ),
+                ),
+                Property("updated", StringType),
+                Property(
+                    "status",
+                    ObjectType(
+                        Property("self", StringType),
+                        Property("description", StringType),
+                        Property("iconUrl", StringType),
+                        Property("name", StringType),
+                        Property("id", StringType),
+                        Property(
+                            "statusCategory",
+                            ObjectType(
+                                Property("self", StringType),
+                                Property("id", IntegerType),
+                                Property("key", StringType),
+                                Property("colorName", StringType),
+                                Property("name", StringType),
+                            ),
+                        ),
+                    ),
+                ),
+                Property("components", ArrayType(StringType)),
+                Property("timeoriginalestimate", StringType),
+                Property(
+                    "description",
+                    ObjectType(
+                        Property("version", IntegerType),
+                        Property("type", StringType),
+                        Property(
+                            "content",
+                            ArrayType(
+                                ObjectType(
+                                    Property("type", StringType),
+                                    Property("text", StringType),
+                                    Property(
+                                        "marks",
+                                        ArrayType(
+                                            ObjectType(
+                                                Property("type", StringType),
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                Property("customfield_10010", StringType),
+                Property("customfield_10014", StringType),
+                Property("timetracking", StringType),
+                Property("customfield_10015", StringType),
+                Property("customfield_10005", StringType),
+                Property("customfield_10006", StringType),
+                Property("customfield_10007", StringType),
+                Property("security", StringType),
+                Property("customfield_10008", StringType),
+                Property("aggregatetimeestimate", StringType),
+                Property("customfield_10009", StringType),
+                Property("attachment", ArrayType(StringType)),
+                Property("summary", StringType),
+                Property(
+                    "creator",
+                    ObjectType(
+                        Property("self", StringType),
+                        Property("accountId", StringType),
+                        Property(
+                            "avartarUrls",
+                            ObjectType(
+                                Property("48x48", StringType),
+                                Property("24x24", StringType),
+                                Property("16x16", StringType),
+                                Property("32x32", StringType),
+                            ),
+                        ),
+                        Property("displayName", StringType),
+                        Property("active", BooleanType),
+                        Property("timeZone", StringType),
+                        Property("accountType", StringType),
+                    ),
+                ),
+                Property("subtasks", ArrayType(StringType)),
+                Property("customfield_10041", StringType),
+                Property(
+                    "reporter",
+                    ObjectType(
+                        Property("self", StringType),
+                        Property("accountId", StringType),
+                        Property("emailAddress", StringType),
+                        Property(
+                            "avartarUrls",
+                            ObjectType(
+                                Property("48x48", StringType),
+                                Property("24x24", StringType),
+                                Property("16x16", StringType),
+                                Property("32x32", StringType),
+                            ),
+                        ),
+                        Property("displayName", StringType),
+                        Property("active", BooleanType),
+                        Property("timeZone", StringType),
+                        Property("accountType", StringType),
+                    ),
+                ),
+                Property("customfield_10043", StringType),
+                Property("customfield_10044", StringType),
+                Property(
+                    "aggregateprogress",
+                    ObjectType(
+                        Property("progress", IntegerType),
+                        Property("total", IntegerType),
+                    ),
+                ),
+                Property("customfield_10045", StringType),
+                Property("customfield_10001", StringType),
+                Property("customfield_10002", StringType),
+                Property("customfield_10003", StringType),
+                Property("customfield_10004", StringType),
+                Property("customfield_10038", StringType),
+                Property("customfield_10039", StringType),
+                Property("environment", StringType),
+                Property("duedate", StringType),
+                Property(
+                    "progress",
+                    ObjectType(
+                        Property("progress", IntegerType),
+                        Property("total", IntegerType),
+                    ),
+                ),
+                Property("comment", StringType),
+                Property(
+                    "votes",
+                    ObjectType(
+                        Property("self", StringType),
+                        Property("votes", IntegerType),
+                        Property("hasVoted", BooleanType),
+                    ),
+                ),
+                Property("worklog", StringType),
+                Property("key", StringType),
+                Property("id", IntegerType),
+                Property("editmeta", StringType),
+                Property("histories", StringType),
+            ),
+        ),
         Property("created", StringType),
         Property("updated", StringType),
 
@@ -771,7 +1264,7 @@ class SearchStream(JiraStream):
             params["order_by"] = self.replication_key
 
         return params
-    
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
@@ -803,7 +1296,7 @@ class SearchStream(JiraStream):
             row["updated"] = row.get("fields").get("updated")
         except:
             pass
-        
+
         return super().post_process(row, context)
 
 
