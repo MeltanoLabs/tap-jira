@@ -53,7 +53,7 @@ class UsersStream(JiraStream):
         Property("emailAddress", StringType),
         Property(
             "avatarUrls",
-             ObjectType(
+            ObjectType(
                 Property("48x48", StringType),
                 Property("24x24", StringType),
                 Property("16x16", StringType),
@@ -84,7 +84,7 @@ class UsersStream(JiraStream):
         Returns:
             A dictionary of URL query parameters.
         """
-        
+
         account_id = self.config.get("account_id", "")
 
         params: dict = {}
@@ -94,7 +94,7 @@ class UsersStream(JiraStream):
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
 
-        params["accountId"] = account_id    
+        params["accountId"] = account_id
 
         return params
 
@@ -255,7 +255,7 @@ class ServerInfoStream(JiraStream):
             params["order_by"] = self.replication_key
 
         return params
-    
+
 
 class IssueTypeStream(JiraStream):
 
@@ -342,7 +342,7 @@ class IssueTypeStream(JiraStream):
 
 
 class StatusStream(JiraStream):
-    
+
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-rest-api-3-statuses-get
     """
@@ -688,23 +688,7 @@ class IssueStream(JiraStream):
             ObjectType(
                 Property("version", IntegerType),
                 Property("type", StringType),
-                Property(
-                    "content",
-                    ArrayType(
-                        ObjectType(
-                            Property("type", StringType),
-                            Property("text", StringType),
-                            Property(
-                                "marks",
-                                ArrayType(
-                                    ObjectType(
-                                        Property("type", StringType),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
+                Property("content", ArrayType(StringType)),
             ),
         ),
         Property("customfield_10010", StringType),
@@ -825,7 +809,7 @@ class IssueStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
 
@@ -1121,23 +1105,7 @@ class SearchStream(JiraStream):
                     ObjectType(
                         Property("version", IntegerType),
                         Property("type", StringType),
-                        Property(
-                            "content",
-                            ArrayType(
-                                ObjectType(
-                                    Property("type", StringType),
-                                    Property("text", StringType),
-                                    Property(
-                                        "marks",
-                                        ArrayType(
-                                            ObjectType(
-                                                Property("type", StringType),
-                                            ),
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
+                        Property("content", ArrayType(StringType)),
                     ),
                 ),
                 Property("customfield_10010", StringType),
@@ -1352,7 +1320,7 @@ class PermissionStream(JiraStream):
             params["order_by"] = self.replication_key
 
         return params
-    
+
 
 class ProjectRoleStream(JiraStream):
 
@@ -1380,9 +1348,19 @@ class ProjectRoleStream(JiraStream):
         Property("name", StringType),
         Property("id", IntegerType),
         Property("description", StringType),
-        Property("scope", StringType),
+        Property(
+            "scope",
+            ObjectType(
+                Property("type", StringType),
+                Property(
+                    "project",
+                    ObjectType(
+                        Property("id", StringType),
+                    ),
+                ),
+            ),
+         ),
         Property("actors", ArrayType(StringType)),
-
     ).to_dict()
 
     def get_url_params(
@@ -1407,7 +1385,7 @@ class ProjectRoleStream(JiraStream):
             params["order_by"] = self.replication_key
 
         return params
-    
+
 
 class PriorityStream(JiraStream):
 
@@ -1462,7 +1440,7 @@ class PriorityStream(JiraStream):
             params["order_by"] = self.replication_key
 
         return params
-    
+
 
 class PermissionHolderStream(JiraStream):
 
@@ -1488,7 +1466,15 @@ class PermissionHolderStream(JiraStream):
     schema = PropertiesList(
         Property("id", IntegerType),
         Property("self", StringType),
-        Property("holder", StringType),
+        Property(
+            "holder",
+            ObjectType(
+                 Property("type", StringType),
+                 Property("parameter", StringType),
+                 Property("value", StringType),
+                 Property("expand", StringType),
+             ),
+        ),
         Property("permission", StringType),
 
     ).to_dict()
@@ -1619,7 +1605,7 @@ class SprintStream(JiraStream):
         else:
             results = resp_json
 
-        yield from results 
+        yield from results
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
@@ -1634,7 +1620,7 @@ class SprintStream(JiraStream):
         sprint_records = []
 
         for record in list(super().get_records(context)):
-            board_id.append(record.get("id"))    
+            board_id.append(record.get("id"))
 
         for id in board_id:
 
@@ -1668,7 +1654,7 @@ class SprintStream(JiraStream):
                         else:
                              results = resp_json
 
-                        yield from results    
+                        yield from results
 
                 sprint = Sprint(
                     self._tap, schema={"properties": {}}
@@ -1678,9 +1664,9 @@ class SprintStream(JiraStream):
 
             except:
                 pass
-        
-        sprint_records = sum(sprint_records, []) 
-            
+
+        sprint_records = sum(sprint_records, [])
+
         return sprint_records
 
 
@@ -1698,7 +1684,7 @@ class UserGroupStream(JiraStream):
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
     """
-    
+
     name = "user_group"
     path = "/user/groups"
     primary_keys = ["self"]
@@ -1707,8 +1693,17 @@ class UserGroupStream(JiraStream):
 
     schema = PropertiesList(
         Property("self", StringType),
+        Property("accountId", StringType),
         Property("user_id", StringType),
-        Property("avatarUrls", StringType),
+        Property(
+            "avatarUrls",
+            ObjectType(
+                Property("48x48", StringType),
+                Property("24x24", StringType),
+                Property("16x16", StringType),
+                Property("32x32", StringType),
+            ),
+        ),
         Property("displayName", StringType),
         Property("active", BooleanType),
         Property("timeZone", StringType),
@@ -1740,10 +1735,10 @@ class UserGroupStream(JiraStream):
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
 
-        params["accountId"] = account_id    
+        params["accountId"] = account_id
 
         return params
-    
+
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
         We have group names for users, we have records for each group name
@@ -1757,7 +1752,7 @@ class UserGroupStream(JiraStream):
         group_records = []
 
         for record in list(super().get_records(context)):
-            user_group_name.append(record.get("name"))    
+            user_group_name.append(record.get("name"))
 
         for name in user_group_name:
 
@@ -1784,7 +1779,7 @@ class UserGroupStream(JiraStream):
                         if isinstance(resp_json, list):
                             results = resp_json
                         elif len(resp_json.get("values")) !=0:
-                            results = resp_json["values"]    
+                            results = resp_json["values"]
                         else:
                             results = [resp_json]
 
@@ -1800,7 +1795,7 @@ class UserGroupStream(JiraStream):
                             row["user_id"] = row["accountId"]
                         except:
                             pass
-        
+
                         return super().post_process(row, context)
 
                 user_group = UserGroup(
@@ -1811,9 +1806,9 @@ class UserGroupStream(JiraStream):
 
             except:
                 pass
-        
-        usergroup_records = sum(group_records, []) 
-            
+
+        usergroup_records = sum(group_records, [])
+
         return usergroup_records
 
 
@@ -1831,7 +1826,7 @@ class ProjectRoleActorStream(JiraStream):
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
     """
-    
+
     name = "project_role_actor"
     path = "/role"
 
@@ -1844,10 +1839,34 @@ class ProjectRoleActorStream(JiraStream):
         Property("name", StringType),
         Property("id", StringType),
         Property("description", StringType),
-        Property("actors", StringType),
-        Property("scope", StringType),
-
-    ).to_dict()
+        Property(
+            "actors",
+            ObjectType(
+                Property("id", IntegerType),
+                Property("displayName", StringType),
+                Property("type", StringType),
+                Property("accountUser", StringType),
+                Property(
+                    "actorUser",
+                    ObjectType(
+                        Property("accountId", StringType),
+                    ),
+                ),
+            ),
+        ),
+        Property(
+            "scope",
+            ObjectType(
+                Property("type", StringType),
+                Property(
+                    "project",
+                    ObjectType(
+                        Property("id", StringType),
+                    ),
+                ),
+            ),
+        ),
+        ).to_dict()
 
     def get_url_params(
             self,
@@ -1868,7 +1887,7 @@ class ProjectRoleActorStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
 
@@ -1893,7 +1912,7 @@ class ProjectRoleActorStream(JiraStream):
             role_id.append(record.get("id"))
 
         for record in list(project.get_records(context)):
-            project_id.append(record.get("id"))        
+            project_id.append(record.get("id"))
 
         for pid in project_id:
             for role in role_id:
@@ -1914,10 +1933,10 @@ class ProjectRoleActorStream(JiraStream):
 
                 except:
                     pass
-        
-        project_role_actor_records = sum(role_actor_records, []) 
-            
-        return project_role_actor_records    
+
+        project_role_actor_records = sum(role_actor_records, [])
+
+        return project_role_actor_records
 
 
 class IssueWatcherStream(JiraStream):
@@ -1949,7 +1968,7 @@ class IssueWatcherStream(JiraStream):
         Property("watchers", ArrayType(StringType)),
         Property("user_id", StringType),
         Property("key", StringType),
-        
+
 
     ).to_dict()
 
@@ -1972,7 +1991,7 @@ class IssueWatcherStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
 
@@ -2009,7 +2028,7 @@ class IssueWatcherStream(JiraStream):
         jira_issue_records = []
 
         for record in list(super().get_records(context)):
-            jira_issue_key.append(record.get("key"))    
+            jira_issue_key.append(record.get("key"))
 
         for key in jira_issue_key:
 
@@ -2029,7 +2048,7 @@ class IssueWatcherStream(JiraStream):
                         row["user_id"] = row.get("watchers")[0].get("accountId")
                     except:
                         pass
-        
+
                     return super().post_process(row, context)
 
             issue_search_key_watcher = IssueKeyWatcher(
@@ -2037,11 +2056,11 @@ class IssueWatcherStream(JiraStream):
             )
 
             jira_issue_records.append(list(issue_search_key_watcher.get_records(context)))
-        
-        issuewatcher_records = sum(jira_issue_records, []) 
-            
+
+        issuewatcher_records = sum(jira_issue_records, [])
+
         return issuewatcher_records
-    
+
 
 class AuditingStream(JiraStream):
 
@@ -2071,10 +2090,14 @@ class AuditingStream(JiraStream):
         Property("created", StringType),
         Property("category", StringType),
         Property("eventSource", StringType),
-        Property("objectItem", StringType),
+        Property(
+            "objectItem",
+            ObjectType(
+                Property("accountId", StringType),
+            ),
+        ),
         Property("changedValues", ArrayType(StringType)),
         Property("associatedItems", ArrayType(StringType)),
-        
 
     ).to_dict()
 
@@ -2097,7 +2120,7 @@ class AuditingStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
 
@@ -2156,7 +2179,7 @@ class DashboardStream(JiraStream):
         Property("view", StringType),
         Property("isWritable", BooleanType),
         Property("systemDashboard", BooleanType),
-        
+
 
     ).to_dict()
 
@@ -2179,7 +2202,7 @@ class DashboardStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
 
@@ -2232,7 +2255,7 @@ class FilterSearchStream(JiraStream):
         Property("self", StringType),
         Property("id", StringType),
         Property("name", StringType),
-        
+
 
     ).to_dict()
 
@@ -2255,7 +2278,7 @@ class FilterSearchStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
 
@@ -2305,7 +2328,7 @@ class FilterDefaultShareScopeStream(JiraStream):
 
     schema = PropertiesList(
         Property("scope", StringType),
-        
+
 
     ).to_dict()
 
@@ -2328,10 +2351,10 @@ class FilterDefaultShareScopeStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
-    
+
 
 class GroupsPickerStream(JiraStream):
 
@@ -2360,7 +2383,7 @@ class GroupsPickerStream(JiraStream):
         Property("html", StringType),
         Property("labels", ArrayType(StringType)),
         Property("groupId", StringType),
-        
+
 
     ).to_dict()
 
@@ -2383,10 +2406,10 @@ class GroupsPickerStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
-    
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
@@ -2434,7 +2457,7 @@ class LicenseStream(JiraStream):
     schema = PropertiesList(
         Property("id", StringType),
         Property("plan", StringType),
-        
+
 
     ).to_dict()
 
@@ -2457,10 +2480,10 @@ class LicenseStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
-    
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
@@ -2509,7 +2532,7 @@ class ScreensStream(JiraStream):
         Property("id", IntegerType),
         Property("name", StringType),
         Property("description", StringType),
-        
+
 
     ).to_dict()
 
@@ -2532,10 +2555,10 @@ class ScreensStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
-    
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
@@ -2583,7 +2606,7 @@ class ScreenTabsStream(JiraStream):
     schema = PropertiesList(
         Property("id", IntegerType),
         Property("name", StringType),
-        
+
 
     ).to_dict()
 
@@ -2606,10 +2629,10 @@ class ScreenTabsStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
-    
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
@@ -2644,7 +2667,7 @@ class ScreenTabsStream(JiraStream):
         screen_id_tab_records = []
 
         for record in list(super().get_records(context)):
-            screend_id.append(record.get("id"))    
+            screend_id.append(record.get("id"))
 
         for key in screend_id:
 
@@ -2663,9 +2686,9 @@ class ScreenTabsStream(JiraStream):
 
             except:
                 pass
-        
-        screentabs_records = sum(screen_id_tab_records, []) 
-            
+
+        screentabs_records = sum(screen_id_tab_records, [])
+
         return screentabs_records
 
 
@@ -2694,7 +2717,7 @@ class ScreenTabFieldsStream(JiraStream):
     schema = PropertiesList(
         Property("id", StringType),
         Property("name", StringType),
-        
+
 
     ).to_dict()
 
@@ -2717,10 +2740,10 @@ class ScreenTabFieldsStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
-    
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
@@ -2755,7 +2778,7 @@ class ScreenTabFieldsStream(JiraStream):
         screend_id = []
         screend_tabs_id = []
         screen_tab_fields = []
-        
+
         screentabs_stream = ScreenTabsStream(
             self._tap, schema={"properties": {}}
         )
@@ -2764,7 +2787,7 @@ class ScreenTabFieldsStream(JiraStream):
             screend_id.append(record.get("id"))
 
         for record in list(screentabs_stream.get_records(context)):
-            screend_tabs_id.append(record.get("id"))    
+            screend_tabs_id.append(record.get("id"))
 
         for screen_id, tab_id in zip(screend_id, screend_tabs_id):
 
@@ -2778,13 +2801,13 @@ class ScreenTabFieldsStream(JiraStream):
                     self._tap, schema={"properties": {}}
                 )
 
-                screen_tab_fields.append(list(screen_id_tab_id_fields.get_records(context)))        
+                screen_tab_fields.append(list(screen_id_tab_id_fields.get_records(context)))
 
             except:
                 pass
-        
-        screen_tab_fields_records = sum(screen_tab_fields, []) 
-            
+
+        screen_tab_fields_records = sum(screen_tab_fields, [])
+
         return screen_tab_fields_records
 
 
@@ -2814,9 +2837,12 @@ class ScreenSchemesStream(JiraStream):
         Property("id", IntegerType),
         Property("name", StringType),
         Property("description", StringType),
-        Property("screens", StringType),
-        
-
+        Property(
+            "screens",
+            ObjectType(
+                Property("default", IntegerType),
+            ),
+        ),
     ).to_dict()
 
     def get_url_params(
@@ -2838,10 +2864,10 @@ class ScreenSchemesStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
-    
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
@@ -2890,11 +2916,16 @@ class StatusesSearchStream(JiraStream):
         Property("id", StringType),
         Property("name", StringType),
         Property("statusCategory", StringType),
-        Property("scope", StringType),
+        Property(
+            "scope",
+            ObjectType(
+                Property("type", StringType)
+            ),
+        ),
         Property("description", StringType),
         Property("usages", ArrayType(StringType)),
         Property("workflowUsages", ArrayType(StringType)),
-        
+
 
     ).to_dict()
 
@@ -2917,10 +2948,10 @@ class StatusesSearchStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
-    
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
@@ -2973,9 +3004,12 @@ class WorkflowStream(JiraStream):
         Property("lastModifiedDate", StringType),
         Property("lastModifiedUser", StringType),
         Property("lastModifiedUserAccountId", StringType),
-        Property("scope", StringType),
-        
-
+        Property(
+            "scope",
+            ObjectType(
+                Property("type", StringType)
+            ),
+        ),
     ).to_dict()
 
     def get_url_params(
@@ -2997,9 +3031,9 @@ class WorkflowStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
-        return params        
+        return params
 
 
 class WorkflowSearchStream(JiraStream):
@@ -3025,11 +3059,16 @@ class WorkflowSearchStream(JiraStream):
     replication_method = "incremental"
 
     schema = PropertiesList(
-        Property("id", StringType),
+        Property(
+            "id",
+            ObjectType(
+                Property("name", StringType),
+                Property("entityId", StringType),
+            ),
+        ),
         Property("description", StringType),
         Property("created", StringType),
         Property("updated", StringType),
-        
 
     ).to_dict()
 
@@ -3052,10 +3091,10 @@ class WorkflowSearchStream(JiraStream):
             params["page"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
-            params["order_by"] = self.replication_key        
+            params["order_by"] = self.replication_key
 
         return params
-    
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
@@ -3078,32 +3117,31 @@ class WorkflowSearchStream(JiraStream):
         yield from results
 
 
-           
-            
-
-                            
-                                    
-                        
-
-                
 
 
-    
-    
-
-    
-
-    
-
-        
-            
-    
-    
 
 
-    
-    
-    
-       
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
