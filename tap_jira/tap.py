@@ -39,6 +39,11 @@ class TapJira(Tap):
             th.StringType,
             description="Jira API account id, used in Users Stream",
         ),
+        th.Property(
+            "access_token",
+            th.StringType,
+            description="Jira API access token",
+        ),
     ).to_dict()
 
     def discover_streams(self) -> list[streams.JiraStream]:
