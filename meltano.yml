@@ -15,28 +15,10 @@ plugins:
     - stream-maps
     settings:
     - name: username
-      value: ${TAP_JIRA_USERNAME}
     - name: password
-      value: ${TAP_JIRA_PASSWORD}
       kind: password
     - name: start_date
-      value: '2010-01-01T00:00:00Z'
-    - name: end_date
-      value: '2023-05-020T00:00:00Z'
-    - name: board_id
-      value: ${TAP_JIRA_BOARD_ID} 
-    - name: account_id 
-      value:  ${TAP_JIRA_ACCOUNT_ID}
-    - name: project_id 
-      value: ${TAP_JIRA_PROJECT_ID}
-    - name: role_admin_id 
-      value: ${TAP_JIRA_ROLE_ADMIN_ID}
-    - name: role_viewer_id 
-      value: ${TAP_JIRA_ROLE_VIEWER_ID}
-    - name: role_member_id 
-      value: ${TAP_JIRA_ROLE_MEMBER_ID}
-    - name: role_altasian_id 
-      value: ${TAP_JIRA_ROLE_ALTASIAN_ID}      
+    - name: end_date      
   loaders:
   - name: target-jsonl
     variant: andyh1203

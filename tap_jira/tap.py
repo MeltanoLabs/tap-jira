@@ -17,52 +17,27 @@ class TapJira(Tap):
         th.Property(
             "start_date",
             th.DateTimeType,
-            description="The earliest record date to sync",
+            description="Earliest record date to sync",
+        ),
+        th.Property(
+            "end_date",
+            th.DateTimeType,
+            description="Latest record date to sync",
         ),
         th.Property(
             "username",
             th.StringType,
-            description="The Jira API username",
+            description="Jira API username",
         ),
         th.Property(
             "password",
             th.StringType,
-            description="The Jira API password",
+            description="Jira API password",
         ),
         th.Property(
             "account_id",
             th.StringType,
-            description="The Jira API accound id",
-        ),
-        th.Property(
-            "board_id",
-            th.StringType,
-            description="The Jira API board id",
-        ),
-        th.Property(
-            "project_id",
-            th.StringType,
-            description="The Jira API project id",
-        ),
-        th.Property(
-            "role_admin_id",
-            th.StringType,
-            description="The Jira API role admin id",
-        ),
-        th.Property(
-            "role_viewer_id",
-            th.StringType,
-            description="The Jira API role admin id",
-        ),
-        th.Property(
-            "role_member_id",
-            th.StringType,
-            description="The Jira API role admin id",
-        ),
-        th.Property(
-            "role_altasian_id",
-            th.StringType,
-            description="The Jira API role admin id",
+            description="Jira API accound id, used in Users Stream",
         ),
     ).to_dict()
 
@@ -86,8 +61,8 @@ class TapJira(Tap):
             streams.PriorityStream(self),
             streams.PermissionHolderStream(self),
             streams.SprintStream(self),
-            streams.UserGroupTrustedStream(self),
-            streams.ProjectRoleAtlassianActorStream(self),
+            streams.UserGroupStream(self),
+            streams.ProjectRoleActorStream(self),
             streams.IssueWatcherStream(self),
             streams.AuditingStream(self),
             streams.DashboardStream(self),
