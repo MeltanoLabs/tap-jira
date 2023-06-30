@@ -20,6 +20,7 @@ BooleanType = th.BooleanType
 IntegerType = th.IntegerType
 role = {}
 
+
 class UsersStream(JiraStream):
 
     """
@@ -58,7 +59,7 @@ class UsersStream(JiraStream):
                 Property("24x24", StringType),
                 Property("16x16", StringType),
                 Property("32x32", StringType),
-             ),
+            ),
         ),
         Property("displayName", StringType),
         Property("active", BooleanType),
@@ -67,13 +68,12 @@ class UsersStream(JiraStream):
         Property("groups", StringType),
         Property("applicationRoles", StringType),
         Property("expand", StringType),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -141,13 +141,12 @@ class FieldStream(JiraStream):
                 Property("system", StringType),
             ),
         ),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -230,13 +229,12 @@ class ServerInfoStream(JiraStream):
                 Property("locale", StringType),
             ),
         ),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -293,13 +291,12 @@ class IssueTypeStream(JiraStream):
         Property("avatarId", IntegerType),
         Property("hierarchyLevel", IntegerType),
         Property("scope", StringType),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -395,13 +392,12 @@ class StatusStream(JiraStream):
                 ),
             ),
         ),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -469,13 +465,12 @@ class ProjectStream(JiraStream):
         Property("properties", StringType),
         Property("entityId", StringType),
         Property("uuid", StringType),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -786,14 +781,12 @@ class IssueStream(JiraStream):
         Property("id", IntegerType),
         Property("editmeta", StringType),
         Property("histories", StringType),
-
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -856,9 +849,9 @@ class IssueStream(JiraStream):
                 path = "/issue/{}/".format(issues_out)
 
                 def get_url_params(
-                        self,
-                        context: dict | None,
-                        next_page_token: Any | None,
+                    self,
+                    context: dict | None,
+                    next_page_token: Any | None,
                 ) -> dict[str, Any]:
                     """Return a dictionary of values to be used in URL parameterization.
 
@@ -896,14 +889,18 @@ class IssueStream(JiraStream):
                         results = resp_json
                     elif resp_json.get("fields") is not None:
                         resp_json["fields"]["editmeta"] = resp_json.get("editmeta")
-                        resp_json["fields"]["histories"] = resp_json.get("changelog").get("histories")
+                        resp_json["fields"]["histories"] = resp_json.get(
+                            "changelog"
+                        ).get("histories")
                         results = [resp_json["fields"]]
                     else:
                         results = resp_json
 
                     yield from results
 
-                def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+                def post_process(
+                    self, row: dict, context: dict | None = None
+                ) -> dict | None:
                     """
                     We can add a key column which have out value
                     We can get the id from comment column, we have a url in comment column, we can split it by / and get the id from it
@@ -917,9 +914,7 @@ class IssueStream(JiraStream):
 
                     return super().post_process(row, context)
 
-            issue_search_key = IssueKey(
-                self._tap, schema={"properties": {}}
-            )
+            issue_search_key = IssueKey(self._tap, schema={"properties": {}})
 
             jira_issue_records.append(list(issue_search_key.get_records(context)))
 
@@ -1207,13 +1202,12 @@ class SearchStream(JiraStream):
         ),
         Property("created", StringType),
         Property("updated", StringType),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -1295,13 +1289,12 @@ class PermissionStream(JiraStream):
 
     schema = PropertiesList(
         Property("permissions", StringType),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -1359,14 +1352,14 @@ class ProjectRoleStream(JiraStream):
                     ),
                 ),
             ),
-         ),
+        ),
         Property("actors", ArrayType(StringType)),
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -1415,13 +1408,12 @@ class PriorityStream(JiraStream):
         Property("iconUrl", StringType),
         Property("name", StringType),
         Property("id", StringType),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -1469,20 +1461,19 @@ class PermissionHolderStream(JiraStream):
         Property(
             "holder",
             ObjectType(
-                 Property("type", StringType),
-                 Property("parameter", StringType),
-                 Property("value", StringType),
-                 Property("expand", StringType),
-             ),
+                Property("type", StringType),
+                Property("parameter", StringType),
+                Property("value", StringType),
+                Property("expand", StringType),
+            ),
         ),
         Property("permission", StringType),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -1555,7 +1546,6 @@ class SprintStream(JiraStream):
         Property("completeDate", StringType),
         Property("originBoardId", IntegerType),
         Property("goal", StringType),
-
     ).to_dict()
 
     @property
@@ -1564,9 +1554,9 @@ class SprintStream(JiraStream):
         return base_url
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -1623,7 +1613,6 @@ class SprintStream(JiraStream):
             board_id.append(record.get("id"))
 
         for id in board_id:
-
             try:
 
                 class Sprint(JiraStream):
@@ -1632,10 +1621,14 @@ class SprintStream(JiraStream):
 
                     @property
                     def url_base(self) -> str:
-                        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/1.0/board/{}".format(id)
+                        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/1.0/board/{}".format(
+                            id
+                        )
                         return base_url
 
-                    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+                    def parse_response(
+                        self, response: requests.Response
+                    ) -> Iterable[dict]:
                         """Parse the response and return an iterator of result records.
 
                         Args:
@@ -1652,13 +1645,11 @@ class SprintStream(JiraStream):
                         elif resp_json.get("values") is not None:
                             results = resp_json["values"]
                         else:
-                             results = resp_json
+                            results = resp_json
 
                         yield from results
 
-                sprint = Sprint(
-                    self._tap, schema={"properties": {}}
-                )
+                sprint = Sprint(self._tap, schema={"properties": {}})
 
                 sprint_records.append(list(sprint.get_records(context)))
 
@@ -1710,13 +1701,12 @@ class UserGroupStream(JiraStream):
         Property("accountType", StringType),
         Property("group_name", StringType),
         Property("name", StringType),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -1755,7 +1745,6 @@ class UserGroupStream(JiraStream):
             user_group_name.append(record.get("name"))
 
         for name in user_group_name:
-
             group_name = name
 
             try:
@@ -1764,7 +1753,9 @@ class UserGroupStream(JiraStream):
                     name = "user_group"
                     path = "/group/member?groupname={}".format(group_name)
 
-                    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+                    def parse_response(
+                        self, response: requests.Response
+                    ) -> Iterable[dict]:
                         """Parse the response and return an iterator of result records.
 
                         Args:
@@ -1778,14 +1769,16 @@ class UserGroupStream(JiraStream):
 
                         if isinstance(resp_json, list):
                             results = resp_json
-                        elif len(resp_json.get("values")) !=0:
+                        elif len(resp_json.get("values")) != 0:
                             results = resp_json["values"]
                         else:
                             results = [resp_json]
 
                         yield from results
 
-                    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+                    def post_process(
+                        self, row: dict, context: dict | None = None
+                    ) -> dict | None:
                         """
                         We can add a group name column with group name variable and a user id column  with account id column
                         """
@@ -1798,9 +1791,7 @@ class UserGroupStream(JiraStream):
 
                         return super().post_process(row, context)
 
-                user_group = UserGroup(
-                    self._tap, schema={"properties": {}}
-                )
+                user_group = UserGroup(self._tap, schema={"properties": {}})
 
                 group_records.append(list(user_group.get_records(context)))
 
@@ -1841,16 +1832,17 @@ class ProjectRoleActorStream(JiraStream):
         Property("description", StringType),
         Property(
             "actors",
-            ArrayType(ObjectType(
-                Property("id", IntegerType),
-                Property("displayName", StringType),
-                Property("type", StringType),
-                Property("accountUser", StringType),
-                Property(
-                    "actorUser",
-                    ObjectType(
-                        Property("accountId", StringType),
-                    ),
+            ArrayType(
+                ObjectType(
+                    Property("id", IntegerType),
+                    Property("displayName", StringType),
+                    Property("type", StringType),
+                    Property("accountUser", StringType),
+                    Property(
+                        "actorUser",
+                        ObjectType(
+                            Property("accountId", StringType),
+                        ),
                     ),
                 ),
             ),
@@ -1867,12 +1859,12 @@ class ProjectRoleActorStream(JiraStream):
                 ),
             ),
         ),
-        ).to_dict()
+    ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -1905,9 +1897,7 @@ class ProjectRoleActorStream(JiraStream):
         project_id = []
         role_actor_records = []
 
-        project = ProjectStream(
-            self._tap, schema={"properties": {}}
-        )
+        project = ProjectStream(self._tap, schema={"properties": {}})
 
         for record in list(super().get_records(context)):
             role_id.append(record.get("id"))
@@ -1917,7 +1907,6 @@ class ProjectRoleActorStream(JiraStream):
 
         for pid in project_id:
             for role in role_id:
-
                 try:
 
                     class ProjectRoleActor(JiraStream):
@@ -1930,7 +1919,9 @@ class ProjectRoleActorStream(JiraStream):
                         self._tap, schema={"properties": {}}
                     )
 
-                    role_actor_records.append(list(project_role_actor.get_records(context)))
+                    role_actor_records.append(
+                        list(project_role_actor.get_records(context))
+                    )
 
                 except:
                     pass
@@ -1969,14 +1960,12 @@ class IssueWatcherStream(JiraStream):
         Property("watchers", ArrayType(StringType)),
         Property("user_id", StringType),
         Property("key", StringType),
-
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2038,7 +2027,9 @@ class IssueWatcherStream(JiraStream):
                 name = "issue_watcher"
                 path = "/issue/{}/watchers".format(issues_out)
 
-                def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+                def post_process(
+                    self, row: dict, context: dict | None = None
+                ) -> dict | None:
                     """
                     We can add a key column which have out value
                     We can get the user id column from watchers column
@@ -2056,7 +2047,9 @@ class IssueWatcherStream(JiraStream):
                 self._tap, schema={"properties": {}}
             )
 
-            jira_issue_records.append(list(issue_search_key_watcher.get_records(context)))
+            jira_issue_records.append(
+                list(issue_search_key_watcher.get_records(context))
+            )
 
         issuewatcher_records = sum(jira_issue_records, [])
 
@@ -2099,13 +2092,12 @@ class AuditingStream(JiraStream):
         ),
         Property("changedValues", ArrayType(StringType)),
         Property("associatedItems", ArrayType(StringType)),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2180,14 +2172,12 @@ class DashboardStream(JiraStream):
         Property("view", StringType),
         Property("isWritable", BooleanType),
         Property("systemDashboard", BooleanType),
-
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2256,14 +2246,12 @@ class FilterSearchStream(JiraStream):
         Property("self", StringType),
         Property("id", StringType),
         Property("name", StringType),
-
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2329,14 +2317,12 @@ class FilterDefaultShareScopeStream(JiraStream):
 
     schema = PropertiesList(
         Property("scope", StringType),
-
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2384,14 +2370,12 @@ class GroupsPickerStream(JiraStream):
         Property("html", StringType),
         Property("labels", ArrayType(StringType)),
         Property("groupId", StringType),
-
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2458,14 +2442,12 @@ class LicenseStream(JiraStream):
     schema = PropertiesList(
         Property("id", StringType),
         Property("plan", StringType),
-
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2533,14 +2515,12 @@ class ScreensStream(JiraStream):
         Property("id", IntegerType),
         Property("name", StringType),
         Property("description", StringType),
-
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2617,9 +2597,9 @@ class ScreenSchemesStream(JiraStream):
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2689,21 +2669,17 @@ class StatusesSearchStream(JiraStream):
         Property("statusCategory", StringType),
         Property(
             "scope",
-            ObjectType(
-                Property("type", StringType)
-            ),
+            ObjectType(Property("type", StringType)),
         ),
         Property("description", StringType),
         Property("usages", ArrayType(StringType)),
         Property("workflowUsages", ArrayType(StringType)),
-
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2777,16 +2753,14 @@ class WorkflowStream(JiraStream):
         Property("lastModifiedUserAccountId", StringType),
         Property(
             "scope",
-            ObjectType(
-                Property("type", StringType)
-            ),
+            ObjectType(Property("type", StringType)),
         ),
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2840,13 +2814,12 @@ class WorkflowSearchStream(JiraStream):
         Property("description", StringType),
         Property("created", StringType),
         Property("updated", StringType),
-
     ).to_dict()
 
     def get_url_params(
-            self,
-            context: dict | None,
-            next_page_token: Any | None,
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
@@ -2886,33 +2859,3 @@ class WorkflowSearchStream(JiraStream):
             results = resp_json
 
         yield from results
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

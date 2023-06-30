@@ -8,7 +8,7 @@ from typing import Any, Callable, Iterable
 import requests
 from singer_sdk.authenticators import BasicAuthenticator, BearerTokenAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
-from singer_sdk.pagination import BaseAPIPaginator  
+from singer_sdk.pagination import BaseAPIPaginator
 from singer_sdk.streams import RESTStream
 
 _Auth = Callable[[requests.PreparedRequest], requests.PreparedRequest]
@@ -29,7 +29,7 @@ class JiraStream(RESTStream):
     records_jsonpath = "$[*]"  # Or override `parse_response`.
 
     # Set this value or override `get_new_paginator`.
-    next_page_token_jsonpath = "$.next_page"  
+    next_page_token_jsonpath = "$.next_page"
 
     @property
     def authenticator(self) -> _Auth:
@@ -41,15 +41,17 @@ class JiraStream(RESTStream):
         auth_type = self.config.get("auth_type", "")
 
         if auth_type == "oauth":
-            return BearerTokenAuthenticator.create_for_stream(self,
-                token=self.config.get("access_token", ""),)
+            return BearerTokenAuthenticator.create_for_stream(
+                self,
+                token=self.config.get("access_token", ""),
+            )
         else:
             return BasicAuthenticator.create_for_stream(
                 self,
                 username=self.config.get("username", ""),
                 password=self.config.get("password", ""),
             )
-        
+
     @property
     def http_headers(self) -> dict:
         """Return the http headers needed.
