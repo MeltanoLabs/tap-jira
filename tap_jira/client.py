@@ -102,3 +102,25 @@ class JiraStream(RESTStream):
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
         return params
+
+    def get_next_page_token(
+        self,
+        response: requests.Response,
+        previous_token: t.Any | None,
+    ) -> t.Any | None:
+        """Return a token for identifying next page or None if no more pages."""
+        # If pagination is required, return a token which can be used to get the
+        #       next page. If this is the final page, return "None" to end the
+        #       pagination loop.
+        resp_json = response.json()
+        if previous_token is None:
+            previous_token = 0
+        try:
+            elements = resp_json.get("elements")
+            if len(elements) == 0 or len(elements) == previous_token + 1:
+                return None
+        except (ValueError, Exception):
+            page = resp_json
+            if len(page) == 0 or len(page) == previous_token + 1:
+                return None
+        return previous_token + 1
