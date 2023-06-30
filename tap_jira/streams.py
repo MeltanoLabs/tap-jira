@@ -529,7 +529,7 @@ class IssueStream(JiraStream):
     """
 
     name = "issue"
-    path = "/search"
+    path = "/search?maxResults=1"
     primary_keys = ["id"]
     replication_key = "updated"
     replication_method = "incremental"
@@ -799,7 +799,7 @@ class IssueStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
