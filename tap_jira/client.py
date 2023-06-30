@@ -18,6 +18,10 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 class JiraStream(RESTStream):
     """tap-jira stream class."""
 
+    next_page_token_jsonpath = (
+        "$.paging.start"  # Or override `get_next_page_token`.  # noqa: S105
+    )
+
     @property
     def url_base(self) -> str:
         """
@@ -115,12 +119,28 @@ class JiraStream(RESTStream):
         resp_json = response.json()
         if previous_token is None:
             previous_token = 0
-        try:
-            elements = resp_json.get("elements")
-            if len(elements) == 0 or len(elements) == previous_token + 1:
-                return None
-        except (ValueError, Exception):
+        total = -1
+        _value = None
+        if type(resp_json) is dict:
+            if resp_json.get("values") is not None:
+                _value = resp_json.get("values")
+                total = resp_json.get("total")
+            elif resp_json.get("issues") is not None:
+                _value = resp_json.get("issues")
+                total = resp_json.get("total")
+            elif resp_json.get("records") is not None:
+                _value = resp_json.get("records")
+                total = resp_json.get("total")
+            elif resp_json.get("dashboard") is not None:
+                _value = resp_json.get("dashboard")
+                total = resp_json.get("total")
+
+        if _value is None:
             page = resp_json
-            if len(page) == 0 or len(page) == previous_token + 1:
+            if len(page) == 0 or total <= previous_token + 1:
                 return None
+        else:
+            if len(_value) == 0 or total <= previous_token + 1:
+                return None
+
         return previous_token + 1

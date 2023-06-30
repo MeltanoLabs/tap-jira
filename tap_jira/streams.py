@@ -89,7 +89,7 @@ class UsersStream(JiraStream):
 
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -159,7 +159,7 @@ class FieldStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -247,7 +247,7 @@ class ServerInfoStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -309,7 +309,7 @@ class IssueTypeStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -410,7 +410,7 @@ class StatusStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -483,7 +483,7 @@ class ProjectStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -529,7 +529,7 @@ class IssueStream(JiraStream):
     """
 
     name = "issue"
-    path = "/search?maxResults=1"
+    path = "/search"
     primary_keys = ["id"]
     replication_key = "updated"
     replication_method = "incremental"
@@ -864,7 +864,7 @@ class IssueStream(JiraStream):
                     """
                     params: dict = {}
                     if next_page_token:
-                        params["page"] = next_page_token
+                        params["startAt"] = next_page_token
                     if self.replication_key:
                         params["sort"] = "asc"
                     params["order_by"] = self.replication_key
@@ -939,7 +939,7 @@ class SearchStream(JiraStream):
     """
 
     name = "search"
-    path = "/search"
+    path = "/search?maxResults=1"
     primary_keys = ["id"]
     replication_key = "updated"
     replication_method = "incremental"
@@ -1220,7 +1220,7 @@ class SearchStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -1307,7 +1307,7 @@ class PermissionStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -1372,7 +1372,7 @@ class ProjectRoleStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -1426,7 +1426,7 @@ class PriorityStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -1486,7 +1486,7 @@ class PermissionHolderStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -1569,7 +1569,7 @@ class SprintStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -1720,7 +1720,7 @@ class UserGroupStream(JiraStream):
         account_id = self.config.get("account_id", "")
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -1877,7 +1877,7 @@ class ProjectRoleActorStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -1978,7 +1978,7 @@ class IssueWatcherStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2110,7 +2110,7 @@ class AuditingStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2190,7 +2190,7 @@ class DashboardStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2264,7 +2264,7 @@ class FilterSearchStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2335,7 +2335,7 @@ class FilterDefaultShareScopeStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2388,7 +2388,7 @@ class GroupsPickerStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2460,7 +2460,7 @@ class LicenseStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2533,7 +2533,7 @@ class ScreensStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2612,7 +2612,7 @@ class ScreenSchemesStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2692,7 +2692,7 @@ class StatusesSearchStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2773,7 +2773,7 @@ class WorkflowStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
@@ -2832,7 +2832,7 @@ class WorkflowSearchStream(JiraStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
