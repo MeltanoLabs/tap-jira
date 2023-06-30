@@ -21,6 +21,7 @@ plugins:
     - name: end_date
     - name: access_token  
     - name: auth_type
+    - name: account_id
   loaders:
   - name: target-jsonl
     variant: andyh1203
