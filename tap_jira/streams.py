@@ -1188,11 +1188,8 @@ class SprintStream(JiraStream):
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
-        We have board ids for board, we have records for each board id
-        We can get the records with these board ids from the parent SprintStream and add them to board_id list
-        We can traverse through these board ids with a for loop and create a child class for them
-        We can get the records for each board ids in a child class and then we can join each of them with get records function and add them to sprint_records list
-        We have added a try except statment to create child streams for those ids which have data
+        Takes each of the board IDs pulled above and makes a request to
+        the Sprint endpoint for each board ID
         """
 
         board_id = []
@@ -1320,11 +1317,8 @@ class UserGroupStream(JiraStream):
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
-        We have group names for users, we have records for each group name
-        We can get the records with these group names from the parent UserGroupStream and add them to user_group_name list
-        We can traverse through these group names with a for loop and create a child class for them
-        We can get the records for each group names in a child class and then we can join each of them with get records function and add them to group_records list
-        We have added a try except statment to create child streams for those ids which have data
+        Takes each of the user group names and adds to list, then loops through the
+        list and gets data from the group group member endpoint for each of the group names in the list
         """
 
         user_group_name = []
@@ -1475,11 +1469,8 @@ class ProjectRoleActorStream(JiraStream):
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
-        We have role ids for project, we have records for each role id
-        We can get the records with these role ids from the parent ProjectRoleActorStream and add them to role_id list
-        We can traverse through these role ids with a for loop and create a child class for them
-        We can get the records for each role ids in a child class and then we can join each of them with get records function and add them to role_actor_records list
-        We have added a try except statment to create child streams for those ids which have data
+        Takes each of the role ID's gathered above and adds to a list, then loops through the
+        list and gets data from the project role actor endpoint for each of the role ID's in the list
         """
 
         role_id = []
