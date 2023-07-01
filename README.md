@@ -23,17 +23,7 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 |:--------------------|:--------:|:-------:|:------------|
 | username            | True    | None    | The username to authenticate against the API service |
 | password            | True    | None    | The password to authenticate against the API service |
-| api_version_2       | True    | v2.0    | The API version to request data from. |
-| api_version_3       | True    | v3.0    | The API version to request data from. |
-| agile_version       | True    | v1.0    | The Agile version to request data from. |
-| board_id            | True    | 63      | The Jira board id to request data from. |
 | account_id          | True    | None    | The Jira account id. |
-| project_id          | True    | None    | The Jira project id. |
-| role_admin_id       | True    | None    | The Jira role admin id. |
-| role_viewer_id      | True    | None    | The Jira role viewer id. |
-| role_member_id      | True    | None    | The Jira role member id. |
-| role_altasian_id    | True    | None    | The Jira role altasian id. |
-| auth_type           | True    | basic   | The auth type to select authentication (basic/http). |
 | start_date          | False   | None    | The earliest record date to sync |
 | end_date            | False   | None    | The latest record date to sync |
 | stream_maps         | False   | None    | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). |

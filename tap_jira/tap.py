@@ -15,36 +15,34 @@ class TapJira(Tap):
 
     config_jsonschema = th.PropertiesList(
         th.Property(
-            "auth_token",
-            th.StringType,
-            #required=True,
-            secret=True,  # Flag config as protected.
-            description="The token to authenticate against the API service",
-        ),
-        th.Property(
             "start_date",
             th.DateTimeType,
-            description="The earliest record date to sync",
+            description="Earliest record date to sync",
         ),
         th.Property(
-            "api_version",
-            th.StringType,
-            description="The Jira API version",
-        ),
-        th.Property(
-            "domain",
-            th.StringType,
-            description="The domain name for the API service",
+            "end_date",
+            th.DateTimeType,
+            description="Latest record date to sync",
         ),
         th.Property(
             "username",
             th.StringType,
-            description="The Jira API username",
+            description="Jira API username",
         ),
         th.Property(
             "password",
             th.StringType,
-            description="The Jira API password",
+            description="Jira API password",
+        ),
+        th.Property(
+            "account_id",
+            th.StringType,
+            description="Jira API account id, used in Users Stream",
+        ),
+        th.Property(
+            "access_token",
+            th.StringType,
+            description="Jira API access token",
         ),
     ).to_dict()
 
@@ -62,15 +60,24 @@ class TapJira(Tap):
             streams.ProjectStream(self),
             streams.StatusStream(self),
             streams.IssueStream(self),
-            streams.SearchStream(self),
             streams.PermissionStream(self),
             streams.ProjectRoleStream(self),
             streams.PriorityStream(self),
             streams.PermissionHolderStream(self),
             streams.SprintStream(self),
-            streams.UserGroupTrustedStream(self),
-            streams.ProjectRoleAtlassianActorStream(self),
-            streams.IssueWatcherStream(self),
+            streams.UserGroupStream(self),
+            streams.ProjectRoleActorStream(self),
+            streams.AuditingStream(self),
+            streams.DashboardStream(self),
+            streams.FilterSearchStream(self),
+            streams.FilterDefaultShareScopeStream(self),
+            streams.GroupsPickerStream(self),
+            streams.LicenseStream(self),
+            streams.ScreensStream(self),
+            streams.ScreenSchemesStream(self),
+            streams.StatusesSearchStream(self),
+            streams.WorkflowStream(self),
+            streams.WorkflowSearchStream(self),
         ]
 
 

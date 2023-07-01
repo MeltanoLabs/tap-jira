@@ -6,11 +6,10 @@ from pathlib import Path
 from typing import Any, Callable, Iterable
 
 import requests
-from singer_sdk.authenticators import BasicAuthenticator
+from singer_sdk.authenticators import BasicAuthenticator, BearerTokenAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
-from singer_sdk.pagination import BaseAPIPaginator  
+from singer_sdk.pagination import BaseAPIPaginator
 from singer_sdk.streams import RESTStream
-from requests.auth import HTTPBasicAuth
 
 _Auth = Callable[[requests.PreparedRequest], requests.PreparedRequest]
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
@@ -19,19 +18,22 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 class JiraStream(RESTStream):
     """tap-jira stream class."""
 
+    next_page_token_jsonpath = (
+        "$.paging.start"  # Or override `get_next_page_token`.  # noqa: S105
+    )
+
     @property
     def url_base(self) -> str:
         """
         Returns base url
         """
-        version = self.config.get("api_version_2", "")
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/{}".format(version)
+        base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
         return base_url
 
     records_jsonpath = "$[*]"  # Or override `parse_response`.
 
     # Set this value or override `get_new_paginator`.
-    next_page_token_jsonpath = "$.next_page"  
+    next_page_token_jsonpath = "$.next_page"
 
     @property
     def authenticator(self) -> _Auth:
@@ -40,21 +42,20 @@ class JiraStream(RESTStream):
         Returns:
             An authenticator instance.
         """
-        auth_type = self.config.get("auth_type")
+        auth_type = self.config.get("auth_type", "")
 
-        if auth_type == "basic":
-            return BasicAuthenticator.create_for_stream(
-                   self,
-                   username=self.config.get("username", ""),
-                   password=self.config.get("password", ""),
+        if auth_type == "oauth":
+            return BearerTokenAuthenticator.create_for_stream(
+                self,
+                token=self.config.get("access_token", ""),
             )
-    
-        elif auth_type == "http":
-            return HTTPBasicAuth( 
-                   username=self.config.get("username", ""),
-                   password=self.config.get("password", ""),
-                )
-        
+        else:
+            return BasicAuthenticator.create_for_stream(
+                self,
+                username=self.config.get("username", ""),
+                password=self.config.get("password", ""),
+            )
+
     @property
     def http_headers(self) -> dict:
         """Return the http headers needed.
@@ -100,8 +101,50 @@ class JiraStream(RESTStream):
         """
         params: dict = {}
         if next_page_token:
-            params["page"] = next_page_token
+            params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
         return params
+
+    def get_next_page_token(
+        self,
+        response: requests.Response,
+        previous_token: t.Any | None,
+    ) -> t.Any | None:
+        """Return a token for identifying next page or None if no more pages."""
+        # If pagination is required, return a token which can be used to get the
+        #       next page. If this is the final page, return "None" to end the
+        #       pagination loop.
+        resp_json = response.json()
+        if previous_token is None:
+            previous_token = 0
+
+        total = -1
+        _value = None
+        if type(resp_json) is dict:
+            if resp_json.get("values") is not None:
+                _value = resp_json.get("values")
+                total = resp_json.get("total")
+            elif resp_json.get("issues") is not None:
+                _value = resp_json.get("issues")
+                total = resp_json.get("total")
+            elif resp_json.get("records") is not None:
+                _value = resp_json.get("records")
+                total = resp_json.get("total")
+            elif resp_json.get("dashboard") is not None:
+                _value = resp_json.get("dashboard")
+                total = resp_json.get("total")
+
+        if total is None:
+            total = -1
+
+        if _value is None:
+            page = resp_json
+            if len(page) == 0 or total <= previous_token + 1:
+                return None
+        else:
+            if len(_value) == 0 or total <= previous_token + 1:
+                return None
+
+        return previous_token + 1
