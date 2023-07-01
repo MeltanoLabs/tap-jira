@@ -59,7 +59,7 @@ class TapJira(Tap):
             streams.IssueTypeStream(self),
             streams.ProjectStream(self),
             streams.StatusStream(self),
-            #streams.SearchStream(self),
+            streams.IssueStream(self),
             streams.PermissionStream(self),
             streams.ProjectRoleStream(self),
             streams.PriorityStream(self),

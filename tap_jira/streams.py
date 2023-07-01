@@ -512,7 +512,7 @@ class ProjectStream(JiraStream):
         yield from results
 
 
-class SearchStream(JiraStream):
+class IssueStream(JiraStream):
 
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get
@@ -527,7 +527,7 @@ class SearchStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "search"
+    name = "issue"
     path = "/search?maxResults=1"
     primary_keys = ["id"]
     replication_key = "updated"
@@ -1518,6 +1518,7 @@ class ProjectRoleActorStream(JiraStream):
         project_role_actor_records = sum(role_actor_records, [])
 
         return project_role_actor_records
+
 
 class AuditingStream(JiraStream):
 
