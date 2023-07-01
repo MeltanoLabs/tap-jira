@@ -119,6 +119,7 @@ class JiraStream(RESTStream):
         resp_json = response.json()
         if previous_token is None:
             previous_token = 0
+
         total = -1
         _value = None
         if type(resp_json) is dict:
@@ -134,6 +135,9 @@ class JiraStream(RESTStream):
             elif resp_json.get("dashboard") is not None:
                 _value = resp_json.get("dashboard")
                 total = resp_json.get("total")
+
+        if total is None:
+            total = -1
 
         if _value is None:
             page = resp_json

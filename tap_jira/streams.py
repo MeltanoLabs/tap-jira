@@ -1617,7 +1617,7 @@ class SprintStream(JiraStream):
 
                 class Sprint(JiraStream):
                     name = "sprint"
-                    path = "/sprint"
+                    path = "/sprint?maxResults=100"
 
                     @property
                     def url_base(self) -> str:
