@@ -38,13 +38,5 @@ plugins:
       batch_size: 5
 environments:
 - name: dev
-  config:
-    plugins:
-      loaders:
-      - name: target-csv
-      - name: target-snowflake
-        config:
-          primary_key_required: false
-          add_metadata_columns: true
 - name: staging
 - name: prod

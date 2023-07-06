@@ -28,17 +28,12 @@ class UsersStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
     """
-
-    columns = """
-                 self, accountId, accountType, name, emailAddress, avatarUrls, displayName, active, timeZone, locale, groups, applicationRoles, expand
-              """
 
     name = "user"
     path = "/user"
@@ -106,17 +101,13 @@ class FieldStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
-
-    columns = """
-                 id, key, name, untranslatedName, custom, orderable, navigable, searchable, clauseNames, schema, untranslatedName
-              """
 
     name = "field"
     path = "/field"
@@ -143,49 +134,6 @@ class FieldStream(JiraStream):
         ),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("records") is not None:
-            results = resp_json["records"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class ServerInfoStream(JiraStream):
@@ -195,17 +143,12 @@ class ServerInfoStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
     """
-
-    columns = """
-                 baseUrl, version, versionNumbers, deploymentType, buildNumber, buildDate, serverTime, scmInfo, serverTitle, defaultLocale
-              """
 
     name = "server_info"
     path = "/serverInfo"
@@ -231,28 +174,6 @@ class ServerInfoStream(JiraStream):
         ),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
 
 
 class IssueTypeStream(JiraStream):
@@ -262,23 +183,20 @@ class IssueTypeStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
-
-    columns = """
-                 self, id, description, iconUrl, name, untranslatedName, subtask, avatarId, hierarchyLevel, scope
-              """
 
     name = "issue_type"
     path = "/issuetype"
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -293,49 +211,6 @@ class IssueTypeStream(JiraStream):
         Property("scope", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("records") is not None:
-            results = resp_json["records"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class StatusStream(JiraStream):
@@ -345,17 +220,12 @@ class StatusStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
     """
-
-    columns = """
-                 self, description, iconUrl, name, untranslatedName, id, statusCategory, scope
-              """
 
     name = "status"
     path = "/status"
@@ -394,28 +264,6 @@ class StatusStream(JiraStream):
         ),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
 
 
 class ProjectStream(JiraStream):
@@ -425,23 +273,20 @@ class ProjectStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
-
-    columns = """
-                 expand, self, id, key, name, avatarUrls, projectTypeKey, simplified, style, isPrivate, properties, entityId, uuid
-              """
 
     name = "project"
     path = "/project"
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("expand", StringType),
@@ -467,49 +312,6 @@ class ProjectStream(JiraStream):
         Property("uuid", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("records") is not None:
-            results = resp_json["records"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class IssueStream(JiraStream):
@@ -519,12 +321,12 @@ class IssueStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
 
     name = "issue"
@@ -532,6 +334,7 @@ class IssueStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "updated"
     replication_method = "incremental"
+    records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("expand", StringType),
@@ -793,49 +596,6 @@ class IssueStream(JiraStream):
         Property("updated", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("issues") is not None:
-            results = resp_json["issues"]
-        else:
-            results = resp_json
-
-        yield from results
 
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
         """
@@ -858,17 +618,12 @@ class PermissionStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
     """
-
-    columns = """
-                 permissions
-              """
 
     name = "permission"
     path = "/permissions"
@@ -880,28 +635,6 @@ class PermissionStream(JiraStream):
         Property("permissions", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
 
 
 class ProjectRoleStream(JiraStream):
@@ -911,7 +644,6 @@ class ProjectRoleStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -945,28 +677,6 @@ class ProjectRoleStream(JiraStream):
         Property("actors", ArrayType(StringType)),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
 
 
 class PriorityStream(JiraStream):
@@ -976,7 +686,6 @@ class PriorityStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -999,28 +708,6 @@ class PriorityStream(JiraStream):
         Property("id", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
 
 
 class PermissionHolderStream(JiraStream):
@@ -1030,12 +717,12 @@ class PermissionHolderStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
 
     name = "permission_holder"
@@ -1043,6 +730,7 @@ class PermissionHolderStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[permissionSchemes][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", IntegerType),
@@ -1059,49 +747,6 @@ class PermissionHolderStream(JiraStream):
         Property("permission", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("permissionSchemes") is not None:
-            results = resp_json["permissionSchemes"][0].get("permissions")
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class SprintStream(JiraStream):
@@ -1111,12 +756,12 @@ class SprintStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
 
     name = "sprint"
@@ -1124,6 +769,7 @@ class SprintStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", StringType),
@@ -1139,52 +785,8 @@ class SprintStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/1.0"
-        return base_url
+        return "https://ryan-miranda.atlassian.net:443/rest/agile/1.0"
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
@@ -1254,7 +856,6 @@ class UserGroupStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1393,7 +994,6 @@ class ProjectRoleActorStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1407,6 +1007,7 @@ class ProjectRoleActorStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -1444,28 +1045,6 @@ class ProjectRoleActorStream(JiraStream):
         ),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
@@ -1518,13 +1097,12 @@ class AuditingStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "auditing"
@@ -1532,6 +1110,7 @@ class AuditingStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "created"
     replication_method = "incremental"
+    records_jsonpath = "$[records][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", IntegerType),
@@ -1549,49 +1128,6 @@ class AuditingStream(JiraStream):
         Property("associatedItems", ArrayType(StringType)),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("records") is not None:
-            results = resp_json["records"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class DashboardStream(JiraStream):
@@ -1601,13 +1137,12 @@ class DashboardStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "dashboard"
@@ -1615,6 +1150,7 @@ class DashboardStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[dashboards][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", StringType),
@@ -1629,49 +1165,6 @@ class DashboardStream(JiraStream):
         Property("systemDashboard", BooleanType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("dashboards") is not None:
-            results = resp_json["dashboards"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class FilterSearchStream(JiraStream):
@@ -1681,13 +1174,12 @@ class FilterSearchStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "filter_search"
@@ -1695,6 +1187,7 @@ class FilterSearchStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("expand", StringType),
@@ -1703,49 +1196,6 @@ class FilterSearchStream(JiraStream):
         Property("name", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class FilterDefaultShareScopeStream(JiraStream):
@@ -1755,13 +1205,11 @@ class FilterDefaultShareScopeStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
     """
 
     name = "filter_default_share_scope"
@@ -1774,28 +1222,6 @@ class FilterDefaultShareScopeStream(JiraStream):
         Property("scope", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
 
 
 class GroupsPickerStream(JiraStream):
@@ -1805,13 +1231,12 @@ class GroupsPickerStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath: json response body
     """
 
     name = "groups_picker"
@@ -1819,6 +1244,7 @@ class GroupsPickerStream(JiraStream):
     primary_keys = ["groupId"]
     replication_key = "groupId"
     replication_method = "incremental"
+    records_jsonpath = "$[groups][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("name", StringType),
@@ -1827,49 +1253,6 @@ class GroupsPickerStream(JiraStream):
         Property("groupId", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("groups") is not None:
-            results = resp_json["groups"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class LicenseStream(JiraStream):
@@ -1879,13 +1262,12 @@ class LicenseStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "license"
@@ -1893,55 +1275,13 @@ class LicenseStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[applications][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", StringType),
         Property("plan", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("applications") is not None:
-            results = resp_json["applications"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class ScreensStream(JiraStream):
@@ -1951,13 +1291,12 @@ class ScreensStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "screens"
@@ -1965,6 +1304,7 @@ class ScreensStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", IntegerType),
@@ -1972,49 +1312,6 @@ class ScreensStream(JiraStream):
         Property("description", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class ScreenSchemesStream(JiraStream):
@@ -2024,13 +1321,12 @@ class ScreenSchemesStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "screen_schemes"
@@ -2038,6 +1334,7 @@ class ScreenSchemesStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", IntegerType),
@@ -2051,49 +1348,6 @@ class ScreenSchemesStream(JiraStream):
         ),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class StatusesSearchStream(JiraStream):
@@ -2103,13 +1357,12 @@ class StatusesSearchStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "statuses_search"
@@ -2117,6 +1370,7 @@ class StatusesSearchStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", StringType),
@@ -2131,49 +1385,6 @@ class StatusesSearchStream(JiraStream):
         Property("workflowUsages", ArrayType(StringType)),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class WorkflowStream(JiraStream):
@@ -2183,13 +1394,11 @@ class WorkflowStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
     """
 
     name = "workflow"
@@ -2212,28 +1421,6 @@ class WorkflowStream(JiraStream):
         ),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
 
 
 class WorkflowSearchStream(JiraStream):
@@ -2243,13 +1430,12 @@ class WorkflowSearchStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "workflow_search"
@@ -2257,6 +1443,7 @@ class WorkflowSearchStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "updated"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property(
@@ -2271,46 +1458,3 @@ class WorkflowSearchStream(JiraStream):
         Property("updated", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results

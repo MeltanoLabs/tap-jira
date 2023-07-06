@@ -105,6 +105,7 @@ class JiraStream(RESTStream):
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
+
         return params
 
     def get_next_page_token(
