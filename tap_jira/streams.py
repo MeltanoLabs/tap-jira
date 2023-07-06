@@ -28,17 +28,12 @@ class UsersStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
     """
-
-    columns = """
-                 self, accountId, accountType, name, emailAddress, avatarUrls, displayName, active, timeZone, locale, groups, applicationRoles, expand
-              """
 
     name = "user"
     path = "/user"
@@ -106,7 +101,6 @@ class FieldStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -114,10 +108,6 @@ class FieldStream(JiraStream):
     replication_key = datetime keys for replication
     records_jsonpath = json response body
     """
-
-    columns = """
-                 id, key, name, untranslatedName, custom, orderable, navigable, searchable, clauseNames, schema, untranslatedName
-              """
 
     name = "field"
     path = "/field"
@@ -175,17 +165,12 @@ class ServerInfoStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
     """
-
-    columns = """
-                 baseUrl, version, versionNumbers, deploymentType, buildNumber, buildDate, serverTime, scmInfo, serverTitle, defaultLocale
-              """
 
     name = "server_info"
     path = "/serverInfo"
@@ -242,7 +227,6 @@ class IssueTypeStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -250,10 +234,6 @@ class IssueTypeStream(JiraStream):
     replication_key = datetime keys for replication
     records_jsonpath = json response body
     """
-
-    columns = """
-                 self, id, description, iconUrl, name, untranslatedName, subtask, avatarId, hierarchyLevel, scope
-              """
 
     name = "issue_type"
     path = "/issuetype"
@@ -299,7 +279,6 @@ class IssueTypeStream(JiraStream):
         return params
 
 
-
 class StatusStream(JiraStream):
 
     """
@@ -307,17 +286,12 @@ class StatusStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
     """
-
-    columns = """
-                 self, description, iconUrl, name, untranslatedName, id, statusCategory, scope
-              """
 
     name = "status"
     path = "/status"
@@ -387,7 +361,6 @@ class ProjectStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -395,10 +368,6 @@ class ProjectStream(JiraStream):
     replication_key = datetime keys for replication
     records_jsonpath = json response body
     """
-
-    columns = """
-                 expand, self, id, key, name, avatarUrls, projectTypeKey, simplified, style, isPrivate, properties, entityId, uuid
-              """
 
     name = "project"
     path = "/project"
@@ -455,7 +424,6 @@ class ProjectStream(JiraStream):
         return params
 
 
-
 class IssueStream(JiraStream):
 
     """
@@ -463,7 +431,6 @@ class IssueStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -783,17 +750,12 @@ class PermissionStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
     """
-
-    columns = """
-                 permissions
-              """
 
     name = "permission"
     path = "/permissions"
@@ -836,7 +798,6 @@ class ProjectRoleStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -901,7 +862,6 @@ class PriorityStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -955,7 +915,6 @@ class PermissionHolderStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1017,7 +976,6 @@ class SprintStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1072,7 +1030,6 @@ class SprintStream(JiraStream):
             params["order_by"] = self.replication_key
 
         return params
-
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
@@ -1142,7 +1099,6 @@ class UserGroupStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1281,7 +1237,6 @@ class ProjectRoleActorStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1407,7 +1362,6 @@ class AuditingStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1470,7 +1424,6 @@ class DashboardStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1530,7 +1483,6 @@ class FilterSearchStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1584,7 +1536,6 @@ class FilterDefaultShareScopeStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1633,7 +1584,6 @@ class GroupsPickerStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1687,7 +1637,6 @@ class LicenseStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1739,7 +1688,6 @@ class ScreensStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1785,7 +1733,6 @@ class ScreensStream(JiraStream):
         return params
 
 
-
 class ScreenSchemesStream(JiraStream):
 
     """
@@ -1793,7 +1740,6 @@ class ScreenSchemesStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1845,7 +1791,6 @@ class ScreenSchemesStream(JiraStream):
         return params
 
 
-
 class StatusesSearchStream(JiraStream):
 
     """
@@ -1853,7 +1798,6 @@ class StatusesSearchStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1906,7 +1850,6 @@ class StatusesSearchStream(JiraStream):
         return params
 
 
-
 class WorkflowStream(JiraStream):
 
     """
@@ -1914,7 +1857,6 @@ class WorkflowStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -1973,7 +1915,6 @@ class WorkflowSearchStream(JiraStream):
     """
 
     """
-    columns: columns which will be added to fields parameter in api
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
@@ -2024,4 +1965,3 @@ class WorkflowSearchStream(JiraStream):
             params["order_by"] = self.replication_key
 
         return params
-
