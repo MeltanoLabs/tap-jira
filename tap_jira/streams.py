@@ -1005,8 +1005,7 @@ class SprintStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/1.0"
-        return base_url
+        return "https://ryan-miranda.atlassian.net:443/rest/agile/1.0"
 
     def get_url_params(
         self,
