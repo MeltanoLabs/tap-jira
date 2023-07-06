@@ -112,6 +112,7 @@ class FieldStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
 
     columns = """
@@ -165,27 +166,6 @@ class FieldStream(JiraStream):
             params["order_by"] = self.replication_key
 
         return params
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("records") is not None:
-            results = resp_json["records"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class ServerInfoStream(JiraStream):
@@ -268,6 +248,7 @@ class IssueTypeStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
 
     columns = """
@@ -279,6 +260,7 @@ class IssueTypeStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -316,26 +298,6 @@ class IssueTypeStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("records") is not None:
-            results = resp_json["records"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class StatusStream(JiraStream):
@@ -431,6 +393,7 @@ class ProjectStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
 
     columns = """
@@ -442,6 +405,7 @@ class ProjectStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("expand", StringType),
@@ -490,26 +454,6 @@ class ProjectStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("records") is not None:
-            results = resp_json["records"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class IssueStream(JiraStream):
@@ -525,6 +469,7 @@ class IssueStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
 
     name = "issue"
@@ -532,6 +477,7 @@ class IssueStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "updated"
     replication_method = "incremental"
+    records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("expand", StringType),
@@ -816,27 +762,6 @@ class IssueStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("issues") is not None:
-            results = resp_json["issues"]
-        else:
-            results = resp_json
-
-        yield from results
-
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
         """
         We can add created and updated time columns from field column
@@ -1036,6 +961,7 @@ class PermissionHolderStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
 
     name = "permission_holder"
@@ -1043,6 +969,7 @@ class PermissionHolderStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[permissionSchemes][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", IntegerType),
@@ -1082,27 +1009,6 @@ class PermissionHolderStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("permissionSchemes") is not None:
-            results = resp_json["permissionSchemes"][0].get("permissions")
-        else:
-            results = resp_json
-
-        yield from results
-
 
 class SprintStream(JiraStream):
 
@@ -1117,6 +1023,7 @@ class SprintStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
+    records_jsonpath = json response body
     """
 
     name = "sprint"
@@ -1124,6 +1031,7 @@ class SprintStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", StringType),
@@ -1165,26 +1073,6 @@ class SprintStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
@@ -1407,6 +1295,7 @@ class ProjectRoleActorStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -1524,7 +1413,7 @@ class AuditingStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "auditing"
@@ -1532,6 +1421,7 @@ class AuditingStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "created"
     replication_method = "incremental"
+    records_jsonpath = "$[records][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", IntegerType),
@@ -1572,27 +1462,6 @@ class AuditingStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("records") is not None:
-            results = resp_json["records"]
-        else:
-            results = resp_json
-
-        yield from results
-
 
 class DashboardStream(JiraStream):
 
@@ -1607,7 +1476,7 @@ class DashboardStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "dashboard"
@@ -1615,6 +1484,7 @@ class DashboardStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[dashboards][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", StringType),
@@ -1652,27 +1522,6 @@ class DashboardStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("dashboards") is not None:
-            results = resp_json["dashboards"]
-        else:
-            results = resp_json
-
-        yield from results
-
 
 class FilterSearchStream(JiraStream):
 
@@ -1687,7 +1536,7 @@ class FilterSearchStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "filter_search"
@@ -1695,6 +1544,7 @@ class FilterSearchStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("expand", StringType),
@@ -1726,27 +1576,6 @@ class FilterSearchStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
-
 
 class FilterDefaultShareScopeStream(JiraStream):
 
@@ -1761,7 +1590,6 @@ class FilterDefaultShareScopeStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
     """
 
     name = "filter_default_share_scope"
@@ -1811,7 +1639,7 @@ class GroupsPickerStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath: json response body
     """
 
     name = "groups_picker"
@@ -1819,6 +1647,7 @@ class GroupsPickerStream(JiraStream):
     primary_keys = ["groupId"]
     replication_key = "groupId"
     replication_method = "incremental"
+    records_jsonpath = "$[groups][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("name", StringType),
@@ -1850,27 +1679,6 @@ class GroupsPickerStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("groups") is not None:
-            results = resp_json["groups"]
-        else:
-            results = resp_json
-
-        yield from results
-
 
 class LicenseStream(JiraStream):
 
@@ -1885,7 +1693,7 @@ class LicenseStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "license"
@@ -1893,6 +1701,7 @@ class LicenseStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[applications][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", StringType),
@@ -1922,27 +1731,6 @@ class LicenseStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("applications") is not None:
-            results = resp_json["applications"]
-        else:
-            results = resp_json
-
-        yield from results
-
 
 class ScreensStream(JiraStream):
 
@@ -1957,7 +1745,7 @@ class ScreensStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "screens"
@@ -1965,6 +1753,7 @@ class ScreensStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", IntegerType),
@@ -1995,26 +1784,6 @@ class ScreensStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class ScreenSchemesStream(JiraStream):
@@ -2030,7 +1799,7 @@ class ScreenSchemesStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "screen_schemes"
@@ -2038,6 +1807,7 @@ class ScreenSchemesStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", IntegerType),
@@ -2074,26 +1844,6 @@ class ScreenSchemesStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class StatusesSearchStream(JiraStream):
@@ -2109,7 +1859,7 @@ class StatusesSearchStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "statuses_search"
@@ -2117,6 +1867,7 @@ class StatusesSearchStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("id", StringType),
@@ -2154,26 +1905,6 @@ class StatusesSearchStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
 
 
 class WorkflowStream(JiraStream):
@@ -2189,7 +1920,6 @@ class WorkflowStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
     """
 
     name = "workflow"
@@ -2249,7 +1979,7 @@ class WorkflowSearchStream(JiraStream):
     schema: instream schema
     primary_keys = primary keys for the table
     replication_key = datetime keys for replication
-    issue_out: issue out value
+    records_jsonpath = json response body
     """
 
     name = "workflow_search"
@@ -2257,6 +1987,7 @@ class WorkflowSearchStream(JiraStream):
     primary_keys = ["id"]
     replication_key = "updated"
     replication_method = "incremental"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property(
@@ -2294,23 +2025,3 @@ class WorkflowSearchStream(JiraStream):
 
         return params
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        """Parse the response and return an iterator of result records.
-
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-
-        resp_json = response.json()
-
-        if isinstance(resp_json, list):
-            results = resp_json
-        elif resp_json.get("values") is not None:
-            results = resp_json["values"]
-        else:
-            results = resp_json
-
-        yield from results
