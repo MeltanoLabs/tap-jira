@@ -54,6 +54,7 @@ class TapJira(Tap):
         """
         return [
             streams.UsersStream(self),
+            streams.UsersSearchStream(self),
             streams.FieldStream(self),
             streams.ServerInfoStream(self),
             streams.IssueTypeStream(self),

@@ -35,7 +35,7 @@ class UsersStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "user"
+    name = "users"
     path = "/user"
     primary_keys = ["accountId"]
     replication_key = "accountId"
@@ -108,7 +108,7 @@ class UsersSearchStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "users_search"
+    name = "users_searches"
     path = "/users/search"
     primary_keys = ["accountId"]
     replication_key = "accountId"
@@ -147,7 +147,7 @@ class FieldStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "field"
+    name = "fields"
     path = "/field"
     primary_keys = ["id"]
     replication_key = "id"
@@ -229,7 +229,7 @@ class IssueTypeStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "issue_type"
+    name = "issue_types"
     path = "/issuetype"
     primary_keys = ["id"]
     replication_key = "id"
