@@ -93,6 +93,44 @@ class UsersStream(JiraStream):
 
         return params
 
+class UsersSearchStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get
+    """
+
+    """
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    records_jsonpath = json response body
+    """
+
+    name = "users_search"
+    path = "/users/search"
+    primary_keys = ["accountId"]
+    replication_key = "accountId"
+    replication_method = "incremental"
+
+    schema = PropertiesList(
+        Property("self", StringType),
+        Property("accountId", StringType),
+        Property("accountType", StringType),
+        Property(
+            "avatarUrls",
+            ObjectType(
+                Property("48x48", StringType),
+                Property("24x24", StringType),
+                Property("16x16", StringType),
+                Property("32x32", StringType),
+            ),
+        ),
+        Property("displayName", StringType),
+        Property("active", BooleanType),
+    ).to_dict()
+
 
 class FieldStream(JiraStream):
 
@@ -216,7 +254,7 @@ class IssueTypeStream(JiraStream):
 class StatusStream(JiraStream):
 
     """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-rest-api-3-statuses-get
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-status-categories/#api-rest-api-3-statuscategory-get
     """
 
     """
