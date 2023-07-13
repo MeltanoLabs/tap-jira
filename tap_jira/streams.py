@@ -265,7 +265,7 @@ class StatusStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "status"
+    name = "statuses"
     path = "/status"
     primary_keys = ["id"]
     replication_key = "self"
@@ -319,7 +319,7 @@ class ProjectStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "project"
+    name = "projects"
     path = "/project"
     primary_keys = ["id"]
     replication_key = "id"
@@ -367,7 +367,7 @@ class IssueStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "issue"
+    name = "issues"
     path = "/search?maxResults=1"
     primary_keys = ["id"]
     replication_key = "updated"
@@ -663,7 +663,7 @@ class PermissionStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "permission"
+    name = "permissions"
     path = "/permissions"
     primary_keys = ["permissions"]
     replication_key = "permissions"
@@ -689,7 +689,7 @@ class ProjectRoleStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "project_role"
+    name = "project_roles"
     path = "/role"
     primary_keys = ["id"]
     replication_key = "id"
@@ -731,7 +731,7 @@ class PriorityStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "priority"
+    name = "prioritys"
     path = "/priority"
     primary_keys = ["id"]
     replication_key = "id"
@@ -763,7 +763,7 @@ class PermissionHolderStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "permission_holder"
+    name = "permission_holders"
     path = "/permissionscheme"
     primary_keys = ["id"]
     replication_key = "id"
@@ -802,7 +802,7 @@ class SprintStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "sprint"
+    name = "sprints"
     path = "/board"
     primary_keys = ["id"]
     replication_key = "id"
@@ -901,7 +901,7 @@ class UserGroupStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "user_group"
+    name = "user_groups"
     path = "/user/groups"
     primary_keys = ["self"]
     replication_key = "user_id"
@@ -1039,7 +1039,7 @@ class ProjectRoleActorStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "project_role_actor"
+    name = "project_role_actors"
     path = "/role"
 
     primary_keys = ["id"]
@@ -1143,7 +1143,7 @@ class AuditingStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "auditing"
+    name = "audit_records"
     path = "/auditing/record"
     primary_keys = ["id"]
     replication_key = "created"
@@ -1183,7 +1183,7 @@ class DashboardStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "dashboard"
+    name = "dashboards"
     path = "/dashboard"
     primary_keys = ["id"]
     replication_key = "id"
@@ -1220,7 +1220,7 @@ class FilterSearchStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "filter_search"
+    name = "filter_searches"
     path = "/filter/search"
     primary_keys = ["id"]
     replication_key = "id"
@@ -1250,7 +1250,7 @@ class FilterDefaultShareScopeStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "filter_default_share_scope"
+    name = "filter_default_share_scopes"
     path = "/filter/defaultShareScope"
     primary_keys = ["scope"]
     replication_key = "scope"
@@ -1277,7 +1277,7 @@ class GroupsPickerStream(JiraStream):
     records_jsonpath: json response body
     """
 
-    name = "groups_picker"
+    name = "groups_pickers"
     path = "/groups/picker"
     primary_keys = ["groupId"]
     replication_key = "groupId"
@@ -1308,7 +1308,7 @@ class LicenseStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "license"
+    name = "licenses"
     path = "/instance/license"
     primary_keys = ["id"]
     replication_key = "id"
@@ -1403,7 +1403,7 @@ class StatusesSearchStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "statuses_search"
+    name = "statuses_searches"
     path = "/statuses/search"
     primary_keys = ["id"]
     replication_key = "id"
@@ -1439,7 +1439,7 @@ class WorkflowStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "workflow"
+    name = "workflows"
     path = "/workflow"
     primary_keys = ["name"]
     replication_key = "lastModifiedDate"
@@ -1476,7 +1476,7 @@ class WorkflowSearchStream(JiraStream):
     records_jsonpath = json response body
     """
 
-    name = "workflow_search"
+    name = "workflow_searches"
     path = "/workflow/search"
     primary_keys = ["id"]
     replication_key = "updated"
