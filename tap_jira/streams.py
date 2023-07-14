@@ -791,7 +791,7 @@ class SprintStream(JiraStream):
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
-        Property("id", StringType),
+        Property("id", IntegerType),
         Property("self", StringType),
         Property("state", StringType),
         Property("name", StringType),
