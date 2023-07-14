@@ -35,11 +35,6 @@ class TapJira(Tap):
             description="Jira API password",
         ),
         th.Property(
-            "account_id",
-            th.StringType,
-            description="Jira API account id, used in Users Stream",
-        ),
-        th.Property(
             "access_token",
             th.StringType,
             description="Jira API access token",
