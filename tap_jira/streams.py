@@ -158,7 +158,7 @@ class ServerInfoStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "server_infos"
+    name = "server_info"
     path = "/serverInfo"
     primary_keys = ["baseUrl"]
     replication_key = "serverTime"
@@ -701,7 +701,7 @@ class PriorityStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "prioritys"
+    name = "priorities"
     path = "/priority"
     primary_keys = ["id"]
     replication_key = "id"
