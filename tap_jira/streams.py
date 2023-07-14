@@ -217,7 +217,20 @@ class IssueTypeStream(JiraStream):
         Property("subtask", BooleanType),
         Property("avatarId", IntegerType),
         Property("hierarchyLevel", IntegerType),
-        Property("scope", StringType),
+        Property("scope",
+                 ObjectType(
+                Property("type", StringType),
+                Property("project",
+                         ObjectType(
+                Property("id", StringType),
+                Property("key", StringType),
+                Property("name", StringType),
+
+            ),
+                         ),
+
+            ),
+                 ),
     ).to_dict()
 
 
@@ -314,7 +327,10 @@ class ProjectStream(JiraStream):
         Property("simplified", BooleanType),
         Property("style", StringType),
         Property("isPrivate", BooleanType),
-        Property("properties", StringType),
+        Property("properties", ObjectType(
+                Property("propertyKey", StringType),
+            ),
+                 ),
         Property("entityId", StringType),
         Property("uuid", StringType),
     ).to_dict()
@@ -874,7 +890,7 @@ class ProjectRoleActorStream(JiraStream):
     schema = PropertiesList(
         Property("self", StringType),
         Property("name", StringType),
-        Property("id", StringType),
+        Property("id", IntegerType),
         Property("description", StringType),
         Property(
             "actors",
@@ -982,11 +998,31 @@ class AuditingStream(JiraStream):
         Property(
             "objectItem",
             ObjectType(
-                Property("accountId", StringType),
+                Property("id", StringType),
+                Property("name", StringType),
+                Property("typeName", StringType),
+                Property("parentId", StringType),
+                Property("parentName", StringType),
             ),
         ),
-        Property("changedValues", ArrayType(StringType)),
-        Property("associatedItems", ArrayType(StringType)),
+        Property("changedValues", ArrayType(
+            ObjectType(
+                Property("fieldName", StringType),
+                Property("changedFrom", StringType),
+                Property("changedTo", StringType),
+            ),
+        ),
+                 ),
+        Property("associatedItems", ArrayType(
+            ObjectType(
+                Property("id", StringType),
+                Property("name", StringType),
+                Property("typeName", StringType),
+                Property("parentId", StringType),
+                Property("parentName", StringType),
+            ),
+        ),
+                 ),
     ).to_dict()
 
 
@@ -1018,7 +1054,11 @@ class DashboardStream(JiraStream):
         Property("name", StringType),
         Property("popularity", IntegerType),
         Property("self", StringType),
-        Property("sharePermissions", ArrayType(StringType)),
+        Property("sharePermissions", ArrayType(ObjectType(
+                Property("type", StringType),
+            ),
+        ),
+                 ),
         Property("editPermissions", ArrayType(StringType)),
         Property("view", StringType),
         Property("isWritable", BooleanType),
@@ -1106,7 +1146,15 @@ class GroupsPickerStream(JiraStream):
     schema = PropertiesList(
         Property("name", StringType),
         Property("html", StringType),
-        Property("labels", ArrayType(StringType)),
+        Property("labels", ArrayType(
+            ObjectType(
+                Property("text", StringType),
+                Property("title", StringType),
+                Property("type", StringType),
+
+            ),
+        ),
+                 ),
         Property("groupId", StringType),
     ).to_dict()
 
