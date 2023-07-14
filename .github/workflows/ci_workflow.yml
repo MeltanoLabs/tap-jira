@@ -50,7 +50,6 @@ jobs:
       env:
          TAP_JIRA_USERNAME: ${{ secrets.username }}
          TAP_JIRA_PASSWORD: ${{ secrets.password }}
-         TAP_JIRA_ACCOUNT_ID: ${{ secrets.account_id }}
          TAP_JIRA_ACCESS_TOKEN: ${{ secrets.access_token }}
       run: |
         poetry run pytest --capture=no
