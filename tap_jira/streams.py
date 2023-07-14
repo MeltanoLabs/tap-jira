@@ -104,6 +104,7 @@ class UsersStream(JiraStream):
 
         return previous_token + 1
 
+
 class FieldStream(JiraStream):
 
     """
@@ -144,6 +145,7 @@ class FieldStream(JiraStream):
         ),
     ).to_dict()
 
+
 class ServerInfoStream(JiraStream):
 
     """
@@ -183,7 +185,6 @@ class ServerInfoStream(JiraStream):
     ).to_dict()
 
 
-
 class IssueTypeStream(JiraStream):
 
     """
@@ -218,7 +219,6 @@ class IssueTypeStream(JiraStream):
         Property("hierarchyLevel", IntegerType),
         Property("scope", StringType),
     ).to_dict()
-
 
 
 class StatusStream(JiraStream):
@@ -273,7 +273,6 @@ class StatusStream(JiraStream):
     ).to_dict()
 
 
-
 class ProjectStream(JiraStream):
 
     """
@@ -319,7 +318,6 @@ class ProjectStream(JiraStream):
         Property("entityId", StringType),
         Property("uuid", StringType),
     ).to_dict()
-
 
 
 class IssueStream(JiraStream):
@@ -604,7 +602,6 @@ class IssueStream(JiraStream):
         Property("updated", StringType),
     ).to_dict()
 
-
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
         """
         We can add created and updated time columns from field column
@@ -642,7 +639,6 @@ class PermissionStream(JiraStream):
     schema = PropertiesList(
         Property("permissions", StringType),
     ).to_dict()
-
 
 
 class ProjectRoleStream(JiraStream):
@@ -686,7 +682,6 @@ class ProjectRoleStream(JiraStream):
     ).to_dict()
 
 
-
 class PriorityStream(JiraStream):
 
     """
@@ -715,7 +710,6 @@ class PriorityStream(JiraStream):
         Property("name", StringType),
         Property("id", StringType),
     ).to_dict()
-
 
 
 class PermissionHolderStream(JiraStream):
@@ -756,7 +750,6 @@ class PermissionHolderStream(JiraStream):
     ).to_dict()
 
 
-
 class SprintStream(JiraStream):
 
     """
@@ -794,7 +787,6 @@ class SprintStream(JiraStream):
     @property
     def url_base(self) -> str:
         return "https://ryan-miranda.atlassian.net:443/rest/agile/1.0"
-
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
@@ -857,141 +849,6 @@ class SprintStream(JiraStream):
         return sprint_records
 
 
-class UserGroupStream(JiraStream):
-
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
-    """
-
-    """
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    """
-
-    name = "user_groups"
-    path = "/user/groups"
-    primary_keys = ["self"]
-    replication_key = "user_id"
-    replication_method = "incremental"
-
-    schema = PropertiesList(
-        Property("self", StringType),
-        Property("accountId", StringType),
-        Property("user_id", StringType),
-        Property(
-            "avatarUrls",
-            ObjectType(
-                Property("48x48", StringType),
-                Property("24x24", StringType),
-                Property("16x16", StringType),
-                Property("32x32", StringType),
-            ),
-        ),
-        Property("displayName", StringType),
-        Property("active", BooleanType),
-        Property("timeZone", StringType),
-        Property("accountType", StringType),
-        Property("group_name", StringType),
-        Property("name", StringType),
-    ).to_dict()
-
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
-    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
-        """
-        Takes each of the user group names and adds to list, then loops through the
-        list and gets data from the group group member endpoint for each of the group names in the list
-        """
-
-        user_group_name = []
-        group_records = []
-
-        for record in list(super().get_records(context)):
-            user_group_name.append(record.get("name"))
-
-        for name in user_group_name:
-            group_name = name
-
-            try:
-
-                class UserGroup(JiraStream):
-                    name = "user_group"
-                    path = "/group/member?groupname={}".format(group_name)
-
-                    def parse_response(
-                        self, response: requests.Response
-                    ) -> Iterable[dict]:
-                        """Parse the response and return an iterator of result records.
-
-                        Args:
-                            response: The HTTP ``requests.Response`` object.
-
-                        Yields:
-                            Each record from the source.
-                        """
-
-                        resp_json = response.json()
-
-                        if isinstance(resp_json, list):
-                            results = resp_json
-                        elif len(resp_json.get("values")) != 0:
-                            results = resp_json["values"]
-                        else:
-                            results = [resp_json]
-
-                        yield from results
-
-                    def post_process(
-                        self, row: dict, context: dict | None = None
-                    ) -> dict | None:
-                        """
-                        We can add a group name column with group name variable and a user id column  with account id column
-                        """
-
-                        try:
-                            row["group_name"] = group_name
-                            row["user_id"] = row["accountId"]
-                        except:
-                            pass
-
-                        return super().post_process(row, context)
-
-                user_group = UserGroup(self._tap, schema={"properties": {}})
-
-                group_records.append(list(user_group.get_records(context)))
-
-            except:
-                pass
-
-        usergroup_records = sum(group_records, [])
-
-        return usergroup_records
-
-
 class ProjectRoleActorStream(JiraStream):
 
     """
@@ -1049,7 +906,6 @@ class ProjectRoleActorStream(JiraStream):
             ),
         ),
     ).to_dict()
-
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
@@ -1134,7 +990,6 @@ class AuditingStream(JiraStream):
     ).to_dict()
 
 
-
 class DashboardStream(JiraStream):
 
     """
@@ -1171,7 +1026,6 @@ class DashboardStream(JiraStream):
     ).to_dict()
 
 
-
 class FilterSearchStream(JiraStream):
 
     """
@@ -1202,7 +1056,6 @@ class FilterSearchStream(JiraStream):
     ).to_dict()
 
 
-
 class FilterDefaultShareScopeStream(JiraStream):
 
     """
@@ -1226,7 +1079,6 @@ class FilterDefaultShareScopeStream(JiraStream):
     schema = PropertiesList(
         Property("scope", StringType),
     ).to_dict()
-
 
 
 class GroupsPickerStream(JiraStream):
@@ -1259,7 +1111,6 @@ class GroupsPickerStream(JiraStream):
     ).to_dict()
 
 
-
 class LicenseStream(JiraStream):
 
     """
@@ -1286,7 +1137,6 @@ class LicenseStream(JiraStream):
         Property("id", StringType),
         Property("plan", StringType),
     ).to_dict()
-
 
 
 class ScreensStream(JiraStream):
@@ -1316,7 +1166,6 @@ class ScreensStream(JiraStream):
         Property("name", StringType),
         Property("description", StringType),
     ).to_dict()
-
 
 
 class ScreenSchemesStream(JiraStream):
@@ -1352,7 +1201,6 @@ class ScreenSchemesStream(JiraStream):
             ),
         ),
     ).to_dict()
-
 
 
 class StatusesSearchStream(JiraStream):
@@ -1391,7 +1239,6 @@ class StatusesSearchStream(JiraStream):
     ).to_dict()
 
 
-
 class WorkflowStream(JiraStream):
 
     """
@@ -1425,7 +1272,6 @@ class WorkflowStream(JiraStream):
             ObjectType(Property("type", StringType)),
         ),
     ).to_dict()
-
 
 
 class WorkflowSearchStream(JiraStream):
@@ -1462,4 +1308,3 @@ class WorkflowSearchStream(JiraStream):
         Property("created", StringType),
         Property("updated", StringType),
     ).to_dict()
-

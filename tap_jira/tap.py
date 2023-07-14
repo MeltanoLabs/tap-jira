@@ -60,7 +60,6 @@ class TapJira(Tap):
             streams.PriorityStream(self),
             streams.PermissionHolderStream(self),
             streams.SprintStream(self),
-            #streams.UserGroupStream(self),
             streams.ProjectRoleActorStream(self),
             streams.AuditingStream(self),
             streams.DashboardStream(self),
