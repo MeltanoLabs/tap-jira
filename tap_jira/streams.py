@@ -36,17 +36,18 @@ class UsersStream(JiraStream):
     """
 
     name = "users"
-    path = "/user"
+    path = "/users/search"
     primary_keys = ["accountId"]
     replication_key = "accountId"
     replication_method = "incremental"
+    records_jsonpath = "$[*]"
 
     schema = PropertiesList(
         Property("self", StringType),
+        Property("key", StringType),
         Property("accountId", StringType),
         Property("accountType", StringType),
         Property("name", StringType),
-        Property("emailAddress", StringType),
         Property(
             "avatarUrls",
             ObjectType(
@@ -58,11 +59,6 @@ class UsersStream(JiraStream):
         ),
         Property("displayName", StringType),
         Property("active", BooleanType),
-        Property("timeZone", StringType),
-        Property("locale", StringType),
-        Property("groups", StringType),
-        Property("applicationRoles", StringType),
-        Property("expand", StringType),
     ).to_dict()
 
     def get_url_params(
@@ -80,8 +76,6 @@ class UsersStream(JiraStream):
             A dictionary of URL query parameters.
         """
 
-        account_id = self.config.get("account_id", "")
-
         params: dict = {}
         if next_page_token:
             params["startAt"] = next_page_token
@@ -89,48 +83,26 @@ class UsersStream(JiraStream):
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
 
-        params["accountId"] = account_id
-
         return params
 
-class UsersSearchStream(JiraStream):
+    def get_next_page_token(
+        self,
+        response: requests.Response,
+        previous_token: t.Any | None,
+    ) -> t.Any | None:
+        """Return a token for identifying next page or None if no more pages."""
+        # If pagination is required, return a token which can be used to get the
+        #       next page. If this is the final page, return "None" to end the
+        #       pagination loop.
+        resp_json = response.json()
+        if previous_token is None:
+            previous_token = 0
 
-    """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get
-    """
+        page = resp_json
+        if len(page) == 0:
+            return None
 
-    """
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    records_jsonpath = json response body
-    """
-
-    name = "users_searches"
-    path = "/users/search"
-    primary_keys = ["accountId"]
-    replication_key = "accountId"
-    replication_method = "incremental"
-
-    schema = PropertiesList(
-        Property("self", StringType),
-        Property("accountId", StringType),
-        Property("accountType", StringType),
-        Property(
-            "avatarUrls",
-            ObjectType(
-                Property("48x48", StringType),
-                Property("24x24", StringType),
-                Property("16x16", StringType),
-                Property("32x32", StringType),
-            ),
-        ),
-        Property("displayName", StringType),
-        Property("active", BooleanType),
-    ).to_dict()
-
+        return previous_token + 1
 
 class FieldStream(JiraStream):
 
@@ -172,8 +144,6 @@ class FieldStream(JiraStream):
         ),
     ).to_dict()
 
-
-
 class ServerInfoStream(JiraStream):
 
     """
@@ -188,7 +158,7 @@ class ServerInfoStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "server_info"
+    name = "server_infos"
     path = "/serverInfo"
     primary_keys = ["baseUrl"]
     replication_key = "serverTime"
@@ -942,15 +912,12 @@ class UserGroupStream(JiraStream):
         Returns:
             A dictionary of URL query parameters.
         """
-        account_id = self.config.get("account_id", "")
         params: dict = {}
         if next_page_token:
             params["startAt"] = next_page_token
         if self.replication_key:
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
-
-        params["accountId"] = account_id
 
         return params
 
