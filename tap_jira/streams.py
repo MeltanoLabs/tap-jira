@@ -655,7 +655,389 @@ class PermissionStream(JiraStream):
     replication_method = "incremental"
 
     schema = PropertiesList(
-        Property("permissions", StringType),
+        Property(
+            "permissions",
+            ObjectType(
+                Property(
+                    "ADD_COMMENTS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "ADMINISTER",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "ADMINISTER_PROJECT",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "ASSIGNABLE_USER",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "ASSIGN_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "BROWSE_PROJECTS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "BULK_CHANGE",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "CLOSE_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "CREATE_ATTACHMENTS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "CREATE_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "CREATE_PROJECT",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "CREATE_SHARED_OBJECTS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "DELETE_ALL_ATTACHMENTS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "DELETE_ALL_COMMENTS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "DELETE_ALL_WORKLOG",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "DELETE_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "DELETE_OWN_ATTACHMENTS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "DELETE_OWN_COMMENTS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "DELETE_OWN_WORKLOGS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "EDIT_ALL_COMMENTS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "EDIT_ALL_WORKLOGS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "EDIT_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "EDIT_OWN_COMMENTS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "EDIT_OWN_WORKLOGS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "LINK_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "MANAGE_GROUP_FILTER_SUBSCRIPTIONS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "MANAGE_SPRINTS_PERMISSION",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "MANAGE_WATCHERS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "MODIFY_REPORTER",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "MOVE_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "RESOLVE_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "SCHEDULE_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "SET_ISSUE_SECURITY",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "SYSTEM_ADMIN",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "TRANSITION_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "USER_PICKER",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "VIEW_AGGREGATED_DATA",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "VIEW_DEV_TOOLS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "VIEW_READONLY_WORKFLOW",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "VIEW_VOTERS_AND_WATCHERS",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "WORK_ON_ISSUES",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+                Property(
+                    "com.atlassian.atlas.jira__jira-townsquare-link-unconnected-issue-glance-view-permission",
+                    ObjectType(
+                        Property("key", StringType),
+                        Property("name", StringType),
+                        Property("type", StringType),
+                        Property("description", StringType),
+                    ),
+                ),
+            ),
+        ),
     ).to_dict()
 
 
@@ -901,10 +1283,13 @@ class ProjectRoleActorStream(JiraStream):
                     Property("id", IntegerType),
                     Property("displayName", StringType),
                     Property("type", StringType),
+                    Property("name", StringType),
                     Property(
-                        "actorUser",
+                        "actorGroup",
                         ObjectType(
-                            Property("accountId", StringType),
+                            Property("name", StringType),
+                            Property("displayName", StringType),
+                            Property("groupId", StringType),
                         ),
                     ),
                 ),
