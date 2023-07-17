@@ -1283,13 +1283,10 @@ class ProjectRoleActorStream(JiraStream):
                     Property("id", IntegerType),
                     Property("displayName", StringType),
                     Property("type", StringType),
-                    Property("name", StringType),
                     Property(
-                        "actorGroup",
+                        "actorUser",
                         ObjectType(
-                            Property("name", StringType),
-                            Property("displayName", StringType),
-                            Property("groupId", StringType),
+                            Property("accountId", StringType),
                         ),
                     ),
                 ),
