@@ -415,7 +415,15 @@ class IssueStream(JiraStream):
                 Property("customfield_10034", StringType),
                 Property("aggregatetimespent", StringType),
                 Property("customfield_10035", StringType),
-                Property("resolution", StringType),
+                Property(
+                    "resolution",
+                    ObjectType(
+                        Property("description", StringType),
+                        Property("id", StringType),
+                        Property("name", StringType),
+                        Property("self", StringType),
+                    ),
+                ),
                 Property("customfield_10036", StringType),
                 Property("customfield_10037", StringType),
                 Property("resolutiondate", StringType),
@@ -467,7 +475,81 @@ class IssueStream(JiraStream):
                 Property("timeestimate", StringType),
                 Property("aggregatetimeoriginalestimate", StringType),
                 Property("versions", ArrayType(StringType)),
-                Property("issuelinks", ArrayType(StringType)),
+                Property(
+                    "issuelinks",
+                    ArrayType(
+                        ObjectType(
+                            Property("id", StringType),
+                            Property(
+                                "outwardIssue",
+                                ObjectType(
+                                    Property(
+                                        "fields",
+                                        ObjectType(
+                                            Property(
+                                                "issueType",
+                                                ObjectType(
+                                                    Property("avatarId", IntegerType),
+                                                    Property("description", StringType),
+                                                    Property("entityId", StringType),
+                                                    Property("hierarchyLevel", IntegerType),
+                                                    Property("iconUrl", StringType),
+                                                    Property("id", StringType),
+                                                    Property("name", StringType),
+                                                    Property("self", StringType),
+                                                    Property("subtask", BooleanType),
+                                                ),
+                                            ),
+                                            Property(
+                                                "priority",
+                                                ObjectType(
+                                                    Property("iconUrl", StringType),
+                                                    Property("id", StringType),
+                                                    Property("name", StringType),
+                                                    Property("self", StringType),
+                                                ),
+                                            ),
+                                            Property(
+                                                "status",
+                                                ObjectType(
+                                                    Property("description", StringType),
+                                                    Property("iconUrl", StringType),
+                                                    Property("id", StringType),
+                                                    Property("name", StringType),
+                                                    Property("self", StringType),
+                                                    Property(
+                                                        "statusCategory",
+                                                        ObjectType(
+                                                            Property("colorName", StringType),
+                                                            Property("id", IntegerType),
+                                                            Property("key", StringType),
+                                                            Property("name", StringType),
+                                                            Property("self", StringType),
+                                                        ),
+                                                    ),
+                                                ),
+                                            ),
+                                            Property("summary", StringType),
+                                        ),
+                                    ),
+                                    Property("id", StringType),
+                                    Property("key", StringType),
+                                    Property("self", StringType),
+                                ),
+                            ),
+                            Property("self", StringType),
+                            Property("type",
+                                ObjectType(
+                                    Property("id", StringType),
+                                    Property("inward", StringType),
+                                    Property("name", StringType),
+                                    Property("outward", StringType),
+                                    Property("self", StringType),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
                 Property(
                     "assignee",
                     ObjectType(
@@ -514,10 +596,31 @@ class IssueStream(JiraStream):
                 Property(
                     "description",
                     ObjectType(
-                        Property("version", IntegerType),
-                        Property("type", StringType),
-                        Property("content", ArrayType(StringType)),
+                        Property("content",
+                            ArrayType(
+                                ObjectType(
+                                    Property("content",
+                                        ArrayType(
+                                            ObjectType(
+                                                Property("marks",
+                                                     ArrayType(
+                                                         ObjectType(
+                                                             Property("type", StringType),
+                                                         )
+                                                     )
+                                                ),
+                                                Property("text", StringType),
+                                                Property("type", StringType),
+                                            ),
+
+                                        ),
+                                    ),
+                                    Property("type", StringType),
+                                ),
+                            ),
+                        ),
                     ),
+
                 ),
                 Property("customfield_10010", StringType),
                 Property("customfield_10014", StringType),
@@ -552,7 +655,43 @@ class IssueStream(JiraStream):
                         Property("accountType", StringType),
                     ),
                 ),
-                Property("subtasks", ArrayType(StringType)),
+                Property(
+                    "sub-tasks",
+                    ArrayType(
+                        ObjectType(
+                            Property("id", StringType),
+                            Property(
+                                "type",
+                                ObjectType(
+                                    Property("id", StringType),
+                                    Property("name", StringType),
+                                    Property("inward", StringType),
+                                    Property("outward", StringType),
+                                ),
+                            ),
+                            Property(
+                                "outwardIssue",
+                                ObjectType(
+                                    Property("id", StringType),
+                                    Property("key", StringType),
+                                    Property("self", StringType),
+                                    Property(
+                                        "fields",
+                                        ObjectType(
+                                            Property(
+                                                "status",
+                                                ObjectType(
+                                                    Property("iconUrl", StringType),
+                                                    Property("name", StringType),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
                 Property("customfield_10041", StringType),
                 Property(
                     "reporter",
@@ -1074,22 +1213,6 @@ class ProjectRoleStream(JiraStream):
                     "project",
                     ObjectType(
                         Property("id", StringType),
-                    ),
-                ),
-            ),
-        ),
-        Property(
-            "actors",
-            ArrayType(
-                ObjectType(
-                    Property("id", IntegerType),
-                    Property("displayName", StringType),
-                    Property("type", StringType),
-                    Property(
-                        "actorUser",
-                        ObjectType(
-                            Property("accountId", StringType),
-                        ),
                     ),
                 ),
             ),
