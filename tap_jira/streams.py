@@ -1217,6 +1217,22 @@ class ProjectRoleStream(JiraStream):
                 ),
             ),
         ),
+        Property(
+            "actors",
+            ArrayType(
+                ObjectType(
+                    Property("id", IntegerType),
+                    Property("displayName", StringType),
+                    Property("type", StringType),
+                    Property(
+                        "actorUser",
+                        ObjectType(
+                            Property("accountId", StringType),
+                        ),
+                    ),
+                ),
+            ),
+        ),
     ).to_dict()
 
 
