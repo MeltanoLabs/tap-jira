@@ -262,10 +262,10 @@ class IssueTypeStream(JiraStream):
     ).to_dict()
 
 
-class StatusStream(JiraStream):
+class WorkflowStatusStream(JiraStream):
 
     """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-status-categories/#api-rest-api-3-statuscategory-get
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-statuses/#api-rest-api-3-status-get
     """
 
     """
@@ -276,7 +276,7 @@ class StatusStream(JiraStream):
     replication_key = datetime keys for replication
     """
 
-    name = "statuses"
+    name = "workflow_statuses"
     path = "/status"
     primary_keys = ["id"]
     replication_key = "self"
@@ -330,11 +330,11 @@ class ProjectStream(JiraStream):
     """
 
     name = "projects"
-    path = "/project"
+    path = "/project/search"
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "incremental"
-    records_jsonpath = "$[*]"  # Or override `parse_response`.
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
         Property("expand", StringType),
