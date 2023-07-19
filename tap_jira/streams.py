@@ -363,6 +363,22 @@ class ProjectStream(JiraStream):
         ),
         Property("entityId", StringType),
         Property("uuid", StringType),
+        Property(
+            "projectCategory",
+            ObjectType(
+                Property("self", StringType),
+                Property("id", StringType),
+                Property("name", StringType),
+                Property("description", StringType),
+            ),
+        ),
+        Property(
+            "insight",
+            ObjectType(
+                Property("totalIssueCount", IntegerType),
+                Property("lastIssueUpdateTime", StringType),
+            ),
+        ),
     ).to_dict()
 
 

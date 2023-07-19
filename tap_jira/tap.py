@@ -25,19 +25,20 @@ class TapJira(Tap):
             description="Latest record date to sync",
         ),
         th.Property(
-            "username",
-            th.StringType,
-            description="Jira API username",
-        ),
-        th.Property(
-            "password",
-            th.StringType,
-            description="Jira API password",
-        ),
-        th.Property(
-            "access_token",
-            th.StringType,
-            description="Jira API access token",
+            "auth",
+            th.DiscriminatedUnion(
+                "flow",
+                oauth=th.ObjectType(
+                    th.Property("access_token", th.StringType, required=True, secret=True),
+                    additional_properties=False,
+                ),
+                password=th.ObjectType(
+                    th.Property("username", th.StringType, required=True),
+                    th.Property("password", th.StringType, required=True, secret=True),
+                    additional_properties=False,
+                ),
+            ),
+            required=True,
         ),
     ).to_dict()
 
