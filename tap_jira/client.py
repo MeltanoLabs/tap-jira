@@ -22,6 +22,11 @@ class JiraStream(RESTStream):
         "$.paging.start"  # Or override `get_next_page_token`.  # noqa: S105
     )
 
+    records_jsonpath = "$[*]"  # Or override `parse_response`.
+
+    # Set this value or override `get_new_paginator`.
+    next_page_token_jsonpath = "$.next_page"
+
     @property
     def url_base(self) -> str:
         """
@@ -29,11 +34,6 @@ class JiraStream(RESTStream):
         """
         base_url = "https://ryan-miranda.atlassian.net:443/rest/api/3"
         return base_url
-
-    records_jsonpath = "$[*]"  # Or override `parse_response`.
-
-    # Set this value or override `get_new_paginator`.
-    next_page_token_jsonpath = "$.next_page"
 
     @property
     def authenticator(self) -> _Auth:
@@ -69,21 +69,6 @@ class JiraStream(RESTStream):
         # If not using an authenticator, you may also provide inline auth headers:
         # headers["Private-Token"] = self.config.get("auth_token")  # noqa: ERA001
         return headers
-
-    def get_new_paginator(self) -> BaseAPIPaginator:
-        """Create a new pagination helper instance.
-
-        If the source API can make use of the `next_page_token_jsonpath`
-        attribute, or it contains a `X-Next-Page` header in the response
-        then you can remove this method.
-
-        If you need custom pagination that uses page numbers, "next" links, or
-        other approaches, please read the guide: https://sdk.meltano.com/en/v0.25.0/guides/pagination-classes.html.
-
-        Returns:
-            A pagination helper instance.
-        """
-        return super().get_new_paginator()
 
     def get_url_params(
         self,

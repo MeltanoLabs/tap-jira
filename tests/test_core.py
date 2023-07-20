@@ -10,7 +10,6 @@ SAMPLE_CONFIG = {
     "start_date": "2023-01-01T00:00:00Z",
 }
 
-
 # Run standard built-in tap tests from the SDK:
 TestTapJira = get_tap_test_class(
     TapJira,

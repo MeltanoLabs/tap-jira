@@ -23,7 +23,6 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 |:--------------------|:--------:|:-------:|:------------|
 | username            | True    | None    | The username to authenticate against the API service |
 | password            | True    | None    | The password to authenticate against the API service |
-| account_id          | True    | None    | The Jira account id. |
 | start_date          | False   | None    | The earliest record date to sync |
 | end_date            | False   | None    | The latest record date to sync |
 | stream_maps         | False   | None    | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). |

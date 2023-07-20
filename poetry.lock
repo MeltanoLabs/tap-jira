@@ -1090,14 +1090,14 @@ files = [
 
 [[package]]
 name = "singer-sdk"
-version = "0.26.0"
+version = "0.30.0"
 description = "A framework for building Singer taps"
 category = "main"
 optional = false
 python-versions = ">=3.7.1,<3.12"
 files = [
-    {file = "singer_sdk-0.26.0-py3-none-any.whl", hash = "sha256:bd506a28734eb8c343dba3ac4ff01881f0bf65e75b9d35b0a3b264ee4540924d"},
-    {file = "singer_sdk-0.26.0.tar.gz", hash = "sha256:b0b8d26a667a2c213128b750f1d9deddc9b8c286937cf6c38a3a5ee0f7eee815"},
+    {file = "singer_sdk-0.30.0-py3-none-any.whl", hash = "sha256:ca8e002ab6fce56c4e6f3312655c7b68896d1d07f88a9efeb373e74c58ceb9b8"},
+    {file = "singer_sdk-0.30.0.tar.gz", hash = "sha256:73300d1c1bcb048b49a7f28c71ae26c9d309fdf3375e65940747b05c8a6551b5"},
 ]
 
 [package.dependencies]
