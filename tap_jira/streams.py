@@ -2916,6 +2916,7 @@ class SprintStream(JiraStream):
                 class Sprint(JiraStream):
                     name = "sprint"
                     path = "/sprint?maxResults=100"
+                    instance_name = ""
 
                     @property
                     def url_base(self) -> str:
@@ -2980,7 +2981,6 @@ class ProjectRoleActorStream(JiraStream):
     replication_key = "id"
     replication_method = "incremental"
     records_jsonpath = "$[*]"  # Or override `parse_response`.
-    instance_name = ""
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -3044,6 +3044,7 @@ class ProjectRoleActorStream(JiraStream):
                         project_id = pid
                         name = "project_role_actor"
                         path = "/project/{}/role/{}".format(project_id, role_id)
+                        instance_name = ""
 
                     project_role_actor = ProjectRoleActor(
                         self._tap, schema={"properties": {}}
