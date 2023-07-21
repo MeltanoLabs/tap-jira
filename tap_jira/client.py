@@ -108,18 +108,10 @@ class JiraStream(RESTStream):
 
         total = -1
         _value = None
-        if type(resp_json) is dict:
-            if resp_json.get("values") is not None:
-                _value = resp_json.get("values")
-                total = resp_json.get("total")
-            elif resp_json.get("issues") is not None:
-                _value = resp_json.get("issues")
-                total = resp_json.get("total")
-            elif resp_json.get("records") is not None:
-                _value = resp_json.get("records")
-                total = resp_json.get("total")
-            elif resp_json.get("dashboard") is not None:
-                _value = resp_json.get("dashboard")
+
+        if isinstance(resp_json, dict):
+            if resp_json.get(self.instance_name) is not None:
+                _value = resp_json.get(self.instance_name)
                 total = resp_json.get("total")
 
         if total is None:
