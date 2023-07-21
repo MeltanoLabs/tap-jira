@@ -124,3 +124,5 @@ class JiraStream(RESTStream):
         else:
             if len(_value) == 0 or total <= previous_token + 1:
                 return None
+
+        return previous_token + 1
