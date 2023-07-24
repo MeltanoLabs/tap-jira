@@ -50,6 +50,29 @@ class TapJira(Tap):
         """
         return [
             streams.UsersStream(self),
+            streams.FieldStream(self),
+            streams.ServerInfoStream(self),
+            streams.IssueTypeStream(self),
+            streams.ProjectStream(self),
+            streams.WorkflowStatusStream(self),
+            streams.IssueStream(self),
+            streams.PermissionStream(self),
+            streams.ProjectRoleStream(self),
+            streams.PriorityStream(self),
+            streams.PermissionHolderStream(self),
+            streams.SprintStream(self),
+            streams.ProjectRoleActorStream(self),
+            streams.AuditingStream(self),
+            streams.DashboardStream(self),
+            streams.FilterSearchStream(self),
+            streams.FilterDefaultShareScopeStream(self),
+            streams.GroupsPickerStream(self),
+            streams.LicenseStream(self),
+            streams.ScreensStream(self),
+            streams.ScreenSchemesStream(self),
+            streams.StatusesSearchStream(self),
+            streams.WorkflowStream(self),
+            streams.WorkflowSearchStream(self),
         ]
 
 
