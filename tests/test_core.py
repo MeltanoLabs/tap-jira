@@ -8,6 +8,11 @@ from tap_jira.tap import TapJira
 
 SAMPLE_CONFIG = {
     "start_date": "2023-01-01T00:00:00Z",
+    "auth": {
+        "flow": "password",
+            "username": '',
+            "password": '',
+    },
 }
 
 # Run standard built-in tap tests from the SDK:

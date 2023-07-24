@@ -25,19 +25,20 @@ class TapJira(Tap):
             description="Latest record date to sync",
         ),
         th.Property(
-            "username",
-            th.StringType,
-            description="Jira API username",
-        ),
-        th.Property(
-            "password",
-            th.StringType,
-            description="Jira API password",
-        ),
-        th.Property(
-            "access_token",
-            th.StringType,
-            description="Jira API access token",
+            "auth",
+            th.DiscriminatedUnion(
+                "flow",
+                oauth=th.ObjectType(
+                    th.Property("access_token", th.StringType, required=True, secret=True),
+                    additional_properties=False,
+                ),
+                password=th.ObjectType(
+                    th.Property("username", th.StringType, required=True),
+                    th.Property("password", th.StringType, required=True, secret=True),
+                    additional_properties=False,
+                ),
+            ),
+            required=True,
         ),
     ).to_dict()
 
@@ -49,29 +50,6 @@ class TapJira(Tap):
         """
         return [
             streams.UsersStream(self),
-            streams.FieldStream(self),
-            streams.ServerInfoStream(self),
-            streams.IssueTypeStream(self),
-            streams.ProjectStream(self),
-            streams.WorkflowStatusStream(self),
-            streams.IssueStream(self),
-            streams.PermissionStream(self),
-            streams.ProjectRoleStream(self),
-            streams.PriorityStream(self),
-            streams.PermissionHolderStream(self),
-            streams.SprintStream(self),
-            streams.ProjectRoleActorStream(self),
-            streams.AuditingStream(self),
-            streams.DashboardStream(self),
-            streams.FilterSearchStream(self),
-            streams.FilterDefaultShareScopeStream(self),
-            streams.GroupsPickerStream(self),
-            streams.LicenseStream(self),
-            streams.ScreensStream(self),
-            streams.ScreenSchemesStream(self),
-            streams.StatusesSearchStream(self),
-            streams.WorkflowStream(self),
-            streams.WorkflowSearchStream(self),
         ]
 
 
