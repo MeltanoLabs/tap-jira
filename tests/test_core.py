@@ -1,6 +1,7 @@
 """Tests standard tap features using the built-in SDK tests library."""
 
 import datetime
+import os
 
 from singer_sdk.testing import SuiteConfig, get_tap_test_class
 
@@ -10,8 +11,8 @@ SAMPLE_CONFIG = {
     "start_date": "2023-01-01T00:00:00Z",
     "auth": {
         "flow": "password",
-            "username": '',
-            "password": '',
+            "username": os.environ.get("TAP_JIRA_AUTH_USERNAME"),
+            "password": os.environ.get("TAP_JIRA_AUTH_PASSWORD"),
     },
 }
 
