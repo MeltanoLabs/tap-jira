@@ -9,7 +9,7 @@ from tap_jira.tap import TapJira
 
 SAMPLE_CONFIG = {
     "start_date": "2023-01-01T00:00:00Z",
-    "domain": os.environ.get("TAP_JIRA_AUTH_USERNAME"),
+    "domain": os.environ.get("TAP_JIRA_DOMAIN"),
     "auth": {
         "flow": "password",
             "username": os.environ.get("TAP_JIRA_AUTH_USERNAME"),
