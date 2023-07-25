@@ -29,7 +29,9 @@ class TapJira(Tap):
             th.DiscriminatedUnion(
                 "flow",
                 oauth=th.ObjectType(
-                    th.Property("access_token", th.StringType, required=True, secret=True),
+                    th.Property(
+                        "access_token", th.StringType, required=True, secret=True
+                    ),
                     additional_properties=False,
                 ),
                 password=th.ObjectType(

@@ -168,8 +168,11 @@ class FieldStream(JiraStream):
                         Property("customRenderer", BooleanType),
                         Property("readOnly", BooleanType),
                         Property("environment", StringType),
-                        Property("com.atlassian.jira.plugin.system.customfieldtypes:atlassian-team", BooleanType),
-                    )
+                        Property(
+                            "com.atlassian.jira.plugin.system.customfieldtypes:atlassian-team",
+                            BooleanType,
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -620,7 +623,9 @@ class IssueStream(JiraStream):
                                                     Property("avatarId", IntegerType),
                                                     Property("description", StringType),
                                                     Property("entityId", StringType),
-                                                    Property("hierarchyLevel", IntegerType),
+                                                    Property(
+                                                        "hierarchyLevel", IntegerType
+                                                    ),
                                                     Property("iconUrl", StringType),
                                                     Property("id", StringType),
                                                     Property("name", StringType),
@@ -648,11 +653,17 @@ class IssueStream(JiraStream):
                                                     Property(
                                                         "statusCategory",
                                                         ObjectType(
-                                                            Property("colorName", StringType),
+                                                            Property(
+                                                                "colorName", StringType
+                                                            ),
                                                             Property("id", IntegerType),
                                                             Property("key", StringType),
-                                                            Property("name", StringType),
-                                                            Property("self", StringType),
+                                                            Property(
+                                                                "name", StringType
+                                                            ),
+                                                            Property(
+                                                                "self", StringType
+                                                            ),
                                                         ),
                                                     ),
                                                 ),
@@ -677,7 +688,9 @@ class IssueStream(JiraStream):
                                                     Property("avatarId", IntegerType),
                                                     Property("description", StringType),
                                                     Property("entityId", StringType),
-                                                    Property("hierarchyLevel", IntegerType),
+                                                    Property(
+                                                        "hierarchyLevel", IntegerType
+                                                    ),
                                                     Property("iconUrl", StringType),
                                                     Property("id", StringType),
                                                     Property("name", StringType),
@@ -705,11 +718,17 @@ class IssueStream(JiraStream):
                                                     Property(
                                                         "statusCategory",
                                                         ObjectType(
-                                                            Property("colorName", StringType),
+                                                            Property(
+                                                                "colorName", StringType
+                                                            ),
                                                             Property("id", IntegerType),
                                                             Property("key", StringType),
-                                                            Property("name", StringType),
-                                                            Property("self", StringType),
+                                                            Property(
+                                                                "name", StringType
+                                                            ),
+                                                            Property(
+                                                                "self", StringType
+                                                            ),
                                                         ),
                                                     ),
                                                 ),
@@ -723,7 +742,8 @@ class IssueStream(JiraStream):
                                 ),
                             ),
                             Property("self", StringType),
-                            Property("type",
+                            Property(
+                                "type",
                                 ObjectType(
                                     Property("id", StringType),
                                     Property("inward", StringType),
@@ -795,43 +815,35 @@ class IssueStream(JiraStream):
                                     Property(
                                         "attrs",
                                         ObjectType(
-                                            Property("href",
-                                                     StringType),
+                                            Property("href", StringType),
                                             Property("language", StringType),
                                             Property("timestamp", StringType),
                                             Property("colspan", IntegerType),
                                             Property("alt", StringType),
-                                            Property("colwidth", ArrayType(IntegerType)),
+                                            Property(
+                                                "colwidth", ArrayType(IntegerType)
+                                            ),
                                             Property("background", StringType),
                                             Property("color", StringType),
-                                            Property("isNumberColumnEnabled", BooleanType),
+                                            Property(
+                                                "isNumberColumnEnabled", BooleanType
+                                            ),
                                             Property("localId", StringType),
                                             Property("panelType", StringType),
                                             Property("level", IntegerType),
                                             Property("accessLevel", StringType),
                                             Property("style", StringType),
-                                            Property("text",
-                                                     StringType),
-                                            Property("order",
-                                                     IntegerType),
-                                            Property("shortName",
-                                                     StringType),
-                                            Property("url",
-                                                     StringType),
-                                            Property("layout",
-                                                     StringType),
-                                            Property("id",
-                                                     StringType),
-                                            Property("type",
-                                                     StringType),
-                                            Property("collection",
-                                                     StringType),
-                                            Property("width",
-                                                     NumberType),
-                                            Property("height",
-                                                     NumberType),
-                                            Property("occurrenceKey",
-                                                     StringType),
+                                            Property("text", StringType),
+                                            Property("order", IntegerType),
+                                            Property("shortName", StringType),
+                                            Property("url", StringType),
+                                            Property("layout", StringType),
+                                            Property("id", StringType),
+                                            Property("type", StringType),
+                                            Property("collection", StringType),
+                                            Property("width", NumberType),
+                                            Property("height", NumberType),
+                                            Property("occurrenceKey", StringType),
                                         ),
                                     ),
                                     Property(
@@ -843,41 +855,54 @@ class IssueStream(JiraStream):
                                                     "attrs",
                                                     ObjectType(
                                                         Property("href", StringType),
-                                                        Property("colspan", IntegerType),
+                                                        Property(
+                                                            "colspan", IntegerType
+                                                        ),
                                                         Property("alt", StringType),
-                                                        Property("timestamp", StringType),
-                                                        Property("language", StringType),
-                                                        Property("colwidth", ArrayType(IntegerType)),
-                                                        Property("background", StringType),
-                                                        Property("isNumberColumnEnabled", BooleanType),
+                                                        Property(
+                                                            "timestamp", StringType
+                                                        ),
+                                                        Property(
+                                                            "language", StringType
+                                                        ),
+                                                        Property(
+                                                            "colwidth",
+                                                            ArrayType(IntegerType),
+                                                        ),
+                                                        Property(
+                                                            "background", StringType
+                                                        ),
+                                                        Property(
+                                                            "isNumberColumnEnabled",
+                                                            BooleanType,
+                                                        ),
                                                         Property("localId", StringType),
                                                         Property("color", StringType),
-                                                        Property("panelType", StringType),
+                                                        Property(
+                                                            "panelType", StringType
+                                                        ),
                                                         Property("level", IntegerType),
-                                                        Property("accessLevel", StringType),
+                                                        Property(
+                                                            "accessLevel", StringType
+                                                        ),
                                                         Property("style", StringType),
-                                                        Property("order",
-                                                                 IntegerType),
-                                                        Property("text",
-                                                                 StringType),
-                                                        Property("shortName",
-                                                                 StringType),
-                                                        Property("url",
-                                                                 StringType),
-                                                        Property("layout",
-                                                                 StringType),
-                                                        Property("id",
-                                                                 StringType),
-                                                        Property("type",
-                                                                 StringType),
-                                                        Property("collection",
-                                                                 StringType),
-                                                        Property("width",
-                                                                 NumberType),
-                                                        Property("height",
-                                                                 NumberType),
-                                                        Property("occurrenceKey",
-                                                                 StringType),
+                                                        Property("order", IntegerType),
+                                                        Property("text", StringType),
+                                                        Property(
+                                                            "shortName", StringType
+                                                        ),
+                                                        Property("url", StringType),
+                                                        Property("layout", StringType),
+                                                        Property("id", StringType),
+                                                        Property("type", StringType),
+                                                        Property(
+                                                            "collection", StringType
+                                                        ),
+                                                        Property("width", NumberType),
+                                                        Property("height", NumberType),
+                                                        Property(
+                                                            "occurrenceKey", StringType
+                                                        ),
                                                     ),
                                                 ),
                                             ),
@@ -893,188 +918,405 @@ class IssueStream(JiraStream):
                                                 Property(
                                                     "attrs",
                                                     ObjectType(
-                                                        Property("href",
-                                                                 StringType),
-                                                        Property("colspan", IntegerType),
+                                                        Property("href", StringType),
+                                                        Property(
+                                                            "colspan", IntegerType
+                                                        ),
                                                         Property("alt", StringType),
-                                                        Property("timestamp", StringType),
-                                                        Property("colwidth", ArrayType(IntegerType)),
-                                                        Property("language", StringType),
-                                                        Property("background", StringType),
-                                                        Property("isNumberColumnEnabled", BooleanType),
+                                                        Property(
+                                                            "timestamp", StringType
+                                                        ),
+                                                        Property(
+                                                            "colwidth",
+                                                            ArrayType(IntegerType),
+                                                        ),
+                                                        Property(
+                                                            "language", StringType
+                                                        ),
+                                                        Property(
+                                                            "background", StringType
+                                                        ),
+                                                        Property(
+                                                            "isNumberColumnEnabled",
+                                                            BooleanType,
+                                                        ),
                                                         Property("localId", StringType),
                                                         Property("color", StringType),
-                                                        Property("panelType", StringType),
+                                                        Property(
+                                                            "panelType", StringType
+                                                        ),
                                                         Property("level", IntegerType),
-                                                        Property("accessLevel", StringType),
+                                                        Property(
+                                                            "accessLevel", StringType
+                                                        ),
                                                         Property("style", StringType),
-                                                        Property("order",
-                                                                 IntegerType),
-                                                        Property("text",
-                                                                 StringType),
-                                                        Property("shortName",
-                                                                 StringType),
-                                                        Property("url",
-                                                                 StringType),
-                                                        Property("layout",
-                                                                 StringType),
-                                                        Property("id",
-                                                                 StringType),
-                                                        Property("type",
-                                                                 StringType),
-                                                        Property("collection",
-                                                                 StringType),
-                                                        Property("width",
-                                                                 NumberType),
-                                                        Property("height",
-                                                                 NumberType),
-                                                        Property("occurrenceKey",
-                                                                 StringType),
+                                                        Property("order", IntegerType),
+                                                        Property("text", StringType),
+                                                        Property(
+                                                            "shortName", StringType
+                                                        ),
+                                                        Property("url", StringType),
+                                                        Property("layout", StringType),
+                                                        Property("id", StringType),
+                                                        Property("type", StringType),
+                                                        Property(
+                                                            "collection", StringType
+                                                        ),
+                                                        Property("width", NumberType),
+                                                        Property("height", NumberType),
+                                                        Property(
+                                                            "occurrenceKey", StringType
+                                                        ),
                                                     ),
                                                 ),
                                                 Property(
                                                     "marks",
-                                                     ArrayType(
-                                                         ObjectType(
-                                                             Property("type", StringType),
-                                                             Property(
-                                                                 "attrs",
-                                                                 ObjectType(
-                                                                     Property("href", StringType),
-                                                                     Property("colspan", IntegerType),
-                                                                     Property("alt", StringType),
-                                                                     Property("timestamp", StringType),
-                                                                     Property("colwidth", ArrayType(IntegerType)),
-                                                                     Property("language", StringType),
-                                                                     Property("background", StringType),
-                                                                     Property("isNumberColumnEnabled", BooleanType),
-                                                                     Property("localId", StringType),
-                                                                     Property("color", StringType),
-                                                                     Property("panelType", StringType),
-                                                                     Property("level", IntegerType),
-                                                                     Property("accessLevel", StringType),
-                                                                     Property("style", StringType),
-                                                                     Property("order",
-                                                                              IntegerType),
-                                                                     Property("text",
-                                                                              StringType),
-                                                                     Property("shortName",
-                                                                              StringType),
-                                                                     Property("url",
-                                                                              StringType),
-                                                                     Property("layout",
-                                                                              StringType),
-                                                                     Property("id",
-                                                                              StringType),
-                                                                     Property("type",
-                                                                              StringType),
-                                                                     Property("collection",
-                                                                              StringType),
-                                                                     Property("width",
-                                                                              NumberType),
-                                                                     Property("height",
-                                                                              NumberType),
-                                                                     Property("occurrenceKey",
-                                                                              StringType),
-                                                                 ),
-                                                             ),
-                                                         ),
-                                                     ),
+                                                    ArrayType(
+                                                        ObjectType(
+                                                            Property(
+                                                                "type", StringType
+                                                            ),
+                                                            Property(
+                                                                "attrs",
+                                                                ObjectType(
+                                                                    Property(
+                                                                        "href",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "colspan",
+                                                                        IntegerType,
+                                                                    ),
+                                                                    Property(
+                                                                        "alt",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "timestamp",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "colwidth",
+                                                                        ArrayType(
+                                                                            IntegerType
+                                                                        ),
+                                                                    ),
+                                                                    Property(
+                                                                        "language",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "background",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "isNumberColumnEnabled",
+                                                                        BooleanType,
+                                                                    ),
+                                                                    Property(
+                                                                        "localId",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "color",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "panelType",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "level",
+                                                                        IntegerType,
+                                                                    ),
+                                                                    Property(
+                                                                        "accessLevel",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "style",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "order",
+                                                                        IntegerType,
+                                                                    ),
+                                                                    Property(
+                                                                        "text",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "shortName",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "url",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "layout",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "id", StringType
+                                                                    ),
+                                                                    Property(
+                                                                        "type",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "collection",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "width",
+                                                                        NumberType,
+                                                                    ),
+                                                                    Property(
+                                                                        "height",
+                                                                        NumberType,
+                                                                    ),
+                                                                    Property(
+                                                                        "occurrenceKey",
+                                                                        StringType,
+                                                                    ),
+                                                                ),
+                                                            ),
+                                                        ),
+                                                    ),
                                                 ),
                                                 Property(
                                                     "content",
                                                     ArrayType(
                                                         ObjectType(
-                                                            Property("version", IntegerType),
-                                                            Property("text", StringType),
-                                                            Property("type", StringType),
+                                                            Property(
+                                                                "version", IntegerType
+                                                            ),
+                                                            Property(
+                                                                "text", StringType
+                                                            ),
+                                                            Property(
+                                                                "type", StringType
+                                                            ),
                                                             Property(
                                                                 "attrs",
                                                                 ObjectType(
-                                                                    Property("href",
-                                                                             StringType),
-                                                                    Property("colspan", IntegerType),
-                                                                    Property("alt", StringType),
-                                                                    Property("timestamp", StringType),
-                                                                    Property("colwidth", ArrayType(IntegerType)),
-                                                                    Property("language", StringType),
-                                                                    Property("background", StringType),
-                                                                    Property("isNumberColumnEnabled", BooleanType),
-                                                                    Property("localId", StringType),
-                                                                    Property("color", StringType),
-                                                                    Property("panelType", StringType),
-                                                                    Property("level", IntegerType),
-                                                                    Property("accessLevel", StringType),
-                                                                    Property("style", StringType),
-                                                                    Property("order",
-                                                                             IntegerType),
-                                                                    Property("text",
-                                                                             StringType),
-                                                                    Property("shortName",
-                                                                             StringType),
-                                                                    Property("url",
-                                                                             StringType),
-                                                                    Property("layout",
-                                                                             StringType),
-                                                                    Property("id",
-                                                                             StringType),
-                                                                    Property("type",
-                                                                             StringType),
-                                                                    Property("collection",
-                                                                             StringType),
-                                                                    Property("width",
-                                                                             NumberType),
-                                                                    Property("height",
-                                                                             NumberType),
-                                                                    Property("occurrenceKey",
-                                                                             StringType),
+                                                                    Property(
+                                                                        "href",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "colspan",
+                                                                        IntegerType,
+                                                                    ),
+                                                                    Property(
+                                                                        "alt",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "timestamp",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "colwidth",
+                                                                        ArrayType(
+                                                                            IntegerType
+                                                                        ),
+                                                                    ),
+                                                                    Property(
+                                                                        "language",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "background",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "isNumberColumnEnabled",
+                                                                        BooleanType,
+                                                                    ),
+                                                                    Property(
+                                                                        "localId",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "color",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "panelType",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "level",
+                                                                        IntegerType,
+                                                                    ),
+                                                                    Property(
+                                                                        "accessLevel",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "style",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "order",
+                                                                        IntegerType,
+                                                                    ),
+                                                                    Property(
+                                                                        "text",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "shortName",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "url",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "layout",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "id", StringType
+                                                                    ),
+                                                                    Property(
+                                                                        "type",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "collection",
+                                                                        StringType,
+                                                                    ),
+                                                                    Property(
+                                                                        "width",
+                                                                        NumberType,
+                                                                    ),
+                                                                    Property(
+                                                                        "height",
+                                                                        NumberType,
+                                                                    ),
+                                                                    Property(
+                                                                        "occurrenceKey",
+                                                                        StringType,
+                                                                    ),
                                                                 ),
                                                             ),
                                                             Property(
                                                                 "marks",
                                                                 ArrayType(
                                                                     ObjectType(
-                                                                        Property("type", StringType),
+                                                                        Property(
+                                                                            "type",
+                                                                            StringType,
+                                                                        ),
                                                                         Property(
                                                                             "attrs",
                                                                             ObjectType(
-                                                                                Property("href", StringType),
-                                                                                Property("colspan", IntegerType),
-                                                                                Property("alt", StringType),
-                                                                                Property("timestamp", StringType),
-                                                                                Property("colwidth", ArrayType(IntegerType)),
-                                                                                Property("language", StringType),
-                                                                                Property("background", StringType),
-                                                                                Property("isNumberColumnEnabled",
-                                                                                         BooleanType),
-                                                                                Property("localId", StringType),
-                                                                                Property("color", StringType),
-                                                                                Property("panelType", StringType),
-                                                                                Property("level", IntegerType),
-                                                                                Property("accessLevel", StringType),
-                                                                                Property("style", StringType),
-                                                                                Property("order",
-                                                                                         IntegerType),
-                                                                                Property("text",
-                                                                                         StringType),
-                                                                                Property("shortName",
-                                                                                         StringType),
-                                                                                Property("url",
-                                                                                         StringType),
-                                                                                Property("layout",
-                                                                                         StringType),
-                                                                                Property("id",
-                                                                                         StringType),
-                                                                                Property("type",
-                                                                                         StringType),
-                                                                                Property("collection",
-                                                                                         StringType),
-                                                                                Property("width",
-                                                                                         NumberType),
-                                                                                Property("height",
-                                                                                         NumberType),
-                                                                                Property("occurrenceKey",
-                                                                                         StringType),
+                                                                                Property(
+                                                                                    "href",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "colspan",
+                                                                                    IntegerType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "alt",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "timestamp",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "colwidth",
+                                                                                    ArrayType(
+                                                                                        IntegerType
+                                                                                    ),
+                                                                                ),
+                                                                                Property(
+                                                                                    "language",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "background",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "isNumberColumnEnabled",
+                                                                                    BooleanType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "localId",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "color",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "panelType",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "level",
+                                                                                    IntegerType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "accessLevel",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "style",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "order",
+                                                                                    IntegerType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "text",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "shortName",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "url",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "layout",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "id",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "type",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "collection",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "width",
+                                                                                    NumberType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "height",
+                                                                                    NumberType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "occurrenceKey",
+                                                                                    StringType,
+                                                                                ),
                                                                             ),
                                                                         ),
                                                                     ),
@@ -1084,109 +1326,238 @@ class IssueStream(JiraStream):
                                                                 "content",
                                                                 ArrayType(
                                                                     ObjectType(
-                                                                        Property("version", IntegerType),
-                                                                        Property("text", StringType),
-                                                                        Property("type", StringType),
+                                                                        Property(
+                                                                            "version",
+                                                                            IntegerType,
+                                                                        ),
+                                                                        Property(
+                                                                            "text",
+                                                                            StringType,
+                                                                        ),
+                                                                        Property(
+                                                                            "type",
+                                                                            StringType,
+                                                                        ),
                                                                         Property(
                                                                             "attrs",
                                                                             ObjectType(
-                                                                                Property("href",
-                                                                                         StringType),
-                                                                                Property("colspan", IntegerType),
-                                                                                Property("alt", StringType),
-                                                                                Property("timestamp", StringType),
-                                                                                Property("colwidth", ArrayType(IntegerType)),
-                                                                                Property("language", StringType),
-                                                                                Property("background", StringType),
-                                                                                Property("isNumberColumnEnabled",
-                                                                                         BooleanType),
-                                                                                Property("localId", StringType),
-                                                                                Property("color", StringType),
-                                                                                Property("panelType", StringType),
-                                                                                Property("level", IntegerType),
-                                                                                Property("accessLevel", StringType),
-                                                                                Property("style", StringType),
-                                                                                Property("order",
-                                                                                         IntegerType),
-                                                                                Property("text",
-                                                                                         StringType),
-                                                                                Property("shortName",
-                                                                                         StringType),
-                                                                                Property("url",
-                                                                                         StringType),
-                                                                                Property("layout",
-                                                                                         StringType),
-                                                                                Property("id",
-                                                                                         StringType),
-                                                                                Property("type",
-                                                                                         StringType),
-                                                                                Property("collection",
-                                                                                         StringType),
-                                                                                Property("width",
-                                                                                         NumberType),
-                                                                                Property("height",
-                                                                                         NumberType),
-                                                                                Property("occurrenceKey",
-                                                                                         StringType),
+                                                                                Property(
+                                                                                    "href",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "colspan",
+                                                                                    IntegerType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "alt",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "timestamp",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "colwidth",
+                                                                                    ArrayType(
+                                                                                        IntegerType
+                                                                                    ),
+                                                                                ),
+                                                                                Property(
+                                                                                    "language",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "background",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "isNumberColumnEnabled",
+                                                                                    BooleanType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "localId",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "color",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "panelType",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "level",
+                                                                                    IntegerType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "accessLevel",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "style",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "order",
+                                                                                    IntegerType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "text",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "shortName",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "url",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "layout",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "id",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "type",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "collection",
+                                                                                    StringType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "width",
+                                                                                    NumberType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "height",
+                                                                                    NumberType,
+                                                                                ),
+                                                                                Property(
+                                                                                    "occurrenceKey",
+                                                                                    StringType,
+                                                                                ),
                                                                             ),
                                                                         ),
                                                                         Property(
                                                                             "marks",
                                                                             ArrayType(
                                                                                 ObjectType(
-                                                                                    Property("type", StringType),
+                                                                                    Property(
+                                                                                        "type",
+                                                                                        StringType,
+                                                                                    ),
                                                                                     Property(
                                                                                         "attrs",
                                                                                         ObjectType(
-                                                                                            Property("href",
-                                                                                                     StringType),
-                                                                                            Property("colspan",
-                                                                                                     IntegerType),
-                                                                                            Property("alt", StringType),
-                                                                                            Property("timestamp",
-                                                                                                     StringType),
-                                                                                            Property("colwidth", ArrayType(IntegerType)),
-                                                                                            Property("language",
-                                                                                                     StringType),
-                                                                                            Property("background",
-                                                                                                     StringType),
+                                                                                            Property(
+                                                                                                "href",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "colspan",
+                                                                                                IntegerType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "alt",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "timestamp",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "colwidth",
+                                                                                                ArrayType(
+                                                                                                    IntegerType
+                                                                                                ),
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "language",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "background",
+                                                                                                StringType,
+                                                                                            ),
                                                                                             Property(
                                                                                                 "isNumberColumnEnabled",
-                                                                                                BooleanType),
-                                                                                            Property("localId",
-                                                                                                     StringType),
-                                                                                            Property("color",
-                                                                                                     StringType),
-                                                                                            Property("panelType",
-                                                                                                     StringType),
-                                                                                            Property("level",
-                                                                                                     IntegerType),
-                                                                                            Property("accessLevel",
-                                                                                                     StringType),
-                                                                                            Property("style",
-                                                                                                     StringType),
-                                                                                            Property("order",
-                                                                                                     IntegerType),
-                                                                                            Property("text",
-                                                                                                     StringType),
-                                                                                            Property("shortName",
-                                                                                                     StringType),
-                                                                                            Property("url",
-                                                                                                     StringType),
-                                                                                            Property("layout",
-                                                                                                     StringType),
-                                                                                            Property("id",
-                                                                                                     StringType),
-                                                                                            Property("type",
-                                                                                                     StringType),
-                                                                                            Property("collection",
-                                                                                                     StringType),
-                                                                                            Property("width",
-                                                                                                     NumberType),
-                                                                                            Property("height",
-                                                                                                     NumberType),
-                                                                                            Property("occurrenceKey",
-                                                                                                     StringType),
+                                                                                                BooleanType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "localId",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "color",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "panelType",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "level",
+                                                                                                IntegerType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "accessLevel",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "style",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "order",
+                                                                                                IntegerType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "text",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "shortName",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "url",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "layout",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "id",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "type",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "collection",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "width",
+                                                                                                NumberType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "height",
+                                                                                                NumberType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "occurrenceKey",
+                                                                                                StringType,
+                                                                                            ),
                                                                                         ),
                                                                                     ),
                                                                                 ),
@@ -1196,139 +1567,238 @@ class IssueStream(JiraStream):
                                                                             "content",
                                                                             ArrayType(
                                                                                 ObjectType(
-                                                                                    Property("version", IntegerType),
-                                                                                    Property("text", StringType),
-                                                                                    Property("type", StringType),
+                                                                                    Property(
+                                                                                        "version",
+                                                                                        IntegerType,
+                                                                                    ),
+                                                                                    Property(
+                                                                                        "text",
+                                                                                        StringType,
+                                                                                    ),
+                                                                                    Property(
+                                                                                        "type",
+                                                                                        StringType,
+                                                                                    ),
                                                                                     Property(
                                                                                         "attrs",
                                                                                         ObjectType(
-                                                                                            Property("href",
-                                                                                                     StringType),
-                                                                                            Property("colspan",
-                                                                                                     IntegerType),
-                                                                                            Property("alt", StringType),
-                                                                                            Property("timestamp",
-                                                                                                     StringType),
-                                                                                            Property("colwidth", ArrayType(IntegerType)),
-                                                                                            Property("language",
-                                                                                                     StringType),
-                                                                                            Property("background",
-                                                                                                     StringType),
+                                                                                            Property(
+                                                                                                "href",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "colspan",
+                                                                                                IntegerType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "alt",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "timestamp",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "colwidth",
+                                                                                                ArrayType(
+                                                                                                    IntegerType
+                                                                                                ),
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "language",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "background",
+                                                                                                StringType,
+                                                                                            ),
                                                                                             Property(
                                                                                                 "isNumberColumnEnabled",
-                                                                                                BooleanType),
-                                                                                            Property("localId",
-                                                                                                     StringType),
-                                                                                            Property("color",
-                                                                                                     StringType),
-                                                                                            Property("panelType",
-                                                                                                     StringType),
-                                                                                            Property("level",
-                                                                                                     IntegerType),
-                                                                                            Property("accessLevel",
-                                                                                                     StringType),
-                                                                                            Property("style",
-                                                                                                     StringType),
-                                                                                            Property("order",
-                                                                                                     IntegerType),
-                                                                                            Property("text",
-                                                                                                     StringType),
-                                                                                            Property("shortName",
-                                                                                                     StringType),
-                                                                                            Property("url",
-                                                                                                     StringType),
-                                                                                            Property("layout",
-                                                                                                     StringType),
-                                                                                            Property("id",
-                                                                                                     StringType),
-                                                                                            Property("type",
-                                                                                                     StringType),
-                                                                                            Property("collection",
-                                                                                                     StringType),
-                                                                                            Property("width",
-                                                                                                     NumberType),
-                                                                                            Property("height",
-                                                                                                     NumberType),
-                                                                                            Property("occurrenceKey",
-                                                                                                     StringType),
+                                                                                                BooleanType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "localId",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "color",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "panelType",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "level",
+                                                                                                IntegerType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "accessLevel",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "style",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "order",
+                                                                                                IntegerType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "text",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "shortName",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "url",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "layout",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "id",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "type",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "collection",
+                                                                                                StringType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "width",
+                                                                                                NumberType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "height",
+                                                                                                NumberType,
+                                                                                            ),
+                                                                                            Property(
+                                                                                                "occurrenceKey",
+                                                                                                StringType,
+                                                                                            ),
                                                                                         ),
                                                                                     ),
                                                                                     Property(
                                                                                         "marks",
                                                                                         ArrayType(
                                                                                             ObjectType(
-                                                                                                Property("type",
-                                                                                                         StringType),
+                                                                                                Property(
+                                                                                                    "type",
+                                                                                                    StringType,
+                                                                                                ),
                                                                                                 Property(
                                                                                                     "attrs",
                                                                                                     ObjectType(
-                                                                                                        Property("href",
-                                                                                                                 StringType),
+                                                                                                        Property(
+                                                                                                            "href",
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "colspan",
-                                                                                                            IntegerType),
-                                                                                                        Property("alt",
-                                                                                                                 StringType),
+                                                                                                            IntegerType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "alt",
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "timestamp",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "language",
-                                                                                                            StringType),
-                                                                                                        Property("colwidth", ArrayType(IntegerType)),
+                                                                                                            StringType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "colwidth",
+                                                                                                            ArrayType(
+                                                                                                                IntegerType
+                                                                                                            ),
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "background",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "isNumberColumnEnabled",
-                                                                                                            BooleanType),
+                                                                                                            BooleanType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "localId",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "color",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "panelType",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "level",
-                                                                                                            IntegerType),
+                                                                                                            IntegerType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "accessLevel",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "style",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "order",
-                                                                                                            IntegerType),
-                                                                                                        Property("text",
-                                                                                                                 StringType),
+                                                                                                            IntegerType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "text",
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "shortName",
-                                                                                                            StringType),
-                                                                                                        Property("url",
-                                                                                                                 StringType),
+                                                                                                            StringType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "url",
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "layout",
-                                                                                                            StringType),
-                                                                                                        Property("id",
-                                                                                                                 StringType),
-                                                                                                        Property("type",
-                                                                                                                 StringType),
+                                                                                                            StringType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "id",
+                                                                                                            StringType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "type",
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "collection",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "width",
-                                                                                                            NumberType),
+                                                                                                            NumberType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "height",
-                                                                                                            NumberType),
+                                                                                                            NumberType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "occurrenceKey",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                     ),
                                                                                                 ),
                                                                                             ),
@@ -1338,82 +1808,123 @@ class IssueStream(JiraStream):
                                                                                         "content",
                                                                                         ArrayType(
                                                                                             ObjectType(
-                                                                                                Property("version",
-                                                                                                         IntegerType),
-                                                                                                Property("text",
-                                                                                                         StringType),
-                                                                                                Property("type",
-                                                                                                         StringType),
+                                                                                                Property(
+                                                                                                    "version",
+                                                                                                    IntegerType,
+                                                                                                ),
+                                                                                                Property(
+                                                                                                    "text",
+                                                                                                    StringType,
+                                                                                                ),
+                                                                                                Property(
+                                                                                                    "type",
+                                                                                                    StringType,
+                                                                                                ),
                                                                                                 Property(
                                                                                                     "attrs",
                                                                                                     ObjectType(
-                                                                                                        Property("href",
-                                                                                                                 StringType),
+                                                                                                        Property(
+                                                                                                            "href",
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "colspan",
-                                                                                                            IntegerType),
-                                                                                                        Property("alt",
-                                                                                                                 StringType),
+                                                                                                            IntegerType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "alt",
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "timestamp",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "language",
-                                                                                                            StringType),
-                                                                                                        Property("colwidth", ArrayType(IntegerType)),
+                                                                                                            StringType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "colwidth",
+                                                                                                            ArrayType(
+                                                                                                                IntegerType
+                                                                                                            ),
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "background",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "isNumberColumnEnabled",
-                                                                                                            BooleanType),
+                                                                                                            BooleanType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "localId",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "color",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "panelType",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "level",
-                                                                                                            IntegerType),
+                                                                                                            IntegerType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "accessLevel",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "style",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "order",
-                                                                                                            IntegerType),
-                                                                                                        Property("text",
-                                                                                                                 StringType),
+                                                                                                            IntegerType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "text",
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "shortName",
-                                                                                                            StringType),
-                                                                                                        Property("url",
-                                                                                                                 StringType),
+                                                                                                            StringType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "url",
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "layout",
-                                                                                                            StringType),
-                                                                                                        Property("id",
-                                                                                                                 StringType),
-                                                                                                        Property("type",
-                                                                                                                 StringType),
+                                                                                                            StringType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "id",
+                                                                                                            StringType,
+                                                                                                        ),
+                                                                                                        Property(
+                                                                                                            "type",
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "collection",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "width",
-                                                                                                            NumberType),
+                                                                                                            NumberType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "height",
-                                                                                                            NumberType),
+                                                                                                            NumberType,
+                                                                                                        ),
                                                                                                         Property(
                                                                                                             "occurrenceKey",
-                                                                                                            StringType),
+                                                                                                            StringType,
+                                                                                                        ),
                                                                                                     ),
                                                                                                 ),
                                                                                                 Property(
@@ -1422,83 +1933,113 @@ class IssueStream(JiraStream):
                                                                                                         ObjectType(
                                                                                                             Property(
                                                                                                                 "type",
-                                                                                                                StringType),
+                                                                                                                StringType,
+                                                                                                            ),
                                                                                                             Property(
                                                                                                                 "attrs",
                                                                                                                 ObjectType(
                                                                                                                     Property(
                                                                                                                         "href",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "colspan",
-                                                                                                                        IntegerType),
+                                                                                                                        IntegerType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "alt",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "timestamp",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "language",
-                                                                                                                        StringType),
-                                                                                                                    Property("colwidth", ArrayType(IntegerType)),
+                                                                                                                        StringType,
+                                                                                                                    ),
+                                                                                                                    Property(
+                                                                                                                        "colwidth",
+                                                                                                                        ArrayType(
+                                                                                                                            IntegerType
+                                                                                                                        ),
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "background",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "isNumberColumnEnabled",
-                                                                                                                        BooleanType),
+                                                                                                                        BooleanType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "localId",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "color",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "panelType",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "level",
-                                                                                                                        IntegerType),
+                                                                                                                        IntegerType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "accessLevel",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "style",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "order",
-                                                                                                                        IntegerType),
+                                                                                                                        IntegerType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "text",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "shortName",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "url",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "layout",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "id",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "type",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "collection",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "width",
-                                                                                                                        NumberType),
+                                                                                                                        NumberType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "height",
-                                                                                                                        NumberType),
+                                                                                                                        NumberType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "occurrenceKey",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                 ),
                                                                                                             ),
                                                                                                         ),
@@ -1510,89 +2051,121 @@ class IssueStream(JiraStream):
                                                                                                         ObjectType(
                                                                                                             Property(
                                                                                                                 "version",
-                                                                                                                IntegerType),
+                                                                                                                IntegerType,
+                                                                                                            ),
                                                                                                             Property(
                                                                                                                 "text",
-                                                                                                                StringType),
+                                                                                                                StringType,
+                                                                                                            ),
                                                                                                             Property(
                                                                                                                 "type",
-                                                                                                                StringType),
+                                                                                                                StringType,
+                                                                                                            ),
                                                                                                             Property(
                                                                                                                 "attrs",
                                                                                                                 ObjectType(
                                                                                                                     Property(
                                                                                                                         "href",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "colspan",
-                                                                                                                        IntegerType),
+                                                                                                                        IntegerType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "alt",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "timestamp",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "language",
-                                                                                                                        StringType),
-                                                                                                                    Property("colwidth", ArrayType(IntegerType)),
+                                                                                                                        StringType,
+                                                                                                                    ),
+                                                                                                                    Property(
+                                                                                                                        "colwidth",
+                                                                                                                        ArrayType(
+                                                                                                                            IntegerType
+                                                                                                                        ),
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "background",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "isNumberColumnEnabled",
-                                                                                                                        BooleanType),
+                                                                                                                        BooleanType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "localId",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "color",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "panelType",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "level",
-                                                                                                                        IntegerType),
+                                                                                                                        IntegerType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "accessLevel",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "style",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "order",
-                                                                                                                        IntegerType),
+                                                                                                                        IntegerType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "text",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "shortName",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "url",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "layout",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "id",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "type",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "collection",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "width",
-                                                                                                                        NumberType),
+                                                                                                                        NumberType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "height",
-                                                                                                                        NumberType),
+                                                                                                                        NumberType,
+                                                                                                                    ),
                                                                                                                     Property(
                                                                                                                         "occurrenceKey",
-                                                                                                                        StringType),
+                                                                                                                        StringType,
+                                                                                                                    ),
                                                                                                                 ),
                                                                                                             ),
                                                                                                             Property(
@@ -1601,83 +2174,113 @@ class IssueStream(JiraStream):
                                                                                                                     ObjectType(
                                                                                                                         Property(
                                                                                                                             "type",
-                                                                                                                            StringType),
+                                                                                                                            StringType,
+                                                                                                                        ),
                                                                                                                         Property(
                                                                                                                             "attrs",
                                                                                                                             ObjectType(
                                                                                                                                 Property(
                                                                                                                                     "href",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "colspan",
-                                                                                                                                    IntegerType),
+                                                                                                                                    IntegerType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "alt",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "timestamp",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "language",
-                                                                                                                                    StringType),
-                                                                                                                                Property("colwidth", ArrayType(IntegerType)),
+                                                                                                                                    StringType,
+                                                                                                                                ),
+                                                                                                                                Property(
+                                                                                                                                    "colwidth",
+                                                                                                                                    ArrayType(
+                                                                                                                                        IntegerType
+                                                                                                                                    ),
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "background",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "isNumberColumnEnabled",
-                                                                                                                                    BooleanType),
+                                                                                                                                    BooleanType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "localId",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "color",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "panelType",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "level",
-                                                                                                                                    IntegerType),
+                                                                                                                                    IntegerType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "accessLevel",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "style",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "order",
-                                                                                                                                    IntegerType),
+                                                                                                                                    IntegerType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "text",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "shortName",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "url",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "layout",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "id",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "type",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "collection",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "width",
-                                                                                                                                    NumberType),
+                                                                                                                                    NumberType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "height",
-                                                                                                                                    NumberType),
+                                                                                                                                    NumberType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "occurrenceKey",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                             ),
                                                                                                                         ),
                                                                                                                     ),
@@ -1689,89 +2292,121 @@ class IssueStream(JiraStream):
                                                                                                                     ObjectType(
                                                                                                                         Property(
                                                                                                                             "version",
-                                                                                                                            IntegerType),
+                                                                                                                            IntegerType,
+                                                                                                                        ),
                                                                                                                         Property(
                                                                                                                             "text",
-                                                                                                                            StringType),
+                                                                                                                            StringType,
+                                                                                                                        ),
                                                                                                                         Property(
                                                                                                                             "type",
-                                                                                                                            StringType),
+                                                                                                                            StringType,
+                                                                                                                        ),
                                                                                                                         Property(
                                                                                                                             "attrs",
                                                                                                                             ObjectType(
                                                                                                                                 Property(
                                                                                                                                     "href",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "colspan",
-                                                                                                                                    IntegerType),
+                                                                                                                                    IntegerType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "alt",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "timestamp",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "language",
-                                                                                                                                    StringType),
-                                                                                                                                Property("colwidth", ArrayType(IntegerType)),
+                                                                                                                                    StringType,
+                                                                                                                                ),
+                                                                                                                                Property(
+                                                                                                                                    "colwidth",
+                                                                                                                                    ArrayType(
+                                                                                                                                        IntegerType
+                                                                                                                                    ),
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "background",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "isNumberColumnEnabled",
-                                                                                                                                    BooleanType),
+                                                                                                                                    BooleanType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "localId",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "color",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "panelType",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "level",
-                                                                                                                                    IntegerType),
+                                                                                                                                    IntegerType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "accessLevel",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "style",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "order",
-                                                                                                                                    IntegerType),
+                                                                                                                                    IntegerType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "text",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "shortName",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "url",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "layout",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "id",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "type",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "collection",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "width",
-                                                                                                                                    NumberType),
+                                                                                                                                    NumberType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "height",
-                                                                                                                                    NumberType),
+                                                                                                                                    NumberType,
+                                                                                                                                ),
                                                                                                                                 Property(
                                                                                                                                     "occurrenceKey",
-                                                                                                                                    StringType),
+                                                                                                                                    StringType,
+                                                                                                                                ),
                                                                                                                             ),
                                                                                                                         ),
                                                                                                                         Property(
@@ -1780,83 +2415,113 @@ class IssueStream(JiraStream):
                                                                                                                                 ObjectType(
                                                                                                                                     Property(
                                                                                                                                         "type",
-                                                                                                                                        StringType),
+                                                                                                                                        StringType,
+                                                                                                                                    ),
                                                                                                                                     Property(
                                                                                                                                         "attrs",
                                                                                                                                         ObjectType(
                                                                                                                                             Property(
                                                                                                                                                 "href",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "colspan",
-                                                                                                                                                IntegerType),
+                                                                                                                                                IntegerType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "alt",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "timestamp",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "language",
-                                                                                                                                                StringType),
-                                                                                                                                            Property("colwidth", ArrayType(IntegerType)),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
+                                                                                                                                            Property(
+                                                                                                                                                "colwidth",
+                                                                                                                                                ArrayType(
+                                                                                                                                                    IntegerType
+                                                                                                                                                ),
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "background",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "isNumberColumnEnabled",
-                                                                                                                                                BooleanType),
+                                                                                                                                                BooleanType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "localId",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "color",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "panelType",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "level",
-                                                                                                                                                IntegerType),
+                                                                                                                                                IntegerType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "accessLevel",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "style",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "order",
-                                                                                                                                                IntegerType),
+                                                                                                                                                IntegerType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "text",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "shortName",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "url",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "layout",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "id",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "type",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "collection",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "width",
-                                                                                                                                                NumberType),
+                                                                                                                                                NumberType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "height",
-                                                                                                                                                NumberType),
+                                                                                                                                                NumberType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "occurrenceKey",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                         ),
                                                                                                                                     ),
                                                                                                                                 ),
@@ -1868,89 +2533,121 @@ class IssueStream(JiraStream):
                                                                                                                                 ObjectType(
                                                                                                                                     Property(
                                                                                                                                         "version",
-                                                                                                                                        IntegerType),
+                                                                                                                                        IntegerType,
+                                                                                                                                    ),
                                                                                                                                     Property(
                                                                                                                                         "text",
-                                                                                                                                        StringType),
+                                                                                                                                        StringType,
+                                                                                                                                    ),
                                                                                                                                     Property(
                                                                                                                                         "type",
-                                                                                                                                        StringType),
+                                                                                                                                        StringType,
+                                                                                                                                    ),
                                                                                                                                     Property(
                                                                                                                                         "attrs",
                                                                                                                                         ObjectType(
                                                                                                                                             Property(
                                                                                                                                                 "href",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "colspan",
-                                                                                                                                                IntegerType),
+                                                                                                                                                IntegerType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "alt",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "timestamp",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "language",
-                                                                                                                                                StringType),
-                                                                                                                                            Property("colwidth", ArrayType(IntegerType)),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
+                                                                                                                                            Property(
+                                                                                                                                                "colwidth",
+                                                                                                                                                ArrayType(
+                                                                                                                                                    IntegerType
+                                                                                                                                                ),
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "background",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "isNumberColumnEnabled",
-                                                                                                                                                BooleanType),
+                                                                                                                                                BooleanType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "localId",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "color",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "panelType",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "level",
-                                                                                                                                                IntegerType),
+                                                                                                                                                IntegerType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "accessLevel",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "style",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "order",
-                                                                                                                                                IntegerType),
+                                                                                                                                                IntegerType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "text",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "shortName",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "url",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "layout",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "id",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "type",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "collection",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "width",
-                                                                                                                                                NumberType),
+                                                                                                                                                NumberType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "height",
-                                                                                                                                                NumberType),
+                                                                                                                                                NumberType,
+                                                                                                                                            ),
                                                                                                                                             Property(
                                                                                                                                                 "occurrenceKey",
-                                                                                                                                                StringType),
+                                                                                                                                                StringType,
+                                                                                                                                            ),
                                                                                                                                         ),
                                                                                                                                     ),
                                                                                                                                     Property(
@@ -1959,83 +2656,113 @@ class IssueStream(JiraStream):
                                                                                                                                             ObjectType(
                                                                                                                                                 Property(
                                                                                                                                                     "type",
-                                                                                                                                                    StringType),
+                                                                                                                                                    StringType,
+                                                                                                                                                ),
                                                                                                                                                 Property(
                                                                                                                                                     "attrs",
                                                                                                                                                     ObjectType(
                                                                                                                                                         Property(
                                                                                                                                                             "href",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "colspan",
-                                                                                                                                                            IntegerType),
+                                                                                                                                                            IntegerType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "alt",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "timestamp",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "language",
-                                                                                                                                                            StringType),
-                                                                                                                                                        Property("colwidth", ArrayType(IntegerType)),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
+                                                                                                                                                        Property(
+                                                                                                                                                            "colwidth",
+                                                                                                                                                            ArrayType(
+                                                                                                                                                                IntegerType
+                                                                                                                                                            ),
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "background",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "isNumberColumnEnabled",
-                                                                                                                                                            BooleanType),
+                                                                                                                                                            BooleanType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "localId",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "color",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "panelType",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "level",
-                                                                                                                                                            IntegerType),
+                                                                                                                                                            IntegerType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "accessLevel",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "style",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "order",
-                                                                                                                                                            IntegerType),
+                                                                                                                                                            IntegerType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "text",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "shortName",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "url",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "layout",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "id",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "type",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "collection",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "width",
-                                                                                                                                                            NumberType),
+                                                                                                                                                            NumberType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "height",
-                                                                                                                                                            NumberType),
+                                                                                                                                                            NumberType,
+                                                                                                                                                        ),
                                                                                                                                                         Property(
                                                                                                                                                             "occurrenceKey",
-                                                                                                                                                            StringType),
+                                                                                                                                                            StringType,
+                                                                                                                                                        ),
                                                                                                                                                     ),
                                                                                                                                                 ),
                                                                                                                                             ),
@@ -2131,7 +2858,7 @@ class IssueStream(JiraStream):
                                                     Property("key", StringType),
                                                     Property("colorName", StringType),
                                                     Property("name", StringType),
-                                                )
+                                                ),
                                             ),
                                         ),
                                     ),
@@ -2212,20 +2939,20 @@ class IssueStream(JiraStream):
                         Property("type", StringType),
                         Property(
                             "content",
-                             ArrayType(
-                                 ObjectType(
-                                     Property(
-                                         "content",
-                                         ArrayType(
-                                             ObjectType(
-                                                 Property("text", StringType),
-                                                 Property("type", StringType),
-                                             ),
-                                         ),
-                                     ),
-                                     Property("type", StringType),
-                                 ),
-                             ),
+                            ArrayType(
+                                ObjectType(
+                                    Property(
+                                        "content",
+                                        ArrayType(
+                                            ObjectType(
+                                                Property("text", StringType),
+                                                Property("type", StringType),
+                                            ),
+                                        ),
+                                    ),
+                                    Property("type", StringType),
+                                ),
+                            ),
                         ),
                         Property("text", StringType),
                         Property("version", IntegerType),
@@ -2832,7 +3559,7 @@ class PermissionHolderStream(JiraStream):
                     "project",
                     ObjectType(
                         Property("id", StringType),
-                    )
+                    ),
                 ),
             ),
         ),
@@ -3335,9 +4062,9 @@ class ScreensStream(JiraStream):
                     "project",
                     ObjectType(
                         Property("id", StringType),
-                    )
+                    ),
                 ),
-            )
+            ),
         ),
     ).to_dict()
 
@@ -3372,8 +4099,7 @@ class ScreenSchemesStream(JiraStream):
         Property(
             "screens",
             ObjectType(
-                Property("default", IntegerType),
-                Property("create", IntegerType)
+                Property("default", IntegerType), Property("create", IntegerType)
             ),
         ),
     ).to_dict()
@@ -3453,7 +4179,7 @@ class WorkflowStream(JiraStream):
                     "project",
                     ObjectType(
                         Property("id", StringType),
-                    )
+                    ),
                 ),
             ),
         ),
