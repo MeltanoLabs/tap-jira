@@ -4159,7 +4159,7 @@ class WorkflowStream(JiraStream):
     name = "workflows"
     path = "/workflow"
     primary_keys = ["name"]
-    replication_key = "lastModifiedDate"
+    replication_key = "name"
     replication_method = "INCREMENTAL"
     instance_name = ""
 
