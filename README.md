@@ -30,6 +30,8 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 | flattening_enabled  | False    | None    | 'True' to enable schema flattening and automatically expand nested properties.                                                              |
 | flattening_max_depth| False    | None    | The max depth to flatten schemas.                                                                                                           |
 
+The auth setting works either with access token or username/password, set by the following configs:
+
 Auth with access token:
 ```bash
 TAP_JIRA_AUTH_FLOW = 'oauth'
