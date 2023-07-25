@@ -14,13 +14,15 @@ plugins:
     - about
     - stream-maps
     settings:
-    - name: username
-    - name: password
-      kind: password
     - name: start_date
     - name: end_date
-    - name: access_token  
     - name: auth_type
+    - name: auth.flow
+    - name: auth.access_token
+      kind: password
+    - name: auth.username
+    - name: auth.password
+      kind: password
 environments:
 - name: dev
 - name: staging
