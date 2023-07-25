@@ -16,6 +16,7 @@ plugins:
     settings:
     - name: start_date
     - name: end_date
+    - name: domain
     - name: auth_type
     - name: auth.flow
     - name: auth.access_token
