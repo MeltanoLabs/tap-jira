@@ -51,5 +51,6 @@ jobs:
          TAP_JIRA_AUTH_FLOW: ${{ secrets.flow }}
          TAP_JIRA_AUTH_USERNAME: ${{ secrets.username }}
          TAP_JIRA_AUTH_PASSWORD: ${{ secrets.password }}
+         TAP_JIRA_DOMAIN: ${{ secrets.domain }}
       run: |
         poetry run pytest --capture=no

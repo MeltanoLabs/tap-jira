@@ -25,6 +25,12 @@ class TapJira(Tap):
             description="Latest record date to sync",
         ),
         th.Property(
+            "domain",
+            th.StringType,
+            description="Site URL",
+            required=True,
+        ),
+        th.Property(
             "auth",
             th.DiscriminatedUnion(
                 "flow",

@@ -40,7 +40,7 @@ class UsersStream(JiraStream):
     path = "/users/search"
     primary_keys = ["accountId"]
     replication_key = "accountId"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[*]"
     instance_name = ""
 
@@ -129,7 +129,7 @@ class FieldStream(JiraStream):
     path = "/field"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     instance_name = ""
 
     schema = PropertiesList(
@@ -197,7 +197,7 @@ class ServerInfoStream(JiraStream):
     path = "/serverInfo"
     primary_keys = ["baseUrl"]
     replication_key = "serverTime"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     instance_name = ""
 
     schema = PropertiesList(
@@ -238,7 +238,7 @@ class IssueTypeStream(JiraStream):
     path = "/issuetype"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[*]"  # Or override `parse_response`.
     instance_name = ""
 
@@ -287,7 +287,7 @@ class WorkflowStatusStream(JiraStream):
     path = "/status"
     primary_keys = ["id"]
     replication_key = "self"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     instance_name = ""
 
     schema = PropertiesList(
@@ -341,7 +341,7 @@ class ProjectStream(JiraStream):
     path = "/project/search"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
@@ -410,7 +410,7 @@ class IssueStream(JiraStream):
     path = "/search?maxResults=1"
     primary_keys = ["id"]
     replication_key = "updated"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
     instance_name = "issues"
 
@@ -3018,7 +3018,7 @@ class PermissionStream(JiraStream):
     path = "/permissions"
     primary_keys = ["permissions"]
     replication_key = "permissions"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     instance_name = ""
 
     schema = PropertiesList(
@@ -3444,7 +3444,7 @@ class ProjectRoleStream(JiraStream):
     path = "/role"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     instance_name = ""
 
     schema = PropertiesList(
@@ -3510,7 +3510,7 @@ class PriorityStream(JiraStream):
     path = "/priority"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     instance_name = ""
 
     schema = PropertiesList(
@@ -3542,7 +3542,7 @@ class PermissionHolderStream(JiraStream):
     path = "/permissionscheme"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[permissionSchemes][*]"  # Or override `parse_response`.
     instance_name = "permissionSchemes"
 
@@ -3605,7 +3605,7 @@ class SprintStream(JiraStream):
     path = "/board"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
@@ -3706,7 +3706,7 @@ class ProjectRoleActorStream(JiraStream):
 
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[*]"  # Or override `parse_response`.
 
     schema = PropertiesList(
@@ -3808,7 +3808,7 @@ class AuditingStream(JiraStream):
     path = "/auditing/record"
     primary_keys = ["id"]
     replication_key = "created"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[records][*]"  # Or override `parse_response`.
     instance_name = "records"
 
@@ -3875,7 +3875,7 @@ class DashboardStream(JiraStream):
     path = "/dashboard"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[dashboards][*]"  # Or override `parse_response`.
     instance_name = "dashboards"
 
@@ -3920,7 +3920,7 @@ class FilterSearchStream(JiraStream):
     path = "/filter/search"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
@@ -3950,7 +3950,7 @@ class FilterDefaultShareScopeStream(JiraStream):
     path = "/filter/defaultShareScope"
     primary_keys = ["scope"]
     replication_key = "scope"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     instance_name = ""
 
     schema = PropertiesList(
@@ -3977,7 +3977,7 @@ class GroupsPickerStream(JiraStream):
     path = "/groups/picker"
     primary_keys = ["groupId"]
     replication_key = "groupId"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[groups][*]"  # Or override `parse_response`.
     instance_name = "groups"
 
@@ -4017,7 +4017,7 @@ class LicenseStream(JiraStream):
     path = "/instance/license"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[applications][*]"  # Or override `parse_response`.
     instance_name = "applications"
 
@@ -4046,7 +4046,7 @@ class ScreensStream(JiraStream):
     path = "/screens"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
@@ -4088,7 +4088,7 @@ class ScreenSchemesStream(JiraStream):
     path = "/screenscheme"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
@@ -4124,7 +4124,7 @@ class StatusesSearchStream(JiraStream):
     path = "/statuses/search"
     primary_keys = ["id"]
     replication_key = "id"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
@@ -4159,8 +4159,8 @@ class WorkflowStream(JiraStream):
     name = "workflows"
     path = "/workflow"
     primary_keys = ["name"]
-    replication_key = "lastModifiedDate"
-    replication_method = "incremental"
+    replication_key = "name"
+    replication_method = "INCREMENTAL"
     instance_name = ""
 
     schema = PropertiesList(
@@ -4205,7 +4205,7 @@ class WorkflowSearchStream(JiraStream):
     path = "/workflow/search"
     primary_keys = ["id"]
     replication_key = "updated"
-    replication_method = "incremental"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
