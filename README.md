@@ -24,7 +24,7 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 | start_date          |  False   | None    | Earliest record date to sync                                                                                                                |
 | end_date            |  False   | None    | Latest record date to sync                                                                                                                  |
 | auth                |   True   | None    | Auth type for Jira API requires either access_token or username/password                                                                    |
-| domain              |   True   | None    | Site URL                                                                                                                                    |                                                                                                                                             |
+| domain              |   True   | None    | Website domain for site url, ie., https://{domain}/rest/api/3/                                                                                                                                    |                                                                                                                                             |
 | stream_maps         |  False   | None    | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). 
  |
 | stream_map_config   |  False   | None    | User-defined config values to be used within map expressions.                                                                               |

@@ -27,7 +27,7 @@ class TapJira(Tap):
         th.Property(
             "domain",
             th.StringType,
-            description="Site URL",
+            description="Website domain for site url, ie., https://{domain}/rest/api/3/",
             required=True,
         ),
         th.Property(
