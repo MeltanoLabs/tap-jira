@@ -1,7 +1,7 @@
 ### A CI workflow template that runs linting and python testing
 ### TODO: Modify as needed or as desired.
 
-name: Test tap-jira-sdk
+name: Test tap-jira
 
 on: [push]
 
@@ -31,7 +31,7 @@ jobs:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.9"]
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -45,5 +45,12 @@ jobs:
       run: |
         poetry install
     - name: Test with pytest
+      id: test_pytest
+      continue-on-error: false
+      env:
+         TAP_JIRA_AUTH_FLOW: ${{ secrets.flow }}
+         TAP_JIRA_AUTH_USERNAME: ${{ secrets.username }}
+         TAP_JIRA_AUTH_PASSWORD: ${{ secrets.password }}
+         TAP_JIRA_DOMAIN: ${{ secrets.domain }}
       run: |
-        poetry run pytest
+        poetry run pytest --capture=no

@@ -1,1 +1,1 @@
-"""Test suite for tap-jira-sdk."""
+"""Test suite for tap-jira."""
