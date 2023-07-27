@@ -48,7 +48,7 @@ class JiraStream(RESTStream):
         if auth_type == "oauth":
             return BearerTokenAuthenticator.create_for_stream(
                 self,
-                access_token=self.config["auth"]["access_token"],
+                access_token=self.config["auth"]["token"],
             )
         else:
             return BasicAuthenticator.create_for_stream(
