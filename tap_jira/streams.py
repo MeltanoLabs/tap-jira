@@ -2986,6 +2986,39 @@ class IssueStream(JiraStream):
         Property("updated", StringType),
     ).to_dict()
 
+    def get_url_params(
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        params: dict = {}
+        
+        params["jql"] = []  # init a query param
+
+        if next_page_token:
+            params["startAt"] = next_page_token
+
+        if self.replication_key:
+            params["sort"] = "asc"
+            params["order_by"] = self.replication_key
+
+        if "start_date" in self.config:
+            start_date = self.config["start_date"]
+            params["jql"].append(f"(created>={start_date} or updated>={start_date})")
+
+        if "end_date" in self.config:
+            end_date = self.config["end_date"]
+            params["jql"].append(f"(created<{end_date} or updated<{start_date})")
+
+        if params["jql"]:
+            jql = " and ".join(params["jql"])
+            params["jql"] = jql
+
+        else:
+            params.pop("jql") # drop if there's no query
+
+        return params
+
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
         """
         We can add created and updated time columns from field column
