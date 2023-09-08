@@ -17,7 +17,7 @@ fs-s3fs = { version = "^1.1.1", optional = true }
 requests = "^2.28.2"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.1"
+pytest = "^7.4.2"
 singer-sdk = { version="*", extras = ["testing"] }
 
 [tool.poetry.extras]
