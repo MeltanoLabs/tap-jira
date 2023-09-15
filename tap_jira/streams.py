@@ -2992,7 +2992,7 @@ class IssueStream(JiraStream):
         next_page_token: Any | None,
     ) -> dict[str, Any]:
         params: dict = {}
-        
+
         params["jql"] = []  # init a query param
 
         if next_page_token:
@@ -3015,7 +3015,7 @@ class IssueStream(JiraStream):
             params["jql"] = jql
 
         else:
-            params.pop("jql") # drop if there's no query
+            params.pop("jql")  # drop if there's no query
 
         return params
 
@@ -4253,4 +4253,54 @@ class WorkflowSearchStream(JiraStream):
         Property("description", StringType),
         Property("created", StringType),
         Property("updated", StringType),
+    ).to_dict()
+
+
+class IssueChangeLogStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
+    """
+
+    """
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    records_jsonpath = json response body
+    """
+
+    name = "issue_changelog"
+
+    parent_stream_type = IssueStream
+
+    ignore_parent_replication_keys = True
+
+    path = "/issue/{issue_id}/changelog"
+
+    primary_keys = ["id"]
+
+    records_jsonpath = "$[values][*]"
+
+    instance_name = "values"
+
+    schema = PropertiesList(
+        Property("id", StringType),
+        Property("author", ObjectType(Property("accountId", StringType))),
+        Property("created", DateTimeType),
+        Property(
+            "items",
+            ArrayType(
+                ObjectType(
+                    Property("field", StringType),
+                    Property("fieldtype", StringType),
+                    Property("fieldId", StringType),
+                    Property("from", StringType),
+                    Property("fromString", StringType),
+                    Property("to", StringType),
+                    Property("toString", StringType),
+                )
+            ),
+        ),
     ).to_dict()
