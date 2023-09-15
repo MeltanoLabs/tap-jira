@@ -81,6 +81,7 @@ class TapJira(Tap):
             streams.StatusesSearchStream(self),
             streams.WorkflowStream(self),
             streams.WorkflowSearchStream(self),
+            streams.IssueChangeLogStream(self),
         ]
 
 
