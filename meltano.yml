@@ -24,6 +24,23 @@ plugins:
     - name: auth.username
     - name: auth.password
       kind: password
+    config:
+      auth:
+        flow: password
+        username: developer+tw@tiqets.com
+      domain: tiqets.atlassian.net
+      end_date: '2023-08-20'
+      start_date: '2023-08-01'
+      # flattening_enabled: true
+      # flattening_max_depth: 55
+    select:
+      - issues.*
+      # - issue_changelog.*
+      # - fields.*
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl
 environments:
 - name: dev
 - name: staging
