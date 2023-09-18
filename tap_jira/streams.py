@@ -4304,3 +4304,82 @@ class IssueChangeLogStream(JiraStream):
             ),
         ),
     ).to_dict()
+
+
+class IssueComments(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
+    """
+
+    """
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    records_jsonpath = json response body
+    """
+
+    name = "issue_comments"
+
+    parent_stream_type = IssueStream
+
+    ignore_parent_replication_keys = True
+
+    path = "/issue/{issue_id}/comment"
+
+    primary_keys = ["id"]
+
+    records_jsonpath = "$[comments][*]"
+
+    instance_name = "comments"
+
+    schema = PropertiesList(
+        Property("id", StringType),
+        Property("self", StringType),
+        Property(
+            "author",
+            ObjectType(
+                Property("accountId", StringType),
+                Property("self", StringType),
+                Property("displayName", StringType),
+                Property("active", BooleanType),
+            ),
+        ),
+        Property("created", DateTimeType),
+        Property("updated", DateTimeType),
+        Property(
+            "body",
+            ObjectType(
+                Property("type", StringType),
+                Property("version", IntegerType),
+                Property(
+                    "content",
+                    ArrayType(
+                        ObjectType(
+                            Property("type", StringType),
+                            Property(
+                                "content",
+                                ArrayType(
+                                    ObjectType(
+                                        Property("type", StringType),
+                                        Property("text", StringType),
+                                    )
+                                ),
+                            ),
+                        )
+                    ),
+                ),
+            ),
+        ),
+        Property(
+            "updateAuthor",
+            ObjectType(
+                Property("accountId", StringType),
+                Property("self", StringType),
+                Property("displayName", StringType),
+                Property("active", BooleanType),
+            ),
+        ),
+    ).to_dict()
