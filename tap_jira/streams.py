@@ -841,12 +841,18 @@ class IssueStream(JiraStream):
                     ),
                 ),
                 Property("customfield_10032", StringType),
-                Property("fixVersions", ArrayType(ObjectType(
-                                                Property("id", StringType),
-                                                Property("archived", BooleanType),
-                                                Property("name", StringType),
-                                                Property("released", BooleanType),
-                                                Property("self", StringType)))),
+                Property(
+                    "fixVersions",
+                    ArrayType(
+                        ObjectType(
+                            Property("id", StringType),
+                            Property("archived", BooleanType),
+                            Property("name", StringType),
+                            Property("released", BooleanType),
+                            Property("self", StringType),
+                        )
+                    ),
+                ),
                 Property("customfield_10033", StringType),
                 Property("customfield_10034", StringType),
                 Property("aggregatetimespent", IntegerType),
@@ -1989,9 +1995,16 @@ class IssueStream(JiraStream):
                 Property("customfield_11463", NumberType),
                 Property("customfield_11341", base_item_schema),
                 Property("customfield_11583", base_item_schema),
-                Property("customfield_11100", ArrayType(ObjectType(Property("_link", StringType),
-                                                                   Property("id", StringType),
-                                                                   Property("name", StringType)))),
+                Property(
+                    "customfield_11100",
+                    ArrayType(
+                        ObjectType(
+                            Property("_link", StringType),
+                            Property("id", StringType),
+                            Property("name", StringType),
+                        )
+                    ),
+                ),
                 Property("customfield_11586", StringType),
                 # Property("customfield_11344", StringType),
                 Property("customfield_11465", DateType),
@@ -2024,8 +2037,13 @@ class IssueStream(JiraStream):
                 ),
                 Property("customfield_11338", base_item_schema),
                 Property("customfield_11450", ArrayType(base_item_schema)),
-                Property("customfield_11331", ObjectType(Property("displayName", StringType),
-                                                        Property("languageCode", StringType))),
+                Property(
+                    "customfield_11331",
+                    ObjectType(
+                        Property("displayName", StringType),
+                        Property("languageCode", StringType),
+                    ),
+                ),
                 Property("customfield_11452", base_item_schema),
                 # Property("customfield_11330", StringType),
                 Property("customfield_11451", StringType),
@@ -2105,25 +2123,52 @@ class IssueStream(JiraStream):
                 Property("customfield_11666", ArrayType(base_item_schema)),
                 Property("customfield_11545", base_content_schema),
                 Property("customfield_11424", NumberType),
-                Property("customfield_11305", ObjectType(Property("_links", ObjectType(Property("agent", StringType),
-                                                                                       Property("jiraRest", StringType),
-                                                                                       Property("self", StringType),
-                                                                                       Property("web", StringType))),
-                                                        Property("currentStatus", ObjectType(Property("status", StringType),
-                                                                                             Property("statusCategory", StringType),
-                                                                                             Property("statusDate", ObjectType(Property("epochMillis", IntegerType),
-                                                                                                                               Property("friendly", DateTimeType),
-                                                                                                                               Property("iso8601",DateTimeType),
-                                                                                                                               Property("jira", DateTimeType))))),
-                                                        Property('requestType', ObjectType(Property("_expands", ArrayType(StringType)),
-                                                                                        Property("_links", ObjectType(Property("self", StringType))),
-                                                                                        Property("description", StringType),
-                                                                                        Property("groupIds", ArrayType(StringType)),
-                                                                                        Property("id", StringType),
-                                                                                        Property("issueTypeId", StringType),
-                                                                                        Property("name", StringType),
-                                                                                        Property("portalId", StringType),
-                                                                                        Property("serviceDeskId", StringType))))),
+                Property(
+                    "customfield_11305",
+                    ObjectType(
+                        Property(
+                            "_links",
+                            ObjectType(
+                                Property("agent", StringType),
+                                Property("jiraRest", StringType),
+                                Property("self", StringType),
+                                Property("web", StringType),
+                            ),
+                        ),
+                        Property(
+                            "currentStatus",
+                            ObjectType(
+                                Property("status", StringType),
+                                Property("statusCategory", StringType),
+                                Property(
+                                    "statusDate",
+                                    ObjectType(
+                                        Property("epochMillis", IntegerType),
+                                        Property("friendly", DateTimeType),
+                                        Property("iso8601", DateTimeType),
+                                        Property("jira", DateTimeType),
+                                    ),
+                                ),
+                            ),
+                        ),
+                        Property(
+                            "requestType",
+                            ObjectType(
+                                Property("_expands", ArrayType(StringType)),
+                                Property(
+                                    "_links", ObjectType(Property("self", StringType))
+                                ),
+                                Property("description", StringType),
+                                Property("groupIds", ArrayType(StringType)),
+                                Property("id", StringType),
+                                Property("issueTypeId", StringType),
+                                Property("name", StringType),
+                                Property("portalId", StringType),
+                                Property("serviceDeskId", StringType),
+                            ),
+                        ),
+                    ),
+                ),
                 Property("customfield_11427", NumberType),
                 Property("customfield_11548", base_item_schema),
                 Property("customfield_11668", base_item_schema),
@@ -2250,9 +2295,8 @@ class IssueStream(JiraStream):
 
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
-        return {
-            "issue_id": record["id"]
-        }
+        return {"issue_id": record["id"]}
+
 
 class PermissionStream(JiraStream):
 
@@ -3475,6 +3519,7 @@ class WorkflowSearchStream(JiraStream):
         Property("created", StringType),
         Property("updated", StringType),
     ).to_dict()
+
 
 class IssueChangeLogStream(JiraStream):
 
