@@ -411,8 +411,8 @@ class IssueStream(JiraStream):
     name = "issues"
     path = "/search?maxResults=1"
     primary_keys = ["id"]
-    # replication_key = "updated"
-    # replication_method = "INCREMENTAL"
+    replication_key = "id"
+    replication_method = "INCREMENTAL"
     records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
     instance_name = "issues"
 
@@ -3574,7 +3574,7 @@ class IssueChangeLogStream(JiraStream):
 class IssueComments(JiraStream):
 
     """
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-get
     """
 
     """
