@@ -409,8 +409,8 @@ class IssueStream(JiraStream):
     name = "issues"
     path = "/search?maxResults=1"
     primary_keys = ["id"]
-    replication_key = "updated"
-    replication_method = "INCREMENTAL"
+    # replication_key = "updated"
+    # replication_method = "INCREMENTAL"
     records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
     instance_name = "issues"
 
@@ -4323,6 +4323,10 @@ class IssueComments(JiraStream):
     path = "/issue/{issue_id}/comment"
 
     primary_keys = ["id"]
+
+    replication_method = "INCREMENTAL"
+
+    replication_key = "updated"
 
     records_jsonpath = "$[comments][*]"
 
