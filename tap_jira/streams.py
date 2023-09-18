@@ -3019,18 +3019,11 @@ class IssueStream(JiraStream):
 
         return params
 
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        """
-        We can add created and updated time columns from field column
-        """
-
-        try:
-            row["created"] = row.get("fields").get("created")
-            row["updated"] = row.get("fields").get("updated")
-        except:
-            pass
-
-        return super().post_process(row, context)
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        return {
+            "issue_id": record["id"]
+        }
 
 
 class PermissionStream(JiraStream):
