@@ -3544,6 +3544,10 @@ class IssueChangeLogStream(JiraStream):
 
     path = "/issue/{issue_id}/changelog"
 
+    replication_method = "INCREMENTAL"
+
+    replication_key = "created"
+
     primary_keys = ["id"]
 
     records_jsonpath = "$[values][*]"
@@ -3552,6 +3556,7 @@ class IssueChangeLogStream(JiraStream):
 
     schema = PropertiesList(
         Property("id", StringType),
+        Property("issueId", StringType),
         Property("author", ObjectType(Property("accountId", StringType))),
         Property("created", DateTimeType),
         Property(
@@ -3569,6 +3574,10 @@ class IssueChangeLogStream(JiraStream):
             ),
         ),
     ).to_dict()
+
+    def post_process(self, row: dict, context: dict) -> dict:
+        row["issueId"] = context["issue_id"]
+        return row
 
 
 class IssueComments(JiraStream):
@@ -3596,16 +3605,13 @@ class IssueComments(JiraStream):
 
     primary_keys = ["id"]
 
-    replication_method = "INCREMENTAL"
-
-    replication_key = "updated"
-
     records_jsonpath = "$[comments][*]"
 
     instance_name = "comments"
 
     schema = PropertiesList(
         Property("id", StringType),
+        Property("issueId", StringType),
         Property("self", StringType),
         Property(
             "author",
@@ -3652,3 +3658,7 @@ class IssueComments(JiraStream):
             ),
         ),
     ).to_dict()
+
+    def post_process(self, row: dict, context: dict) -> dict:
+        row["issueId"] = context["issue_id"]
+        return row
