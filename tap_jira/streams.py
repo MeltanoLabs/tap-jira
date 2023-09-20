@@ -2021,7 +2021,10 @@ class IssueStream(JiraStream):
                     ),
                 ),
                 Property("customfield_11452", base_item_schema),
-                Property("customfield_11330", ObjectType(Property("errorMessage", StringType))),
+                Property(
+                    "customfield_11330",
+                    ObjectType(Property("errorMessage", StringType)),
+                ),
                 Property("customfield_11451", StringType),
                 Property("customfield_11454", base_item_schema),
                 Property("customfield_11333", base_item_schema),
@@ -2042,11 +2045,20 @@ class IssueStream(JiraStream):
                 Property("customfield_11567", NumberType),
                 Property("customfield_11446", ArrayType(base_item_schema)),
                 Property("customfield_11325", ArrayType(base_item_schema)),
-                Property("customfield_11328", ObjectType(Property("errorMessage", StringType))),
+                Property(
+                    "customfield_11328",
+                    ObjectType(Property("errorMessage", StringType)),
+                ),
                 Property("customfield_11449", ArrayType(base_item_schema)),
-                Property("customfield_11327", ObjectType(Property("errorMessage", StringType))),
+                Property(
+                    "customfield_11327",
+                    ObjectType(Property("errorMessage", StringType)),
+                ),
                 Property("customfield_11448", ArrayType(base_item_schema)),
-                Property("customfield_11329", ObjectType(Property("errorMessage", StringType))),
+                Property(
+                    "customfield_11329",
+                    ObjectType(Property("errorMessage", StringType)),
+                ),
                 Property("customfield_11560", StringType),
                 Property("customfield_11441", StringType),
                 Property(
@@ -2942,7 +2954,7 @@ class SprintStream(JiraStream):
             board_id.append(record.get("id"))
 
         board_id = list(set(board_id))
-        
+
         for id in board_id:
             try:
 
@@ -2987,10 +2999,10 @@ class SprintStream(JiraStream):
                 sprint = Sprint(self._tap, schema=self.schema)
 
                 sprint_records.append(list(sprint.get_records(context)))
-            
+
             except:
                 pass
-        
+
         sprint_records = sum(sprint_records, [])
         return sprint_records
 
@@ -3202,7 +3214,12 @@ class DashboardStream(JiraStream):
                 ),
             ),
         ),
-        Property("editPermissions", ArrayType(StringType)),
+        Property(
+            "editPermissions",
+            ArrayType(
+                ObjectType(Property("id", IntegerType), Property("type", StringType))
+            ),
+        ),
         Property("view", StringType),
         Property("isWritable", BooleanType),
         Property("systemDashboard", BooleanType),
@@ -3587,7 +3604,7 @@ class IssueChangeLogStream(JiraStream):
         ),
     ).to_dict()
 
-    def post_process(self, row:dict, context:dict) -> dict:
+    def post_process(self, row: dict, context: dict) -> dict:
         row["issueId"] = context["issue_id"]
         return row
 
@@ -3673,6 +3690,6 @@ class IssueComments(JiraStream):
         ),
     ).to_dict()
 
-    def post_process(self, row:dict, context:dict) -> dict:
+    def post_process(self, row: dict, context: dict) -> dict:
         row["issueId"] = context["issue_id"]
         return row
