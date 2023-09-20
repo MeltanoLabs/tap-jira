@@ -409,7 +409,7 @@ class IssueStream(JiraStream):
     """
 
     name = "issues"
-    path = "/search?maxResults=1"
+    path = "/search?maxResults=10"
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "INCREMENTAL"
@@ -1896,7 +1896,7 @@ class IssueStream(JiraStream):
                 Property("customfield_11394", StringType),
                 Property("customfield_11395", StringType),
                 Property("customfield_11397", StringType),
-                Property("customfield_11396", IntegerType),
+                Property("customfield_11396", base_item_schema),
                 Property("customfield_11399", StringType),
                 Property("customfield_11398", DateType),
                 Property("customfield_11384", base_item_schema),
@@ -1950,7 +1950,7 @@ class IssueStream(JiraStream):
                     base_item_schema,
                 ),
                 Property("customfield_11377", StringType),
-                # Property("customfield_11497", StringType),
+                Property("customfield_11497", NumberType),
                 Property("customfield_11376", StringType),
                 Property("customfield_11379", ArrayType(base_item_schema)),
                 Property("customfield_11378", ArrayType(base_item_schema)),
@@ -2006,7 +2006,7 @@ class IssueStream(JiraStream):
                     ),
                 ),
                 Property("customfield_11586", StringType),
-                # Property("customfield_11344", StringType),
+                Property("customfield_11344", NumberType),
                 Property("customfield_11465", DateType),
                 Property("customfield_11585", StringType),
                 Property("customfield_11464", NumberType),
@@ -2045,14 +2045,14 @@ class IssueStream(JiraStream):
                     ),
                 ),
                 Property("customfield_11452", base_item_schema),
-                # Property("customfield_11330", StringType),
+                Property("customfield_11330", ObjectType(Property("errorMessage", StringType))),
                 Property("customfield_11451", StringType),
                 Property("customfield_11454", base_item_schema),
                 Property("customfield_11333", base_item_schema),
                 Property("customfield_11575", base_item_schema),
                 Property("customfield_11453", DateType),
                 Property("customfield_11332", StringType),
-                Property("customfield_11335", base_content_schema),
+                Property("customfield_11335", StringType),
                 Property("customfield_11576", StringType),
                 Property(
                     "customfield_11334",
@@ -2066,11 +2066,11 @@ class IssueStream(JiraStream):
                 Property("customfield_11567", NumberType),
                 Property("customfield_11446", ArrayType(base_item_schema)),
                 Property("customfield_11325", ArrayType(base_item_schema)),
-                # Property("customfield_11328", StringType),
+                Property("customfield_11328", ObjectType(Property("errorMessage", StringType))),
                 Property("customfield_11449", ArrayType(base_item_schema)),
-                # Property("customfield_11327", StringType),
+                Property("customfield_11327", ObjectType(Property("errorMessage", StringType))),
                 Property("customfield_11448", ArrayType(base_item_schema)),
-                # Property("customfield_11329", StringType),
+                Property("customfield_11329", ObjectType(Property("errorMessage", StringType))),
                 Property("customfield_11560", StringType),
                 Property("customfield_11441", StringType),
                 Property(
@@ -2110,9 +2110,9 @@ class IssueStream(JiraStream):
                 Property("customfield_11430", base_item_schema),
                 Property("customfield_11310", ArrayType(base_item_schema)),
                 Property("customfield_10100", StringType),
-                Property("customfield_11431", base_item_schema),
+                Property("customfield_11431", ArrayType(base_item_schema)),
                 Property("customfield_11311", base_item_schema),
-                # Property("customfield_11434", StringType),
+                Property("customfield_11434", NumberType),
                 Property("customfield_11312", base_item_schema),
                 Property("customfield_11555", base_item_schema),
                 Property("customfield_11433", StringType),
@@ -2169,6 +2169,7 @@ class IssueStream(JiraStream):
                         ),
                     ),
                 ),
+                Property("customfield_11615", StringType),
                 Property("customfield_11427", NumberType),
                 Property("customfield_11548", base_item_schema),
                 Property("customfield_11668", base_item_schema),
@@ -2239,7 +2240,7 @@ class IssueStream(JiraStream):
                 Property("customfield_11637", base_item_schema),
                 Property("customfield_11519", base_item_schema),
                 Property("customfield_11639", base_item_schema),
-                Property("customfield_11518", base_item_schema),
+                Property("customfield_11518", StringType),
                 Property("customfield_10300", StringType),
                 Property("customfield_11511", StringType),
                 Property("customfield_10301", StringType),
@@ -2254,6 +2255,34 @@ class IssueStream(JiraStream):
                 Property("customfield_11618", base_item_schema),
                 Property("customfield_11610", NumberType),
                 Property("customfield_11600", base_item_schema),
+                Property("customfield_11380", StringType),
+                Property("customfield_11382", StringType),
+                Property("customfield_11381", StringType),
+                Property("customfield_11480", base_item_schema),
+                Property("customfield_11479", StringType),
+                Property("customfield_11590", NumberType),
+                Property("customfield_11478", StringType),
+                Property("customfield_11477", StringType),
+                Property("customfield_11348", NumberType),
+                Property("customfield_11349", base_item_schema),
+                Property("customfield_11343", base_item_schema),
+                Property("customfield_11571", base_item_schema),
+                Property("customfield_11573", base_item_schema),
+                Property("customfield_11572", NumberType),
+                Property("customfield_11574", base_item_schema),
+                Property("customfield_11577", base_item_schema),
+                Property("customfield_11569", StringType),
+                Property("customfield_11551", NumberType),
+                Property("customfield_11550", StringType),
+                Property("customfield_11553", NumberType),
+                Property("customfield_11552", StringType),
+                Property("customfield_11554", NumberType),
+                Property("customfield_11540", base_item_schema),
+                Property("customfield_11541", base_item_schema),
+                Property("customfield_11543", StringType),
+                Property("customfield_11617", StringType),
+                Property("customfield_11504", base_item_schema),
+                Property("customfield_11616", NumberType),
             ),
         ),
         Property("created", StringType),
@@ -2921,7 +2950,8 @@ class SprintStream(JiraStream):
 
     @property
     def url_base(self) -> str:
-        return "https://ryan-miranda.atlassian.net:443/rest/agile/1.0"
+        domain = self.config["domain"]
+        return "https://{}:443/rest/agile/1.0".format(domain)
 
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """
@@ -2935,6 +2965,8 @@ class SprintStream(JiraStream):
         for record in list(super().get_records(context)):
             board_id.append(record.get("id"))
 
+        board_id = list(set(board_id))
+        
         for id in board_id:
             try:
 
@@ -2942,11 +2974,14 @@ class SprintStream(JiraStream):
                     name = "sprint"
                     path = "/sprint?maxResults=100"
                     instance_name = ""
+                    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
+                    instance_name = "values"
 
                     @property
                     def url_base(self) -> str:
-                        base_url = "https://ryan-miranda.atlassian.net:443/rest/agile/1.0/board/{}".format(
-                            id
+                        domain = self.config["domain"]
+                        base_url = "https://{}:443/rest/agile/1.0/board/{}".format(
+                            domain, id
                         )
                         return base_url
 
@@ -2973,15 +3008,14 @@ class SprintStream(JiraStream):
 
                         yield from results
 
-                sprint = Sprint(self._tap, schema={"properties": {}})
+                sprint = Sprint(self._tap, schema=self.schema)
 
                 sprint_records.append(list(sprint.get_records(context)))
-
+            
             except:
                 pass
-
+        
         sprint_records = sum(sprint_records, [])
-
         return sprint_records
 
 
@@ -3554,6 +3588,8 @@ class IssueChangeLogStream(JiraStream):
 
     instance_name = "values"
 
+    next_page_token_jsonpath = None
+
     schema = PropertiesList(
         Property("id", StringType),
         Property("issueId", StringType),
@@ -3575,7 +3611,7 @@ class IssueChangeLogStream(JiraStream):
         ),
     ).to_dict()
 
-    def post_process(self, row: dict, context: dict) -> dict:
+    def post_process(self, row:dict, context:dict) -> dict:
         row["issueId"] = context["issue_id"]
         return row
 
@@ -3608,6 +3644,8 @@ class IssueComments(JiraStream):
     records_jsonpath = "$[comments][*]"
 
     instance_name = "comments"
+
+    next_page_token_jsonpath = None
 
     schema = PropertiesList(
         Property("id", StringType),
@@ -3659,6 +3697,6 @@ class IssueComments(JiraStream):
         ),
     ).to_dict()
 
-    def post_process(self, row: dict, context: dict) -> dict:
+    def post_process(self, row:dict, context:dict) -> dict:
         row["issueId"] = context["issue_id"]
         return row
