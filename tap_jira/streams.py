@@ -44,7 +44,7 @@ class UsersStream(JiraStream):
     replication_key = "accountId"
     replication_method = "INCREMENTAL"
     records_jsonpath = "$[*]"
-    instance_name = ""
+    next_page_token_jsonpath = None
 
     schema = PropertiesList(
         Property("self", StringType),
@@ -68,30 +68,6 @@ class UsersStream(JiraStream):
         Property("locale", StringType),
     ).to_dict()
 
-    def get_url_params(
-        self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-
-        params: dict = {}
-        if next_page_token:
-            params["startAt"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
-
-        return params
-
     def get_next_page_token(
         self,
         response: requests.Response,
@@ -109,7 +85,7 @@ class UsersStream(JiraStream):
         if len(page) == 0:
             return None
 
-        return previous_token + 1
+        return previous_token + len(page)
 
 
 class FieldStream(JiraStream):
