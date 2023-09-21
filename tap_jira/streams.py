@@ -2900,6 +2900,7 @@ class PermissionHolderStream(JiraStream):
         ),
     ).to_dict()
 
+
 class BoardStream(JiraStream):
     """
     https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference/#sprint
@@ -2927,19 +2928,24 @@ class BoardStream(JiraStream):
         Property("self", StringType),
         Property("name", StringType),
         Property("type", StringType),
-        Property("location", ObjectType(Property("projectId", IntegerType),
-                                        Property("displayName", StringType),
-                                        Property("projectName", StringType),
-                                        Property("projectKey", StringType),
-                                        Property("projectTypeKey", StringType),
-                                        Property("name", StringType)))
+        Property(
+            "location",
+            ObjectType(
+                Property("projectId", IntegerType),
+                Property("displayName", StringType),
+                Property("projectName", StringType),
+                Property("projectKey", StringType),
+                Property("projectTypeKey", StringType),
+                Property("name", StringType),
+            ),
+        ),
     ).to_dict()
 
     @property
     def url_base(self) -> str:
         domain = self.config["domain"]
         return "https://{}:443/rest/agile/1.0".format(domain)
-    
+
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
         return {"board_id": record["id"]}
@@ -2977,18 +2983,18 @@ class SprintStream(JiraStream):
         Property("completeDate", StringType),
         Property("originBoardId", IntegerType),
         Property("goal", StringType),
-        Property("boardId", IntegerType)
+        Property("boardId", IntegerType),
     ).to_dict()
 
     @property
     def url_base(self) -> str:
         domain = self.config["domain"]
         return "https://{}:443/rest/agile/1.0".format(domain)
-    
+
     def post_process(self, row: dict, context: dict) -> dict:
         row["boardId"] = context["board_id"]
         return row
-    
+
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         try:
             for record in self.request_records(context):
@@ -2998,6 +3004,7 @@ class SprintStream(JiraStream):
                 yield transformed_record
         except Exception as e:
             pass
+
 
 class ProjectRoleActorStream(JiraStream):
 
