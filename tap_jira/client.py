@@ -120,8 +120,9 @@ class JiraStream(RESTStream):
                 is_last = resp_json.get("isLast")
                 results = len(_value)
 
-        if total == -1 and not is_last:
-            return previous_token + results
+        if type(is_last) == bool:
+            if total == -1 and not is_last:
+                return previous_token + results
 
         if _value is None:
             page = resp_json
