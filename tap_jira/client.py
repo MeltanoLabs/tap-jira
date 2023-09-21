@@ -111,6 +111,7 @@ class JiraStream(RESTStream):
         total = -1
         results = 0
         _value = None
+        is_last = None
 
         if isinstance(resp_json, dict):
             if resp_json.get(self.instance_name) is not None:
