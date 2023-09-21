@@ -2900,9 +2900,52 @@ class PermissionHolderStream(JiraStream):
         ),
     ).to_dict()
 
+class BoardStream(JiraStream):
+    """
+    https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference/#sprint
+    """
+
+    """
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    records_jsonpath = json response body
+    """
+
+    name = "boards"
+    path = "/board"
+    primary_keys = ["id"]
+    replication_key = "id"
+    replication_method = "INCREMENTAL"
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
+    instance_name = "values"
+
+    schema = PropertiesList(
+        Property("id", IntegerType),
+        Property("self", StringType),
+        Property("name", StringType),
+        Property("type", StringType),
+        Property("location", ObjectType(Property("projectId", IntegerType),
+                                        Property("displayName", StringType),
+                                        Property("projectName", StringType),
+                                        Property("projectKey", StringType),
+                                        Property("projectTypeKey", StringType),
+                                        Property("name", StringType)))
+    ).to_dict()
+
+    @property
+    def url_base(self) -> str:
+        domain = self.config["domain"]
+        return "https://{}:443/rest/agile/1.0".format(domain)
+    
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        return {"board_id": record["id"]}
+
 
 class SprintStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference/#sprint
     """
@@ -2917,10 +2960,10 @@ class SprintStream(JiraStream):
     """
 
     name = "sprints"
-    path = "/board"
-    primary_keys = ["id"]
-    replication_key = "id"
+    parent_stream_type = BoardStream
+    path = "/board/{board_id}/sprint?maxResults=100"
     replication_method = "INCREMENTAL"
+    replication_key = "id"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
@@ -2934,78 +2977,27 @@ class SprintStream(JiraStream):
         Property("completeDate", StringType),
         Property("originBoardId", IntegerType),
         Property("goal", StringType),
+        Property("boardId", IntegerType)
     ).to_dict()
 
     @property
     def url_base(self) -> str:
         domain = self.config["domain"]
         return "https://{}:443/rest/agile/1.0".format(domain)
-
+    
+    def post_process(self, row: dict, context: dict) -> dict:
+        row["boardId"] = context["board_id"]
+        return row
+    
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
-        """
-        Takes each of the board IDs pulled above and makes a request to
-        the Sprint endpoint for each board ID
-        """
-
-        board_id = []
-        sprint_records = []
-
-        for record in list(super().get_records(context)):
-            board_id.append(record.get("id"))
-
-        board_id = list(set(board_id))
-
-        for id in board_id:
-            try:
-
-                class Sprint(JiraStream):
-                    name = "sprint"
-                    path = "/sprint?maxResults=100"
-                    instance_name = ""
-                    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
-                    instance_name = "values"
-
-                    @property
-                    def url_base(self) -> str:
-                        domain = self.config["domain"]
-                        base_url = "https://{}:443/rest/agile/1.0/board/{}".format(
-                            domain, id
-                        )
-                        return base_url
-
-                    def parse_response(
-                        self, response: requests.Response
-                    ) -> Iterable[dict]:
-                        """Parse the response and return an iterator of result records.
-
-                        Args:
-                            response: The HTTP ``requests.Response`` object.
-
-                        Yields:
-                            Each record from the source.
-                        """
-
-                        resp_json = response.json()
-
-                        if isinstance(resp_json, list):
-                            results = resp_json
-                        elif resp_json.get("values") is not None:
-                            results = resp_json["values"]
-                        else:
-                            results = resp_json
-
-                        yield from results
-
-                sprint = Sprint(self._tap, schema=self.schema)
-
-                sprint_records.append(list(sprint.get_records(context)))
-
-            except:
-                pass
-
-        sprint_records = sum(sprint_records, [])
-        return sprint_records
-
+        try:
+            for record in self.request_records(context):
+                transformed_record = self.post_process(record, context)
+                if transformed_record is None:
+                    continue
+                yield transformed_record
+        except Exception as e:
+            pass
 
 class ProjectRoleActorStream(JiraStream):
 
