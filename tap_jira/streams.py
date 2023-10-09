@@ -2314,6 +2314,38 @@ class IssueStream(JiraStream):
         """Return a context dictionary for child streams."""
         return {"issue_id": record["id"]}
 
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        # dafault value for array, would remove once handled at SDK level
+        for key_set_default in [
+            "customfield_10010",
+            "customfield_10005",
+            "customfield_10001",
+            "customfield_10000",
+            "customfield_11379",
+            "customfield_11378",
+            "customfield_11481",
+            "customfield_11481",
+            "customfield_11100",
+            "customfield_11450",
+            "customfield_11455",
+            "customfield_11326",
+            "customfield_11447",
+            "customfield_11446",
+            "customfield_11325",
+            "customfield_11449",
+            "customfield_11448",
+            "customfield_11310",
+            "customfield_11431",
+            "customfield_11666",
+            "customfield_11402",
+            "customfield_11648",
+            "customfield_11512",
+            "customfield_11515",
+        ]:
+            if row["fields"].get(key_set_default) is None:
+                row["fields"][key_set_default] = []
+        return row
+
 
 class PermissionStream(JiraStream):
 
@@ -3510,6 +3542,38 @@ class WorkflowStream(JiraStream):
     ).to_dict()
 
 
+class Resolutions(JiraStream):
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-resolutions/#api-rest-api-3-resolution-get
+    """
+
+    """
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    records_jsonpath = json response body
+    """
+
+    name = "resolutions"
+
+    path = "/resolution/search"
+
+    records_jsonpath = "$[values][*]"
+
+    primary_keys = ["id"]
+
+    instance_name = "values"
+
+    schema = PropertiesList(
+        Property("id", StringType),
+        Property("description", StringType),
+        Property("name", StringType),
+        Property("isDefault", BooleanType),
+    ).to_dict()
+
+
 class WorkflowSearchStream(JiraStream):
 
     """
@@ -3547,6 +3611,54 @@ class WorkflowSearchStream(JiraStream):
     ).to_dict()
 
 
+# Child Streams
+
+
+class IssueWatchersStream(JiraStream):
+
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
+    """
+
+    """
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    records_jsonpath = json response body
+    """
+
+    name = "issue_watchers"
+    path = "/issue/{issue_id}/watchers"
+    parent_stream_type = IssueStream
+    ignore_parent_replication_keys = True
+    primary_keys = ["id"]
+    records_jsonpath = "$[*]"  # Or override `parse_response`.
+    instance_name = ""
+
+    schema = PropertiesList(
+        Property("self", StringType),
+        Property("watchCount", IntegerType),
+        Property(
+            "watchers",
+            ArrayType(
+                ObjectType(
+                    Property("accountId", StringType),
+                    Property("accountType", StringType),
+                    Property("active", BooleanType),
+                    Property("displayName", StringType),
+                )
+            ),
+        ),
+        Property("issueId", StringType),
+    ).to_dict()
+
+    def post_process(self, row: dict, context: dict) -> dict:
+        row["issueId"] = context["issue_id"]
+        return row
+
+
 class IssueChangeLogStream(JiraStream):
 
     """
@@ -3569,8 +3681,6 @@ class IssueChangeLogStream(JiraStream):
     ignore_parent_replication_keys = True
 
     path = "/issue/{issue_id}/changelog"
-
-    replication_method = "INCREMENTAL"
 
     replication_key = "created"
 
@@ -3692,3 +3802,61 @@ class IssueComments(JiraStream):
     def post_process(self, row: dict, context: dict) -> dict:
         row["issueId"] = context["issue_id"]
         return row
+
+
+class IssueWorklogs(JiraStream):
+    """
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-get
+    """
+
+    """
+    name: stream name
+    path: path which will be added to api url in client.py
+    schema: instream schema
+    primary_keys = primary keys for the table
+    replication_key = datetime keys for replication
+    records_jsonpath = json response body
+    """
+
+    name = "issue_worklogs"
+
+    parent_stream_type = IssueStream
+
+    ignore_parent_replication_keys = True
+
+    path = "/issue/{issue_id}/worklog"
+
+    primary_keys = ["id"]
+
+    records_jsonpath = "$[worklogs][*]"
+
+    instance_name = "worklogs"
+
+    next_page_token_jsonpath = None
+
+    schema = PropertiesList(
+        Property("id", StringType),
+        Property("self", StringType),
+        Property(
+            "author",
+            ObjectType(
+                Property("accountId", StringType),
+                Property("self", StringType),
+                Property("displayName", StringType),
+                Property("active", BooleanType),
+            ),
+        ),
+        Property(
+            "updateAuthor",
+            ObjectType(
+                Property("accountId", StringType),
+                Property("self", StringType),
+                Property("displayName", StringType),
+                Property("active", BooleanType),
+            ),
+        ),
+        Property("updated", DateTimeType),
+        Property("started", DateTimeType),
+        Property("timeSpentSeconds", IntegerType),
+        Property("issueId", StringType),
+    ).to_dict()
