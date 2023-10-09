@@ -104,26 +104,31 @@ class JiraStream(RESTStream):
         #       next page. If this is the final page, return "None" to end the
         #       pagination loop.
         resp_json = response.json()
+
         if previous_token is None:
             previous_token = 0
 
         total = -1
+        results = 0
         _value = None
+        is_last = None
 
         if isinstance(resp_json, dict):
             if resp_json.get(self.instance_name) is not None:
                 _value = resp_json.get(self.instance_name)
-                total = resp_json.get("total")
+                total = resp_json.get("total", -1)
+                is_last = resp_json.get("isLast")
+                results = len(_value)
 
-        if total is None:
-            total = -1
+        if type(is_last) == bool:
+            if total == -1 and not is_last:
+                return previous_token + results
 
         if _value is None:
             page = resp_json
-            if len(page) == 0 or total <= previous_token + 1:
+            if len(page) == 0 or total <= previous_token + results:
                 return None
         else:
-            if len(_value) == 0 or total <= previous_token + 1:
+            if len(_value) == 0 or total <= previous_token + results:
                 return None
-
-        return previous_token + 1
+        return previous_token + results
