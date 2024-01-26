@@ -15,6 +15,9 @@ SAMPLE_CONFIG = {
             "username": os.environ.get("TAP_JIRA_AUTH_USERNAME"),
             "password": os.environ.get("TAP_JIRA_AUTH_PASSWORD"),
     },
+    "page_size": {
+        "issues": 100,
+    }
 }
 
 # Run standard built-in tap tests from the SDK:

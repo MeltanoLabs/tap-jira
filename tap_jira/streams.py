@@ -385,7 +385,7 @@ class IssueStream(JiraStream):
     """
 
     name = "issues"
-    path = "/search?maxResults=10"
+    path = "/search"
     primary_keys = ["id"]
     replication_key = "id"
     replication_method = "INCREMENTAL"
@@ -2283,6 +2283,8 @@ class IssueStream(JiraStream):
         next_page_token: Any | None,
     ) -> dict[str, Any]:
         params: dict = {}
+
+        params["maxResults"] = self.config.get("page_size", {}).get("issues", 10)
 
         params["jql"] = []  # init a query param
 
