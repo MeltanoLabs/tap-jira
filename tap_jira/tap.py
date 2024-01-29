@@ -48,6 +48,12 @@ class TapJira(Tap):
             ),
             required=True,
         ),
+        th.Property(
+            "page_size",
+            th.ObjectType(
+                th.Property("issues", th.IntegerType, description="Page size for issues stream", default=100),
+            ),
+        ),
     ).to_dict()
 
     def discover_streams(self) -> list[streams.JiraStream]:
