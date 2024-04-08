@@ -387,7 +387,7 @@ class IssueStream(JiraStream):
     name = "issues"
     path = "/search"
     primary_keys = ["id"]
-    replication_key = "id"
+    replication_key = "updated"
     replication_method = "INCREMENTAL"
     records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
     instance_name = "issues"
@@ -2316,8 +2316,9 @@ class IssueStream(JiraStream):
         """Return a context dictionary for child streams."""
         return {"issue_id": record["id"]}
 
-    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
-        # dafault value for array, would remove once handled at SDK level
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:  # noqa: ARG002
+        """Post process each row before returning to the SDK."""
+        # default value for array, would remove once handled at SDK level
         for key_set_default in [
             "customfield_10010",
             "customfield_10005",
@@ -2346,6 +2347,9 @@ class IssueStream(JiraStream):
         ]:
             if row["fields"].get(key_set_default) is None:
                 row["fields"][key_set_default] = []
+
+        row["created"] = row["fields"].get("created")
+        row["updated"] = row["fields"].get("updated")
         return row
 
 
