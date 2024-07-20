@@ -1,7 +1,5 @@
 # tap-jira
  
-# tap-jira
- 
 `tap-jira` is a Singer tap for tap-jira.
 
 Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
