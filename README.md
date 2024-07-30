@@ -33,7 +33,7 @@ The auth setting works either with access token or username/password, set by the
 Auth with access token:
 ```bash
 TAP_JIRA_AUTH_FLOW = 'oauth'
-TAP_JIRA_AUTH_TOKEN = ''
+TAP_JIRA_AUTH_ACCESS_TOKEN = ''
 ```
 
 Auth with username/password:
