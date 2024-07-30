@@ -22,9 +22,8 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 | start_date          |  False   | None    | Earliest record date to sync                                                                                                                |
 | end_date            |  False   | None    | Latest record date to sync                                                                                                                  |
 | auth                |   True   | None    | Auth type for Jira API requires either access_token or username/password                                                                    |
-| domain              |   True   | None    | Site URL                                                                                                                                    |                                                                                                                                             |
-| stream_maps         |  False   | None    | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). 
- |
+| domain              |   True   | None    | Site URL                                                                                                                                    |                                                             
+| stream_maps         |  False   | None    | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). |
 | stream_map_config   |  False   | None    | User-defined config values to be used within map expressions.                                                                               |
 | flattening_enabled  |  False   | None    | 'True' to enable schema flattening and automatically expand nested properties.                                                              |
 | flattening_max_depth|  False   | None    | The max depth to flatten schemas.                                                                                                           |
@@ -34,7 +33,7 @@ The auth setting works either with access token or username/password, set by the
 Auth with access token:
 ```bash
 TAP_JIRA_AUTH_FLOW = 'oauth'
-TAP_JIRA_AUTH_TOKEN = ''
+TAP_JIRA_AUTH_ACCESS_TOKEN = ''
 ```
 
 Auth with username/password:
