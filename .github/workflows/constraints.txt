@@ -2,4 +2,4 @@ nox==2024.4.15
 nox-poetry==1.0.3
 pip==24.2
 poetry==1.8.3
-poetry-dynamic-versioning==1.4.0
+poetry-dynamic-versioning==1.4.1
