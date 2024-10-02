@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Callable, Iterable
+from typing import Any, Callable
 
 import requests
-from singer_sdk.authenticators import BasicAuthenticator, BearerTokenAuthenticator
-from singer_sdk.helpers.jsonpath import extract_jsonpath
-from singer_sdk.pagination import BaseAPIPaginator
+from singer_sdk.authenticators import BasicAuthenticator
 from singer_sdk.streams import RESTStream
 
 _Auth = Callable[[requests.PreparedRequest], requests.PreparedRequest]
@@ -43,19 +41,11 @@ class JiraStream(RESTStream):
         Returns:
             An authenticator instance.
         """
-        auth_type = self.config["auth"]["flow"]
-
-        if auth_type == "oauth":
-            return BearerTokenAuthenticator.create_for_stream(
-                self,
-                token=self.config["auth"]["access_token"],
-            )
-        else:
-            return BasicAuthenticator.create_for_stream(
-                self,
-                password=self.config["auth"]["password"],
-                username=self.config["auth"]["username"],
-            )
+        return BasicAuthenticator.create_for_stream(
+            self,
+            password=self.config["api_token"],
+            username=self.config["email"],
+        )
 
     @property
     def http_headers(self) -> dict:

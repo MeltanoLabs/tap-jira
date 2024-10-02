@@ -27,31 +27,30 @@ class TapJira(Tap):
         th.Property(
             "domain",
             th.StringType,
-            description="Site URL",
+            description="The Domain for your Jira account, e.g. meltano.atlassian.net",
             required=True,
         ),
         th.Property(
-            "auth",
-            th.DiscriminatedUnion(
-                "flow",
-                oauth=th.ObjectType(
-                    th.Property(
-                        "access_token", th.StringType, required=True, secret=True
-                    ),
-                    additional_properties=False,
-                ),
-                password=th.ObjectType(
-                    th.Property("username", th.StringType, required=True),
-                    th.Property("password", th.StringType, required=True, secret=True),
-                    additional_properties=False,
-                ),
-            ),
+            "api_token",
+            th.StringType,
+            description="Jira API Token.",
+            required=True,
+        ),
+        th.Property(
+            "email",
+            th.StringType,
+            description="The user email for your Jira account.",
             required=True,
         ),
         th.Property(
             "page_size",
             th.ObjectType(
-                th.Property("issues", th.IntegerType, description="Page size for issues stream", default=100),
+                th.Property(
+                    "issues",
+                    th.IntegerType,
+                    description="Page size for issues stream",
+                    default=100,
+                ),
             ),
         ),
     ).to_dict()
