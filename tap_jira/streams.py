@@ -5,11 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Optional
 
+import requests
 from singer_sdk import typing as th  # JSON Schema typing helpers
 
 from tap_jira.client import JiraStream
-
-import requests
 
 PropertiesList = th.PropertiesList
 Property = th.Property
@@ -25,7 +24,6 @@ role = {}
 
 
 class UsersStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-get
     """
@@ -89,7 +87,6 @@ class UsersStream(JiraStream):
 
 
 class FieldStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-get
     """
@@ -158,7 +155,6 @@ class FieldStream(JiraStream):
 
 
 class ServerInfoStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-server-info/#api-rest-api-3-serverinfo-get
     """
@@ -198,7 +194,6 @@ class ServerInfoStream(JiraStream):
 
 
 class IssueTypeStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-get
     """
@@ -248,7 +243,6 @@ class IssueTypeStream(JiraStream):
 
 
 class WorkflowStatusStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-statuses/#api-rest-api-3-status-get
     """
@@ -301,7 +295,6 @@ class WorkflowStatusStream(JiraStream):
 
 
 class ProjectStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-get
     """
@@ -370,7 +363,6 @@ class ProjectStream(JiraStream):
 
 
 class IssueStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get
     """
@@ -2350,7 +2342,6 @@ class IssueStream(JiraStream):
 
 
 class PermissionStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get
     """
@@ -2776,7 +2767,6 @@ class PermissionStream(JiraStream):
 
 
 class ProjectRoleStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-role-get
     """
@@ -2842,7 +2832,6 @@ class ProjectRoleStream(JiraStream):
 
 
 class PriorityStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-priorities/#api-rest-api-3-priority-get
     """
@@ -2873,7 +2862,6 @@ class PriorityStream(JiraStream):
 
 
 class PermissionHolderStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-get
     """
@@ -3041,7 +3029,6 @@ class SprintStream(JiraStream):
 
 
 class ProjectRoleActorStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-role-id-actors-get
     """
@@ -3143,7 +3130,6 @@ class ProjectRoleActorStream(JiraStream):
 
 
 class AuditingStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-audit-records/#api-rest-api-3-auditing-record-get
     """
@@ -3210,7 +3196,6 @@ class AuditingStream(JiraStream):
 
 
 class DashboardStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-get
     """
@@ -3260,7 +3245,6 @@ class DashboardStream(JiraStream):
 
 
 class FilterSearchStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get
     """
@@ -3291,7 +3275,6 @@ class FilterSearchStream(JiraStream):
 
 
 class FilterDefaultShareScopeStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-defaultsharescope-get
     """
@@ -3317,7 +3300,6 @@ class FilterDefaultShareScopeStream(JiraStream):
 
 
 class GroupsPickerStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-groups-picker-get
     """
@@ -3357,7 +3339,6 @@ class GroupsPickerStream(JiraStream):
 
 
 class LicenseStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-license-metrics/#api-rest-api-3-instance-license-get
     """
@@ -3386,7 +3367,6 @@ class LicenseStream(JiraStream):
 
 
 class ScreensStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-get
     """
@@ -3428,7 +3408,6 @@ class ScreensStream(JiraStream):
 
 
 class ScreenSchemesStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-get
     """
@@ -3464,7 +3443,6 @@ class ScreenSchemesStream(JiraStream):
 
 
 class StatusesSearchStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-get
     """
@@ -3501,7 +3479,6 @@ class StatusesSearchStream(JiraStream):
 
 
 class WorkflowStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
     """
@@ -3577,7 +3554,6 @@ class Resolutions(JiraStream):
 
 
 class WorkflowSearchStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
     """
@@ -3617,7 +3593,6 @@ class WorkflowSearchStream(JiraStream):
 
 
 class IssueWatchersStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
     """
@@ -3662,7 +3637,6 @@ class IssueWatchersStream(JiraStream):
 
 
 class IssueChangeLogStream(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
     """
@@ -3721,7 +3695,6 @@ class IssueChangeLogStream(JiraStream):
 
 
 class IssueComments(JiraStream):
-
     """
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-get
     """
