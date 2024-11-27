@@ -43,6 +43,11 @@ class TapJira(Tap):
             required=True,
         ),
         th.Property(
+            "tz",
+            th.StringType,
+            description="Timezone to use when JQL filtering by time",
+        ),
+        th.Property(
             "page_size",
             th.ObjectType(
                 th.Property(
