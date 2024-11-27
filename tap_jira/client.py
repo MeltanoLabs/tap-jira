@@ -1,3 +1,4 @@
+#tap_jira/client.py
 """REST client handling, including tap-jiraStream base class."""
 
 from __future__ import annotations
@@ -6,8 +7,10 @@ from pathlib import Path
 from typing import Any, Callable
 
 import requests
-from singer_sdk.authenticators import BasicAuthenticator
 from singer_sdk.streams import RESTStream
+from tap_jira.authenticators import JiraAuthenticator 
+
+
 
 _Auth = Callable[[requests.PreparedRequest], requests.PreparedRequest]
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
@@ -41,11 +44,7 @@ class JiraStream(RESTStream):
         Returns:
             An authenticator instance.
         """
-        return BasicAuthenticator.create_for_stream(
-            self,
-            password=self.config["api_token"],
-            username=self.config["email"],
-        )
+        return JiraAuthenticator.create_for_stream(self)
 
     @property
     def http_headers(self) -> dict:

@@ -1,3 +1,4 @@
+#tap_jira/tap.py
 """tap-jira tap class."""
 
 from __future__ import annotations
@@ -15,6 +16,61 @@ class TapJira(Tap):
 
     config_jsonschema = th.PropertiesList(
         th.Property(
+            "auth_type",
+            th.StringType,
+            description="Authentication type ('basic' or 'oauth2')",
+            default="basic"
+        ),
+        # Basic Auth Settings
+        th.Property(
+            "api_token",
+            th.StringType,
+            description="Jira API Token (required for basic auth)",
+            secret=True,
+            required=False,
+        ),
+        th.Property(
+            "email",
+            th.StringType,
+            description="The user email for your Jira account (required for basic auth)",
+            required=False,
+        ),
+        # OAuth2 Settings
+        th.Property(
+            "client_id",
+            th.StringType,
+            description="OAuth2 Client ID (required for OAuth)",
+            required=False,
+        ),
+        th.Property(
+            "client_secret",
+            th.StringType,
+            description="OAuth2 Client Secret (required for OAuth)",
+            secret=True,
+            required=False,
+        ),
+        th.Property(
+            "access_token",
+            th.StringType,
+            description="OAuth2 Access Token",
+            secret=True,
+            required=False,
+        ),
+        th.Property(
+            "refresh_token",
+            th.StringType,
+            description="OAuth2 Refresh Token",
+            secret=True,
+            required=False,
+        ),
+        # Common Settings
+        th.Property(
+            "domain",
+            th.StringType,
+            description="The Domain for your Jira account, e.g. meltano.atlassian.net",
+            required=True,
+        ),
+        th.Property(
             "start_date",
             th.DateTimeType,
             description="Earliest record date to sync",
@@ -23,24 +79,6 @@ class TapJira(Tap):
             "end_date",
             th.DateTimeType,
             description="Latest record date to sync",
-        ),
-        th.Property(
-            "domain",
-            th.StringType,
-            description="The Domain for your Jira account, e.g. meltano.atlassian.net",
-            required=True,
-        ),
-        th.Property(
-            "api_token",
-            th.StringType,
-            description="Jira API Token.",
-            required=True,
-        ),
-        th.Property(
-            "email",
-            th.StringType,
-            description="The user email for your Jira account.",
-            required=True,
         ),
         th.Property(
             "page_size",
