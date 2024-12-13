@@ -53,6 +53,11 @@ class TapJira(Tap):
                 ),
             ),
         ),
+        th.Property(
+            "issues_jql",
+            th.StringType,
+            description="An optional Base JQL query for issue searches",
+        ),
     ).to_dict()
 
     def discover_streams(self) -> list[streams.JiraStream]:

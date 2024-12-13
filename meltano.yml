@@ -24,6 +24,7 @@ plugins:
     - name: auth.username
     - name: auth.password
       kind: password
+    - name: issues_jql
 environments:
 - name: dev
 - name: staging
