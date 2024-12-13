@@ -1635,7 +1635,7 @@ class IssueStream(JiraStream):
 
         if "end_date" in self.config:
             end_date = self.config["end_date"]
-            params["jql"].append(f"(created<{end_date} or updated<{start_date})")
+            params["jql"].append(f"(created<{end_date} or updated<{end_date})")
 
         if params["jql"]:
             jql = " and ".join(params["jql"])
