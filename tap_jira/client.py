@@ -9,6 +9,9 @@ import requests
 import requests.auth
 from singer_sdk.streams import RESTStream
 
+if t.TYPE_CHECKING:
+    from singer_sdk.helpers.types import Context
+
 _Auth = t.Callable[[requests.PreparedRequest], requests.PreparedRequest]
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
@@ -16,13 +19,9 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 class JiraStream(RESTStream):
     """tap-jira stream class."""
 
-    next_page_token_jsonpath = (
-        "$.paging.start"  # Or override `get_next_page_token`.  # noqa: S105
-    )
-
+    next_page_token_jsonpath = "$.paging.start"  # noqa: S105
     records_jsonpath = "$[*]"  # Or override `parse_response`.
-
-    # Set this value or override `get_new_paginator`.
+    instance_name: str
 
     @property
     def url_base(self) -> str:
@@ -58,7 +57,7 @@ class JiraStream(RESTStream):
 
     def get_url_params(
         self,
-        context: dict | None,  # noqa: ARG002
+        context: Context | None,  # noqa: ARG002
         next_page_token: t.Any | None,  # noqa: ANN401
     ) -> dict[str, t.Any]:
         """Return a dictionary of values to be used in URL parameterization.
