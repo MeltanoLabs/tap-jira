@@ -53,6 +53,12 @@ class TapJira(Tap):
                 ),
             ),
         ),
+        th.Property(
+            "include_audit_logs",
+            th.BooleanType,
+            description="Include the audit logs stream",
+            default=False,
+        ),
     ).to_dict()
 
     def discover_streams(self) -> list[streams.JiraStream]:
@@ -61,7 +67,7 @@ class TapJira(Tap):
         Returns:
             A list of discovered streams.
         """
-        return [
+        stream_list = [
             streams.UsersStream(self),
             streams.FieldStream(self),
             streams.ServerInfoStream(self),
@@ -75,7 +81,6 @@ class TapJira(Tap):
             streams.PermissionHolderStream(self),
             streams.SprintStream(self),
             streams.ProjectRoleActorStream(self),
-            streams.AuditingStream(self),
             streams.DashboardStream(self),
             streams.FilterSearchStream(self),
             streams.FilterDefaultShareScopeStream(self),
@@ -94,6 +99,7 @@ class TapJira(Tap):
             streams.IssueWorklogs(self),
         ]
 
+        if self.config.get("include_audit_logs", False):
+            stream_list.append(streams.AuditingStream(self))
 
-if __name__ == "__main__":
-    TapJira.cli()
+        return stream_list

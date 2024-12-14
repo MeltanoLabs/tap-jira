@@ -1,4 +1,4 @@
-# `tap-jira`
+# tap-jira
 
 tap-jira tap class.
 
@@ -14,30 +14,47 @@ Built with the [Meltano Singer SDK](https://sdk.meltano.com).
 * `schema-flattening`
 * `batch`
 
-## Settings
-
-| Setting             | Required | Default | Description |
-|:--------------------|:--------:|:-------:|:------------|
-| start_date          | False    | None    | Earliest record date to sync |
-| end_date            | False    | None    | Latest record date to sync |
-| domain              | True     | None    | The Domain for your Jira account, e.g. meltano.atlassian.net |
-| api_token           | True     | None    | Jira API Token. |
-| Email               | True     | None    | The user email for your Jira account. |
-| page_size           | False    | None    |             |
-| stream_maps         | False    | None    | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). |
-| stream_map_config   | False    | None    | User-defined config values to be used within map expressions. |
-| flattening_enabled  | False    | None    | 'True' to enable schema flattening and automatically expand nested properties. |
-| flattening_max_depth| False    | None    | The max depth to flatten schemas. |
-| batch_config        | False    | None    |             |
-
-A full list of supported settings and capabilities is available by running: `tap-jira --about`
-
 ## Supported Python Versions
 
-* 3.8
 * 3.9
 * 3.10
 * 3.11
+* 3.12
+* 3.13
+
+## Settings
+
+| Setting                           | Required | Default | Description                                                                                                                                                                                                                                              |
+| :-------------------------------- | :------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| start_date                        | False    | None    | Earliest record date to sync                                                                                                                                                                                                                             |
+| end_date                          | False    | None    | Latest record date to sync                                                                                                                                                                                                                               |
+| domain                            | True     | None    | The Domain for your Jira account, e.g. meltano.atlassian.net                                                                                                                                                                                             |
+| api_token                         | True     | None    | Jira API Token.                                                                                                                                                                                                                                          |
+| email                             | True     | None    | The user email for your Jira account.                                                                                                                                                                                                                    |
+| page_size                         | False    | None    |                                                                                                                                                                                                                                                          |
+| page_size.issues                  | False    | 100     | Page size for issues stream                                                                                                                                                                                                                              |
+| include_audit_logs                | False    | False   | Include the audit logs stream                                                                                                                                                                                                                            |
+
+### Built-in capabilities
+
+| Setting                           | Required | Default | Description                                                                                                                                                                                                                                              |
+| :-------------------------------- | :------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| stream_maps                       | False    | None    | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).                                                                                                              |
+| stream_map_config                 | False    | None    | User-defined config values to be used within map expressions.                                                                                                                                                                                            |
+| faker_config                      | False    | None    | Config for the [`Faker`](https://faker.readthedocs.io/en/master/) instance variable `fake` used within map expressions. Only applicable if the plugin specifies `faker` as an addtional dependency (through the `singer-sdk` `faker` extra or directly). |
+| faker_config.seed                 | False    | None    | Value to seed the Faker generator for deterministic output: https://faker.readthedocs.io/en/master/#seeding-the-generator                                                                                                                                |
+| faker_config.locale               | False    | None    | One or more LCID locale strings to produce localized output for: https://faker.readthedocs.io/en/master/#localization                                                                                                                                    |
+| flattening_enabled                | False    | None    | 'True' to enable schema flattening and automatically expand nested properties.                                                                                                                                                                           |
+| flattening_max_depth              | False    | None    | The max depth to flatten schemas.                                                                                                                                                                                                                        |
+| batch_config                      | False    | None    | Configuration for BATCH message capabilities.                                                                                                                                                                                                            |
+| batch_config.encoding             | False    | None    | Specifies the format and compression of the batch files.                                                                                                                                                                                                 |
+| batch_config.encoding.format      | False    | None    | Format to use for batch files.                                                                                                                                                                                                                           |
+| batch_config.encoding.compression | False    | None    | Compression format to use for batch files.                                                                                                                                                                                                               |
+| batch_config.storage              | False    | None    | Defines the storage layer to use when writing batch files                                                                                                                                                                                                |
+| batch_config.storage.root         | False    | None    | Root path to use when writing batch files.                                                                                                                                                                                                               |
+| batch_config.storage.prefix       | False    | None    | Prefix to use when writing batch files.                                                                                                                                                                                                                  |
+
+A full list of supported settings and capabilities is available by running: `tap-jira --about`
 
 ## Elastic License 2.0
 
