@@ -30,18 +30,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - uses: actions/setup-python@v5
       with:
         python-version: 3.x
-    - name: Install pipx and Poetry
-      run: |
-        pip install pipx poetry
-    - name: Run lint command from tox.ini
-      run: |
-        pipx run tox -e lint
+    - uses: astral-sh/setup-uv@v4
+      with:
+        version: ">=0.5"
+    - run: uvx --with tox-uv tox -e lint
 
   pytest:
+    name: Python ${{ matrix.python-version }} - pytest
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 2
@@ -54,22 +52,15 @@ jobs:
         - "3.9"
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install Poetry
-      run: |
-        pip install poetry
-    - name: Install dependencies
-      run: |
-        poetry install
+    - uses: astral-sh/setup-uv@v4
+      with:
+        version: ">=0.5"
     - name: Test with pytest
-      id: test_pytest
-      continue-on-error: false
       env:
         TAP_JIRA_DOMAIN: ${{ secrets.TAP_JIRA_DOMAIN }}
         TAP_JIRA_API_TOKEN: ${{ secrets.TAP_JIRA_API_TOKEN }}
         TAP_JIRA_EMAIL: ${{ secrets.TAP_JIRA_EMAIL }}
-      run: |
-        poetry run pytest --capture=no
+      run: uvx --with tox-uv tox -e ${{ matrix.python-version }}
