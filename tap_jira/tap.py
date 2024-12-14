@@ -35,6 +35,8 @@ class TapJira(Tap):
             th.StringType,
             description="Jira API Token.",
             required=True,
+            secret=True,
+            title="API Token",
         ),
         th.Property(
             "email",
@@ -54,9 +56,23 @@ class TapJira(Tap):
             ),
         ),
         th.Property(
-            "issues_jql",
-            th.StringType,
-            description="An optional Base JQL query for issue searches",
+            "stream_options",
+            th.ObjectType(
+                th.Property(
+                    "issues",
+                    th.ObjectType(
+                        th.Property(
+                            "jql",
+                            th.StringType,
+                            description="A JQL query to filter issues",
+                            title="JQL Query",
+                        ),
+                    ),
+                    title="Issues Stream Options",
+                    description="Options specific to the issues stream",
+                ),
+            ),
+            description="Options for individual streams",
         ),
         th.Property(
             "include_audit_logs",

@@ -1678,8 +1678,11 @@ class IssueStream(JiraStream):
             end_date = self.config["end_date"]
             jql.append(f"(created<'{end_date}' or updated<'{end_date}')")
 
-        if "issues_jql" in self.config:
-            base_jql = self.config["issues_jql"]
+        if (
+            base_jql := self.config.get("stream_options", {})
+            .get("issues", {})
+            .get("jql")
+        ):
             jql.append(f"({base_jql})")
 
         if jql:
