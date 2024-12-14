@@ -2,37 +2,32 @@
 
 from __future__ import annotations
 
+import typing as t
 from pathlib import Path
-from typing import Any, Callable
 
 import requests
-from singer_sdk.authenticators import BasicAuthenticator
+import requests.auth
 from singer_sdk.streams import RESTStream
 
-_Auth = Callable[[requests.PreparedRequest], requests.PreparedRequest]
+if t.TYPE_CHECKING:
+    from singer_sdk.helpers.types import Context
+
+_Auth = t.Callable[[requests.PreparedRequest], requests.PreparedRequest]
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
 
 class JiraStream(RESTStream):
     """tap-jira stream class."""
 
-    next_page_token_jsonpath = (
-        "$.paging.start"  # Or override `get_next_page_token`.  # noqa: S105
-    )
-
+    next_page_token_jsonpath = "$.paging.start"  # noqa: S105
     records_jsonpath = "$[*]"  # Or override `parse_response`.
-
-    # Set this value or override `get_new_paginator`.
-    next_page_token_jsonpath = "$.next_page"
+    instance_name: str
 
     @property
     def url_base(self) -> str:
-        """
-        Returns base url
-        """
+        """Returns base url."""
         domain = self.config["domain"]
-        base_url = "https://{}:443/rest/api/3".format(domain)
-        return base_url
+        return f"https://{domain}:443/rest/api/3"
 
     @property
     def authenticator(self) -> _Auth:
@@ -41,8 +36,7 @@ class JiraStream(RESTStream):
         Returns:
             An authenticator instance.
         """
-        return BasicAuthenticator.create_for_stream(
-            self,
+        return requests.auth.HTTPBasicAuth(
             password=self.config["api_token"],
             username=self.config["email"],
         )
@@ -63,9 +57,9 @@ class JiraStream(RESTStream):
 
     def get_url_params(
         self,
-        context: dict | None,
-        next_page_token: Any | None,
-    ) -> dict[str, Any]:
+        context: Context | None,  # noqa: ARG002
+        next_page_token: t.Any | None,  # noqa: ANN401
+    ) -> dict[str, t.Any]:
         """Return a dictionary of values to be used in URL parameterization.
 
         Args:
@@ -87,8 +81,8 @@ class JiraStream(RESTStream):
     def get_next_page_token(
         self,
         response: requests.Response,
-        previous_token: t.Any | None,
-    ) -> t.Any | None:
+        previous_token: t.Any | None,  # noqa: ANN401
+    ) -> t.Any | None:  # noqa: ANN401
         """Return a token for identifying next page or None if no more pages."""
         # If pagination is required, return a token which can be used to get the
         #       next page. If this is the final page, return "None" to end the
@@ -103,22 +97,22 @@ class JiraStream(RESTStream):
         _value = None
         is_last = None
 
-        if isinstance(resp_json, dict):
-            if resp_json.get(self.instance_name) is not None:
-                _value = resp_json.get(self.instance_name)
-                total = resp_json.get("total", -1)
-                is_last = resp_json.get("isLast")
-                results = len(_value)
+        if (
+            isinstance(resp_json, dict)
+            and resp_json.get(self.instance_name) is not None
+        ):
+            _value = resp_json.get(self.instance_name)
+            total = resp_json.get("total", -1)
+            is_last = resp_json.get("isLast")
+            results = len(_value)  # type: ignore[arg-type]
 
-        if type(is_last) == bool:
-            if total == -1 and not is_last:
-                return previous_token + results
+        if isinstance(is_last, bool) and total == -1 and not is_last:
+            return previous_token + results
 
         if _value is None:
             page = resp_json
             if len(page) == 0 or total <= previous_token + results:
                 return None
-        else:
-            if len(_value) == 0 or total <= previous_token + results:
-                return None
+        elif len(_value) == 0 or total <= previous_token + results:
+            return None
         return previous_token + results
