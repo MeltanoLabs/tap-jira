@@ -8,16 +8,12 @@ on: [push]
 jobs:
   linting:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Only lint using the primary version used for dev
-        python-version: ["3.9"]
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.x
     - name: Install pipx and Poetry
       run: |
         pip install pipx poetry
@@ -27,11 +23,15 @@ jobs:
 
   pytest:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     strategy:
+      max-parallel: 2
       matrix:
-        python-version: ["3.9"]
+        python-version:
+        - "3.13"
+        - "3.12"
+        - "3.11"
+        - "3.10"
+        - "3.9"
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -48,9 +48,8 @@ jobs:
       id: test_pytest
       continue-on-error: false
       env:
-         TAP_JIRA_AUTH_FLOW: ${{ secrets.flow }}
-         TAP_JIRA_AUTH_USERNAME: ${{ secrets.username }}
-         TAP_JIRA_AUTH_PASSWORD: ${{ secrets.password }}
-         TAP_JIRA_DOMAIN: ${{ secrets.domain }}
+        TAP_JIRA_DOMAIN: ${{ secrets.TAP_JIRA_DOMAIN }}
+        TAP_JIRA_API_TOKEN: ${{ secrets.TAP_JIRA_API_TOKEN }}
+        TAP_JIRA_EMAIL: ${{ secrets.TAP_JIRA_EMAIL }}
       run: |
         poetry run pytest --capture=no
