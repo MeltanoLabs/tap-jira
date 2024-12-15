@@ -1661,7 +1661,7 @@ class IssueStream(JiraStream):
 
         params["maxResults"] = self.config.get("page_size", {}).get("issues", 10)
 
-        params["jql"] = []  # init a query param
+        jql: list[str] = []
 
         if next_page_token:
             params["startAt"] = next_page_token
@@ -1672,18 +1672,21 @@ class IssueStream(JiraStream):
 
         if "start_date" in self.config:
             start_date = self.config["start_date"]
-            params["jql"].append(f"(created>={start_date} or updated>={start_date})")
+            jql.append(f"(created>='{start_date}' or updated>='{start_date}')")
 
         if "end_date" in self.config:
             end_date = self.config["end_date"]
-            params["jql"].append(f"(created<{end_date} or updated<{start_date})")
+            jql.append(f"(created<'{end_date}' or updated<'{end_date}')")
 
-        if params["jql"]:
-            jql = " and ".join(params["jql"])
-            params["jql"] = jql
+        if (
+            base_jql := self.config.get("stream_options", {})
+            .get("issues", {})
+            .get("jql")
+        ):
+            jql.append(f"({base_jql})")
 
-        else:
-            params.pop("jql")  # drop if there's no query
+        if jql:
+            params["jql"] = " and ".join(jql)
 
         return params
 

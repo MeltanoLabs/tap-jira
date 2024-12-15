@@ -1,11 +1,11 @@
 version: 1
 send_anonymous_usage_stats: true
-project_id: "tap-jira"
+project_id: tap-jira
 default_environment: dev
 plugins:
   extractors:
-  - name: "tap-jira"
-    namespace: "tap_jira"
+  - name: tap-jira
+    namespace: tap_jira
     pip_url: -e .
     capabilities:
     - state
@@ -13,18 +13,35 @@ plugins:
     - discover
     - about
     - stream-maps
+    settings_group_validation:
+    - [domain, api_token, email]
     settings:
     - name: start_date
+      kind: date_iso8601
+      description: Earliest record date to sync
     - name: end_date
+      kind: date_iso8601
+      description: Latest record date to sync
     - name: domain
-    - name: auth_type
-    - name: auth.flow
-    - name: auth.access_token
-      kind: password
-    - name: auth.username
-    - name: auth.password
-      kind: password
+      kind: string
+      description: The Domain for your Jira account, e.g. meltano.atlassian.net
+    - name: api_token
+      kind: string
+      description: Jira API Token
+      sensitive: true
+    - name: email
+      kind: string
+      description: The user email for your Jira account
+    - name: page_size.issues
+      kind: integer
+      value: 100
+      description: Page size for issues stream
+    - name: stream_options.issues.jql
+      kind: string
+      description: A JQL query to filter issues
 environments:
 - name: dev
 - name: staging
 - name: prod
+venv:
+  backend: uv
