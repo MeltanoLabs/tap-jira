@@ -1645,6 +1645,7 @@ class IssueStream(JiraStream):
                 Property("id", IntegerType),
                 Property("editmeta", StringType),
                 Property("histories", StringType),
+                additional_properties=True,
             ),
         ),
         Property("created", StringType),
