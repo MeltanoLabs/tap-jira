@@ -1063,13 +1063,13 @@ files = [
 
 [[package]]
 name = "singer-sdk"
-version = "0.44.1"
+version = "0.44.2"
 description = "A framework for building Singer taps"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "singer_sdk-0.44.1-py3-none-any.whl", hash = "sha256:948eb8eb570e5d7b55593f0dec07eb6496ee2bccc97e55b55c31e41a18e951b1"},
-    {file = "singer_sdk-0.44.1.tar.gz", hash = "sha256:d64c7eb25b1ad5eeacd2ffba85a5b523184dc5f8c57db2fca6365682c94b9ecc"},
+    {file = "singer_sdk-0.44.2-py3-none-any.whl", hash = "sha256:caa4bca45c3a8d4cdcc84566d38ec49919b22d29b1a9a45518d41906a22706ed"},
+    {file = "singer_sdk-0.44.2.tar.gz", hash = "sha256:6be24fe8a014bfb20cab8b09a1030b3be9a33e3283072731f07dde276dc368f1"},
 ]
 
 [package.dependencies]
@@ -1087,7 +1087,7 @@ jsonschema = ">=4.16.0"
 packaging = ">=23.1"
 pytest = {version = ">=7.2.1", optional = true, markers = "extra == \"testing\""}
 python-dotenv = ">=0.20"
-PyYAML = ">=6.0"
+pyyaml = ">=6.0"
 referencing = ">=0.30.0"
 requests = ">=2.25.1"
 setuptools = "<=70.3.0"
@@ -1095,16 +1095,12 @@ simpleeval = ">=0.9.13,<1.0.1 || >1.0.1"
 simplejson = ">=3.17.6"
 sqlalchemy = ">=1.4,<3.0"
 typing-extensions = ">=4.5.0"
-urllib3 = [
-    {version = "<2", markers = "python_version < \"3.10\""},
-    {version = "*", markers = "python_version >= \"3.10\""},
-]
 
 [package.extras]
 docs = ["furo (>=2024.5.6)", "myst-parser (>=3)", "pytest (>=7.2.1)", "sphinx (>=7)", "sphinx-copybutton (>=0.5.2)", "sphinx-inline-tabs (>=2023.4.21)", "sphinx-notfound-page (>=1.0.0)", "sphinx-reredirects (>=0.1.5)"]
 faker = ["faker (>=22.5)"]
-jwt = ["PyJWT (>=2.4,<3.0)", "cryptography (>=3.4.6)"]
-parquet = ["numpy (>=1.22)", "numpy (>=1.22,<2.1)", "pyarrow (>=13)"]
+jwt = ["cryptography (>=3.4.6)", "pyjwt (>=2.4,<3.0)"]
+parquet = ["numpy (>=1.22)", "pyarrow (>=13)"]
 s3 = ["fs-s3fs (>=1.1.1)", "s3fs (>=2024.9.0)"]
 ssh = ["paramiko (>=3.3.0)"]
 testing = ["pytest (>=7.2.1)"]
@@ -1325,4 +1321,4 @@ s3 = ["fs-s3fs"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "952a94553fdc2742dd1ad0f6639cce93a6e964624b29aea6c549b56cc186be43"
+content-hash = "d56cfd1d237cc44f41f3d8498ac925b5ca98b7fb3110a5ccc10e3fd136ab117f"
