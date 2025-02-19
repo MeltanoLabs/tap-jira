@@ -1710,7 +1710,6 @@ class PermissionStream(JiraStream):
 
     name = "permissions"
     path = "/permissions"
-    replication_method = "FULL_TABLE"
     instance_name = ""
 
     schema = PropertiesList(
