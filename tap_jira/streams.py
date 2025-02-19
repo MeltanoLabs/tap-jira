@@ -5,6 +5,7 @@ from __future__ import annotations
 import functools
 import operator
 import typing as t
+from http import HTTPStatus
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
 
@@ -2385,6 +2386,20 @@ class SprintStream(JiraStream):
             if transformed_record is None:
                 continue
             yield transformed_record
+
+    def validate_response(self, response: requests.Response) -> None:
+        """Validate the API response.
+
+        Allow for a 400 response if the board does not support sprints.
+        Do raise an error for other 400 responses.
+        """
+        if (
+            response.status_code == HTTPStatus.BAD_REQUEST
+            and "The board does not support sprints"
+            in response.json().get("errorMessages", [])
+        ):
+            return
+        super().validate_response(response)
 
 
 class ProjectRoleActorStream(JiraStream):
