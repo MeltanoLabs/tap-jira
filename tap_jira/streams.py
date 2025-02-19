@@ -2952,7 +2952,7 @@ class WorkflowSearchStream(JiraStream):
         Property("updated", StringType),
     ).to_dict()
 
-    def post_process(self, row: dict, context: dict | None) -> dict: # noqa: ARG002
+    def post_process(self, row: dict, context: dict | None) -> dict:  # noqa: ARG002
         """Post-process the record before it is returned.
 
         Flattens the id object into separate name and entityId fields.
