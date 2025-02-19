@@ -19,6 +19,7 @@ on:
     - pyproject.toml
     - poetry.lock
     - tox.ini
+  workflow_dispatch:
 
 env:
   FORCE_COLOR: "1"
