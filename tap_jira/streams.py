@@ -1706,15 +1706,10 @@ class PermissionStream(JiraStream):
     name: stream name
     path: path which will be added to api url in client.py
     schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
     """
 
     name = "permissions"
     path = "/permissions"
-    primary_keys = ("permissions",)
-    replication_key = "permissions"
-    replication_method = "INCREMENTAL"
     instance_name = ""
 
     schema = PropertiesList(
