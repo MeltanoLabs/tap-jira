@@ -5,8 +5,10 @@ from __future__ import annotations
 import functools
 import operator
 import typing as t
+from http import HTTPStatus
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
+from singer_sdk.exceptions import FatalAPIError
 
 from tap_jira.client import JiraStream
 
@@ -2386,6 +2388,22 @@ class SprintStream(JiraStream):
                 continue
             yield transformed_record
 
+    def validate_response(self, response: requests.Response) -> None:
+        """Validate the API response.
+
+        Allow for a 400 response if the board does not support sprints.
+        Do raise an error for other 400 responses.
+        """
+        try:
+            super().validate_response(response)
+        except FatalAPIError:
+            if (
+                response.status_code == HTTPStatus.BAD_REQUEST
+                and "The board does not support sprints"
+                in response.json().get("errorMessages", [])
+            ):
+                return
+            raise
 
 class ProjectRoleActorStream(JiraStream):
     """Project role actor stream.
