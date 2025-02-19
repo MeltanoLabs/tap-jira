@@ -2957,24 +2957,31 @@ class WorkflowSearchStream(JiraStream):
 
     name = "workflow_searches"
     path = "/workflow/search"
-    primary_keys = ("id",)
+    primary_keys = ("name", "entityId")
     replication_key = "updated"
     replication_method = "INCREMENTAL"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
     schema = PropertiesList(
-        Property(
-            "id",
-            ObjectType(
-                Property("name", StringType),
-                Property("entityId", StringType),
-            ),
-        ),
+        Property("name", StringType),
+        Property("entityId", StringType),
         Property("description", StringType),
         Property("created", StringType),
         Property("updated", StringType),
     ).to_dict()
+
+    def post_process(self, row: dict, context: dict | None) -> dict:  # noqa: ARG002
+        """Post-process the record before it is returned.
+
+        Flattens the id object into separate name and entityId fields.
+        """
+        if "id" in row:
+            # Extract values from the id object
+            id_obj = row.pop("id")
+            row["name"] = id_obj.get("name")
+            row["entityId"] = id_obj.get("entityId")
+        return row
 
 
 # Child Streams
