@@ -2405,6 +2405,7 @@ class SprintStream(JiraStream):
                 return
             raise
 
+
 class ProjectRoleActorStream(JiraStream):
     """Project role actor stream.
 
