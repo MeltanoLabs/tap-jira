@@ -147,10 +147,7 @@ class FieldStream(JiraStream):
                         Property("customRenderer", BooleanType),
                         Property("readOnly", BooleanType),
                         Property("environment", StringType),
-                        Property(
-                            "com.atlassian.jira.plugin.system.customfieldtypes:atlassian-team",
-                            BooleanType,
-                        ),
+                        Property("atlassian_team", BooleanType),
                     ),
                 ),
             ),
@@ -2347,6 +2344,7 @@ class SprintStream(JiraStream):
     """
 
     name = "sprints"
+    primary_keys = ("id",)
     parent_stream_type = BoardStream
     path = "/board/{board_id}/sprint?maxResults=100"
     replication_method = "INCREMENTAL"
