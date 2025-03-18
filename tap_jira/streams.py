@@ -147,10 +147,7 @@ class FieldStream(JiraStream):
                         Property("customRenderer", BooleanType),
                         Property("readOnly", BooleanType),
                         Property("environment", StringType),
-                        Property(
-                            "com.atlassian.jira.plugin.system.customfieldtypes:atlassian-team",
-                            BooleanType,
-                        ),
+                        Property("atlassian_team", BooleanType),
                     ),
                 ),
             ),
