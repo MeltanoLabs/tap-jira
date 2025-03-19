@@ -13,6 +13,7 @@ from tap_jira.client import JiraStream
 
 if t.TYPE_CHECKING:
     import requests
+    from singer_sdk.helpers.types import Context, Record
 
 PropertiesList = th.PropertiesList
 Property = th.Property
@@ -1688,6 +1689,15 @@ class IssueStream(JiraStream):
             params["jql"] = " and ".join(jql)
 
         return params
+
+    def post_process(self, row: Record, context: Context | None = None) -> Record:  # noqa: ARG002
+        """Post-process the record.
+
+        - Add top-level `created` field.
+        """
+        created = row.get("fields", {}).pop("created", None)
+        row["created"] = created
+        return row
 
     def get_child_context(self, record: dict, context: dict | None) -> dict:  # noqa: ARG002
         """Return a context dictionary for child streams."""
