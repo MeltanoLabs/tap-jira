@@ -1115,14 +1115,14 @@ files = [
 
 [[package]]
 name = "singer-sdk"
-version = "0.45.3"
+version = "0.45.4"
 description = "A framework for building Singer taps"
 optional = false
 python-versions = ">=3.9"
 groups = ["main", "dev"]
 files = [
-    {file = "singer_sdk-0.45.3-py3-none-any.whl", hash = "sha256:15962c3344b3efe72a77a0ec398e1142f73a5b8f7df786ea51f0c68709332bb7"},
-    {file = "singer_sdk-0.45.3.tar.gz", hash = "sha256:d2ad6f1b9a9a5431af57d16c33c493a6cb76709ab7c87a611ad25ae064a66191"},
+    {file = "singer_sdk-0.45.4-py3-none-any.whl", hash = "sha256:a8112cb0b5c784900c0f5100d9550ef22891083434f3742aa7d3168eda06862d"},
+    {file = "singer_sdk-0.45.4.tar.gz", hash = "sha256:9237ec032fbad68a6595d008caccec4e6005320bcd66bd969f80a023d62aea2c"},
 ]
 
 [package.dependencies]
@@ -1385,4 +1385,4 @@ s3 = ["fs-s3fs"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9"
-content-hash = "1d92bce18b32ad137c44cdec835d3bb527db4d3b6de70e4ce56a12890eab9108"
+content-hash = "028c05650da3c76a82d27fea86a235518f1d63329d2b55ea3fcc897ddb9ab0b7"
