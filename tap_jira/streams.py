@@ -35,11 +35,11 @@ ADFInlineNode = th.ObjectType(
         ArrayType(
             ObjectType(
                 Property("type", StringType),
-                Property("attrs", ObjectType),
+                Property("attrs", ObjectType(additional_properties=True)),
             ),
         ),
     ),
-    Property("attrs", ObjectType),
+    Property("attrs", ObjectType(additional_properties=True)),
 )
 
 
@@ -47,13 +47,12 @@ ADFChildBlockNode = ObjectType(
     Property("type", StringType),
     Property("content", ArrayType(ADFInlineNode)),
     Property("text", StringType),
-    Property("attrs", ObjectType),
-    Property("marks", ArrayType(ObjectType)),
+    Property("attrs", ObjectType(additional_properties=True)),
 )
 
 
 ADFRootBlockNode = ObjectType(
-    Property("type", th.Constant("doc")),
+    Property("type", StringType),
     Property("version", IntegerType),
     Property(
         "content",
@@ -3169,7 +3168,7 @@ class IssueComments(JiraStream):
         ),
         Property("created", DateTimeType),
         Property("updated", DateTimeType),
-        Property("body", ObjectType(ADFRootBlockNode)),
+        Property("body", ADFRootBlockNode),
         Property(
             "updateAuthor",
             ObjectType(
