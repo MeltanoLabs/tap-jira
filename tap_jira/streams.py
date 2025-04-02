@@ -27,6 +27,41 @@ IntegerType = th.IntegerType
 NumberType = th.NumberType
 
 
+ADFInlineNode = th.ObjectType(
+    Property("type", StringType),
+    Property("text", StringType),
+    Property(
+        "marks",
+        ArrayType(
+            ObjectType(
+                Property("type", StringType),
+                Property("attrs", ObjectType),
+            )
+        ),
+    ),
+    Property("attrs", ObjectType),
+)
+
+
+ADFChildBlockNode = ObjectType(
+    Property("type", StringType),
+    Property("content", ArrayType(ADFInlineNode)),
+    Property("text", StringType),
+    Property("attrs", ObjectType),
+    Property("marks", ArrayType(ObjectType)),
+)
+
+
+ADFRootBlockNode = ObjectType(
+    Property("type", th.Constant("doc")),
+    Property("version", IntegerType),
+    Property(
+        "content",
+        ArrayType(ADFChildBlockNode),
+    ),
+)
+
+
 class UsersStream(JiraStream):
     """Users stream.
 
@@ -3134,34 +3169,7 @@ class IssueComments(JiraStream):
         ),
         Property("created", DateTimeType),
         Property("updated", DateTimeType),
-        Property(
-            "body",
-            ObjectType(
-                Property("type", StringType),
-                Property("version", IntegerType),
-                Property(
-                    "content",
-                    ArrayType(
-                        ObjectType(
-                            Property("type", StringType),
-                            Property("text", StringType),
-                            Property(
-                                "marks",
-                                ArrayType(
-                                    ObjectType(
-                                        Property("type", StringType),
-                                        Property(
-                                            "attrs",
-                                            ObjectType(additional_properties=True),
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
+        Property("body", ObjectType(ADFRootBlockNode)),
         Property(
             "updateAuthor",
             ObjectType(
