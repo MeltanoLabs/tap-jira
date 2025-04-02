@@ -27,36 +27,12 @@ IntegerType = th.IntegerType
 NumberType = th.NumberType
 
 
-ADFInlineNode = th.ObjectType(
-    Property("type", StringType),
-    Property("text", StringType),
-    Property(
-        "marks",
-        ArrayType(
-            ObjectType(
-                Property("type", StringType),
-                Property("attrs", ObjectType(additional_properties=True)),
-            ),
-        ),
-    ),
-    Property("attrs", ObjectType(additional_properties=True)),
-)
-
-
-ADFChildBlockNode = ObjectType(
-    Property("type", StringType),
-    Property("content", ArrayType(ADFInlineNode)),
-    Property("text", StringType),
-    Property("attrs", ObjectType(additional_properties=True)),
-)
-
-
 ADFRootBlockNode = ObjectType(
     Property("type", StringType),
     Property("version", IntegerType),
     Property(
         "content",
-        ArrayType(ADFChildBlockNode),
+        ArrayType(ObjectType(additional_properties=True)),
     ),
 )
 
