@@ -36,7 +36,7 @@ ADFInlineNode = th.ObjectType(
             ObjectType(
                 Property("type", StringType),
                 Property("attrs", ObjectType),
-            )
+            ),
         ),
     ),
     Property("attrs", ObjectType),
