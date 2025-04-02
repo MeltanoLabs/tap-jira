@@ -3150,7 +3150,10 @@ class IssueComments(JiraStream):
                                 ArrayType(
                                     ObjectType(
                                         Property("type", StringType),
-                                        Property("attrs", ObjectType(additional_properties=True)),
+                                        Property(
+                                            "attrs",
+                                            ObjectType(additional_properties=True),
+                                        ),
                                     ),
                                 ),
                             ),
