@@ -12,7 +12,7 @@ license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = ">=3.9"
-fs-s3fs = { version = "^1.1.1", optional = true }
+s3fs = { version = "==2025.3.2", optional = true }
 requests = "~=2.32.2"
 
 [tool.poetry.dependencies.singer-sdk]
@@ -26,7 +26,7 @@ version = "*"
 extras = ["testing"]
 
 [tool.poetry.extras]
-s3 = ["fs-s3fs"]
+s3 = ["s3fs"]
 
 [tool.mypy]
 python_version = "3.9"
