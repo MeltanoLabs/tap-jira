@@ -676,6 +676,7 @@ class IssueStream(JiraStream):
                         Property("id", StringType),
                         Property("name", StringType),
                         Property("self", StringType),
+                        Property("releaseDate", StringType),
                     ),
                 ),
                 Property("resolutiondate", StringType),
