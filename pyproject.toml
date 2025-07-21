@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "tap-jira"
 version = "0.0.1"
-description = "`tap-jira` is a Singer tap for tap-jira, built with the Meltano Singer SDK."
+description = "Singer tap for tap-jira, built with the Meltano Singer SDK."
 readme = "README.md"
 authors = ["Ethan Stein"]
 keywords = [
