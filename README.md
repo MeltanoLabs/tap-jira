@@ -16,7 +16,6 @@ Built with the [Meltano Singer SDK](https://sdk.meltano.com).
 
 ## Supported Python Versions
 
-* 3.9
 * 3.10
 * 3.11
 * 3.12
