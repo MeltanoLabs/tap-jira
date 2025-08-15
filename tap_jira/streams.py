@@ -1669,7 +1669,7 @@ class IssueStream(JiraStream):
 
     def get_url_params(
         self,
-        context: dict | None,
+        context: dict | None,  # noqa: ARG002
         next_page_token: t.Any | None,  # noqa: ANN401
     ) -> dict[str, t.Any]:
         """Return a dictionary of query parameters."""
