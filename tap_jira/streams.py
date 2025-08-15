@@ -8,6 +8,7 @@ import typing as t
 from http import HTTPStatus
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
+from singer_sdk.pagination import JSONPathPaginator
 
 from tap_jira.client import JiraStream
 
@@ -399,6 +400,7 @@ class IssueStream(JiraStream):
     replication_key = "id"
     replication_method = "INCREMENTAL"
     records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
+    next_page_token_jsonpath = "$.nextPageToken"  # noqa: S105
     instance_name = "issues"
 
     __content_schema = ArrayType(
@@ -1661,26 +1663,9 @@ class IssueStream(JiraStream):
         Property("updated", StringType),
     ).to_dict()
 
-    def get_next_page_token(
-        self,
-        response: requests.Response,
-        previous_token: t.Any | None,  # noqa: ANN401, ARG002
-    ) -> t.Any | None:  # noqa: ANN401
-        """Return a token for identifying next page or None if no more pages."""
-        resp_json = response.json()
-
-        if (
-            not isinstance(resp_json, dict)
-            or resp_json.get(self.instance_name, None) is None
-        ):
-            # Response body is not compatible with the expected structure
-            return None
-
-        if resp_json.get("isLast", False):
-            # Last page reached, no next page token available
-            return None
-
-        return resp_json.get("nextPageToken", None)
+    def get_new_paginator(self) -> JSONPathPaginator:
+        """Return a new paginator for this stream."""
+        return JSONPathPaginator(jsonpath=self.next_page_token_jsonpath)
 
     def get_url_params(
         self,
