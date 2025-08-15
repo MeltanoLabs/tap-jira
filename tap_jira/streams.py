@@ -1694,7 +1694,7 @@ class IssueStream(JiraStream):
         params["fields"] = (
             self.config.get("stream_options", {})
             .get("issues", {})
-            .get("fields", "*all")
+            .get("fields")
         )
         params["expand"] = "renderedFields"
 
