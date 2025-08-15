@@ -1694,7 +1694,6 @@ class IssueStream(JiraStream):
         params["fields"] = (
             self.config.get("stream_options", {}).get("issues", {}).get("fields")
         )
-        params["expand"] = "renderedFields"
 
         jql: list[str] = []
 
