@@ -8,6 +8,7 @@ import typing as t
 from http import HTTPStatus
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
+from singer_sdk.pagination import JSONPathPaginator
 
 from tap_jira.client import JiraStream
 
@@ -381,7 +382,7 @@ class ProjectStream(JiraStream):
 class IssueStream(JiraStream):
     """Issue stream.
 
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-jql-get
     """
 
     """
@@ -394,11 +395,12 @@ class IssueStream(JiraStream):
     """
 
     name = "issues"
-    path = "/search"
+    path = "/search/jql"
     primary_keys = ("id",)
     replication_key = "id"
     replication_method = "INCREMENTAL"
     records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
+    next_page_token_jsonpath = "$.nextPageToken"  # noqa: S105
     instance_name = "issues"
 
     __content_schema = ArrayType(
@@ -1661,6 +1663,10 @@ class IssueStream(JiraStream):
         Property("updated", StringType),
     ).to_dict()
 
+    def get_new_paginator(self) -> JSONPathPaginator:
+        """Return a new paginator for this stream."""
+        return JSONPathPaginator(jsonpath=self.next_page_token_jsonpath)
+
     def get_url_params(
         self,
         context: dict | None,  # noqa: ARG002
@@ -1670,15 +1676,14 @@ class IssueStream(JiraStream):
         params: dict = {}
 
         params["maxResults"] = self.config.get("page_size", {}).get("issues", 10)
+        params["fields"] = (
+            self.config.get("stream_options", {}).get("issues", {}).get("fields")
+        )
 
         jql: list[str] = []
 
         if next_page_token:
-            params["startAt"] = next_page_token
-
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
+            params["nextPageToken"] = next_page_token
 
         if "start_date" in self.config:
             start_date = self.config["start_date"]
@@ -1695,8 +1700,7 @@ class IssueStream(JiraStream):
         ):
             jql.append(f"({base_jql})")
 
-        if jql:
-            params["jql"] = " and ".join(jql)
+        params["jql"] = " and ".join(jql) + f" order by {self.replication_key} asc"
 
         return params
 
