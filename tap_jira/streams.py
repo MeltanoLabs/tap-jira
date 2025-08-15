@@ -1718,8 +1718,6 @@ class IssueStream(JiraStream):
         ):
             jql.append(f"({base_jql})")
 
-        if jql:
-            params["jql"] = " and ".join(jql)
         params["jql"] = " and ".join(jql) + f" order by {self.replication_key} asc"
 
         return params
