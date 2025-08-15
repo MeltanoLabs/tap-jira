@@ -381,7 +381,7 @@ class ProjectStream(JiraStream):
 class IssueStream(JiraStream):
     """Issue stream.
 
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-jql-get
     """
 
     """
@@ -394,7 +394,7 @@ class IssueStream(JiraStream):
     """
 
     name = "issues"
-    path = "/search"
+    path = "/search/jql"
     primary_keys = ("id",)
     replication_key = "id"
     replication_method = "INCREMENTAL"
@@ -1661,24 +1661,47 @@ class IssueStream(JiraStream):
         Property("updated", StringType),
     ).to_dict()
 
+    def get_next_page_token(
+        self,
+        response: requests.Response,
+        previous_token: t.Any | None,  # noqa: ANN401, ARG002
+    ) -> t.Any | None:  # noqa: ANN401
+        """Return a token for identifying next page or None if no more pages."""
+        resp_json = response.json()
+
+        if (
+            not isinstance(resp_json, dict)
+            or resp_json.get(self.instance_name, None) is None
+        ):
+            # Response body is not compatible with the expected structure
+            return None
+
+        if resp_json.get("isLast", False):
+            # Last page reached, no next page token available
+            return None
+
+        return resp_json.get("nextPageToken", None)
+
     def get_url_params(
         self,
-        context: dict | None,  # noqa: ARG002
+        context: dict | None,
         next_page_token: t.Any | None,  # noqa: ANN401
     ) -> dict[str, t.Any]:
         """Return a dictionary of query parameters."""
         params: dict = {}
 
         params["maxResults"] = self.config.get("page_size", {}).get("issues", 10)
+        params["fields"] = (
+            self.config.get("stream_options", {})
+            .get("issues", {})
+            .get("fields", "*all")
+        )
+        params["expand"] = "renderedFields"
 
         jql: list[str] = []
 
         if next_page_token:
-            params["startAt"] = next_page_token
-
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
+            params["nextPageToken"] = next_page_token
 
         if "start_date" in self.config:
             start_date = self.config["start_date"]
@@ -1697,6 +1720,7 @@ class IssueStream(JiraStream):
 
         if jql:
             params["jql"] = " and ".join(jql)
+        params["jql"] = " and ".join(jql) + f" order by {self.replication_key} asc"
 
         return params
 
