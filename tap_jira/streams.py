@@ -690,7 +690,7 @@ class IssueStream(JiraStream):
                         Property("isWatching", BooleanType),
                     ),
                 ),
-                Property("issuerestriction", StringType),
+                Property("issuerestriction", ObjectType(additional_properties=True)),
                 Property("lastViewed", StringType),
                 Property("created", StringType),
                 Property(
@@ -1495,10 +1495,10 @@ class IssueStream(JiraStream):
                         ),
                     ),
                 ),
-                Property("timetracking", StringType),
+                Property("timetracking", ObjectType(additional_properties=True)),
                 Property("security", StringType),
                 Property("aggregatetimeestimate", IntegerType),
-                Property("attachment", ArrayType(StringType)),
+                Property("attachment", ArrayType(ObjectType(additional_properties=True))),
                 Property("summary", StringType),
                 Property(
                     "creator",
@@ -1642,7 +1642,7 @@ class IssueStream(JiraStream):
                         Property("total", IntegerType),
                     ),
                 ),
-                Property("comment", StringType),
+                Property("comment", ObjectType(additional_properties=True)),
                 Property(
                     "votes",
                     ObjectType(
@@ -1651,7 +1651,7 @@ class IssueStream(JiraStream):
                         Property("hasVoted", BooleanType),
                     ),
                 ),
-                Property("worklog", StringType),
+                Property("worklog", ObjectType(additional_properties=True)),
                 Property("key", StringType),
                 Property("id", IntegerType),
                 Property("editmeta", StringType),
