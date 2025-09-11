@@ -23,19 +23,20 @@ Built with the [Meltano Singer SDK](https://sdk.meltano.com).
 
 ## Settings
 
-| Setting                   | Required | Default | Description                                                  |
-| :------------------------ | :------- | :------ | :----------------------------------------------------------- |
-| start_date                | False    | None    | Earliest record date to sync                                 |
-| end_date                  | False    | None    | Latest record date to sync                                   |
-| domain                    | True     | None    | The Domain for your Jira account, e.g. meltano.atlassian.net |
-| api_token                 | True     | None    | Jira API Token.                                              |
-| email                     | True     | None    | The user email for your Jira account.                        |
-| page_size                 | False    | None    |                                                              |
-| page_size.issues          | False    | 100     | Page size for issues stream                                  |
-| stream_options            | False    | None    | Options for individual streams                               |
-| stream_options.issues     | False    | None    | Options specific to the issues stream                        |
-| stream_options.issues.jql | False    | None    | A JQL query to filter issues                                 |
-| include_audit_logs        | False    | False   | Include the audit logs stream                                |
+| Setting                      | Required | Default    | Description                                                                      |
+|:-----------------------------|:---------|:-----------|:---------------------------------------------------------------------------------|
+| start_date                   | False    | None       | Earliest record date to sync                                                     |
+| end_date                     | False    | None       | Latest record date to sync                                                       |
+| domain                       | True     | None       | The Domain for your Jira account, e.g. meltano.atlassian.net                     |
+| api_token                    | True     | None       | Jira API Token.                                                                  |
+| email                        | True     | None       | The user email for your Jira account.                                            |
+| page_size                    | False    | None       |                                                                                  |
+| page_size.issues             | False    | 100        | Page size for issues stream                                                      |
+| stream_options               | False    | None       | Options for individual streams                                                   |
+| stream_options.issues        | False    | None       | Options specific to the issues stream                                            |
+| stream_options.issues.jql    | False    | id != null | A JQL query to filter issues                                                     |
+| stream_options.issues.fields | False    | *all       | A comma-separated list of fields to include. All fields are included by default. |
+| include_audit_logs           | False    | False      | Include the audit logs stream                                                    |
 
 ### Built-in capabilities
 
