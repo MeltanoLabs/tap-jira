@@ -66,6 +66,7 @@ class TapJira(Tap):
                             th.StringType,
                             description="A JQL query to filter issues",
                             title="JQL Query",
+                            default="id != null",
                         ),
                         th.Property(
                             "fields",
