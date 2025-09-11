@@ -1498,7 +1498,10 @@ class IssueStream(JiraStream):
                 Property("timetracking", ObjectType(additional_properties=True)),
                 Property("security", StringType),
                 Property("aggregatetimeestimate", IntegerType),
-                Property("attachment", ArrayType(ObjectType(additional_properties=True))),
+                Property(
+                    "attachment",
+                    ArrayType(ObjectType(additional_properties=True)),
+                ),
                 Property("summary", StringType),
                 Property(
                     "creator",
@@ -1677,7 +1680,9 @@ class IssueStream(JiraStream):
 
         params["maxResults"] = self.config.get("page_size", {}).get("issues", 10)
         params["fields"] = (
-            self.config.get("stream_options", {}).get("issues", {}).get("fields", "*all")
+            self.config.get("stream_options", {})
+            .get("issues", {})
+            .get("fields", "*all")
         )
 
         jql: list[str] = []
@@ -1693,9 +1698,10 @@ class IssueStream(JiraStream):
             end_date = self.config["end_date"]
             jql.append(f"(created<'{end_date}' or updated<'{end_date}')")
 
-        base_jql = ((self.config.get("stream_options", {})
-            .get("issues", {}))
-            .get("jql", "id != null"))
+        base_jql = (self.config.get("stream_options", {}).get("issues", {})).get(
+            "jql",
+            "id != null",
+        )
 
         jql.append(f"({base_jql})")
 
