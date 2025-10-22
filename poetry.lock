@@ -1588,18 +1588,18 @@ files = [
 
 [[package]]
 name = "singer-sdk"
-version = "0.51.0"
+version = "0.52.0"
 description = "A framework for building Singer taps and targets"
 optional = false
 python-versions = ">=3.10"
 groups = ["main", "dev"]
 files = [
-    {file = "singer_sdk-0.51.0-py3-none-any.whl", hash = "sha256:5066f854becb5b899f8d2cadb030871f4e2b36bebff11e78fea06603e203b22a"},
-    {file = "singer_sdk-0.51.0.tar.gz", hash = "sha256:25a3285d26837bfe399b0bb542621752d8e42ab1c395b4fb3ccd3de3d488f71a"},
+    {file = "singer_sdk-0.52.0-py3-none-any.whl", hash = "sha256:aa46569a13f781bca19623e718ea3b5a5776a33e030b4234281c4cd4c936cfc7"},
+    {file = "singer_sdk-0.52.0.tar.gz", hash = "sha256:dc5694ef219be66549c7b067bcea77717b613cf6af0ab48564a2d792c0402dab"},
 ]
 
 [package.dependencies]
-backoff = ">=2.0.0,<4"
+backoff = ">=2.2.0,<4"
 backports-datetime-fromisoformat = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
 click = ">=8.2,<9"
 fsspec = ">=2024.9.0"
@@ -2070,4 +2070,4 @@ s3 = ["s3fs"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4"
-content-hash = "252ec926100dc7163dfd83cf50bbf00e3df1b880539ba7993ebb5e7420f8df1d"
+content-hash = "db93fe89f4c800163211337968e72190f37cec00f1e942dfa731fe6a4f404fb6"
