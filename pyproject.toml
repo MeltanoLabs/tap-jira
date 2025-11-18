@@ -16,7 +16,7 @@ s3fs = { version = "==2025.10.0", optional = true }
 requests = "~=2.32.2"
 
 [tool.poetry.dependencies.singer-sdk]
-version = "~=0.52.0"
+version = "~=0.53.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8"
