@@ -2,10 +2,25 @@
 
 from __future__ import annotations
 
+import sys
+from typing import TYPE_CHECKING, Any
+
 from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
 from tap_jira import streams
+
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from singer_sdk.streams.rest import RESTStream
+
+    from tap_jira.client import JiraStream
 
 
 class TapJira(Tap):
@@ -90,13 +105,10 @@ class TapJira(Tap):
         ),
     ).to_dict()
 
-    def discover_streams(self) -> list[streams.JiraStream]:
-        """Return a list of discovered streams.
-
-        Returns:
-            A list of discovered streams.
-        """
-        stream_list = [
+    @override
+    def discover_streams(self) -> Sequence[RESTStream[Any]]:
+        """Return a list of discovered streams."""
+        stream_list: list[JiraStream[Any]] = [
             streams.UsersStream(self),
             streams.FieldStream(self),
             streams.ServerInfoStream(self),
