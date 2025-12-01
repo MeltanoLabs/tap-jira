@@ -1,39 +1,47 @@
-[tool.poetry]
+[project]
 name = "tap-jira"
 version = "0.0.1"
 description = "Singer tap for tap-jira, built with the Meltano Singer SDK."
 readme = "README.md"
-authors = ["Ethan Stein"]
+authors = [ { name = "Ethan Stein" } ]
+maintainers = [ { name = "MeltanoLabs", email = "hello@meltano.com" } ]
 keywords = [
     "ELT",
     "tap-jira",
 ]
 license = "Apache-2.0"
+requires-python = ">=3.10"
+dependencies = [
+    "requests~=2.32.2",
+    "typing-extensions~=4.15.0; python_version < '3.12'",
+    "singer-sdk~=0.53.0",
+]
+optional-dependencies.s3 = [
+    "s3fs==2025.10.0",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10"
-s3fs = { version = "==2025.10.0", optional = true }
-requests = "~=2.32.2"
+[dependency-groups]
+dev = [
+    "pytest>=9",
+    "mypy>=1.19.0",
+    "ruff>=0.14.7",
+    "singer-sdk[testing]",
+    "ty>=0.0.1a29",
+    "types-requests>=2.32.4",
+]
 
-[tool.poetry.dependencies.singer-sdk]
-version = "~=0.53.0"
-
-[tool.poetry.group.dev.dependencies]
-pytest = ">=8"
-
-[tool.poetry.group.dev.dependencies.singer-sdk]
-version = "*"
-extras = ["testing"]
-
-[tool.poetry.extras]
-s3 = ["s3fs"]
+[tool.poetry]
+requires-poetry = ">=2.2.0"
 
 [tool.mypy]
-python_version = "3.10"
+strict = true
+warn_redundant_casts = true
+warn_unreachable = true
 warn_unused_configs = true
+warn_unused_ignores = true
 
 [tool.ruff]
-target-version = "py310"
+line-length = 88
 
 [tool.ruff.lint]
 select = ["ALL"]

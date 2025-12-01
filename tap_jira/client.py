@@ -2,74 +2,64 @@
 
 from __future__ import annotations
 
-import typing as t
-from pathlib import Path
+import sys
+from typing import TYPE_CHECKING, Any, TypeVar
 
-import requests
 import requests.auth
 from singer_sdk.streams import RESTStream
 
-if t.TYPE_CHECKING:
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from requests import Response
     from singer_sdk.helpers.types import Context
 
-_Auth = t.Callable[[requests.PreparedRequest], requests.PreparedRequest]
-SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
+    _Auth = Callable[[requests.PreparedRequest], requests.PreparedRequest]
 
 
-class JiraStream(RESTStream):
+_TNextPageToken = TypeVar("_TNextPageToken")
+
+
+class JiraStream(RESTStream[_TNextPageToken]):
     """tap-jira stream class."""
 
     next_page_token_jsonpath = "$.paging.start"  # noqa: S105
     records_jsonpath = "$[*]"  # Or override `parse_response`.
     instance_name: str
 
+    @override
     @property
     def url_base(self) -> str:
         """Returns base url."""
         domain = self.config["domain"]
         return f"https://{domain}:443/rest/api/3"
 
+    @override
     @property
     def authenticator(self) -> _Auth:
-        """Return a new authenticator object.
-
-        Returns:
-            An authenticator instance.
-        """
+        """Stream authenticator."""
         return requests.auth.HTTPBasicAuth(
             password=self.config["api_token"],
             username=self.config["email"],
         )
 
-    @property
-    def http_headers(self) -> dict:
-        """Return the http headers needed.
 
-        Returns:
-            A dictionary of HTTP headers.
-        """
-        headers = {}
-        if "user_agent" in self.config:
-            headers["User-Agent"] = self.config.get("user_agent")
-        # If not using an authenticator, you may also provide inline auth headers:
-        # headers["Private-Token"] = self.config.get("auth_token")  # noqa: ERA001
-        return headers
+class JiraStartAtPaginatedStream(JiraStream[int]):
+    """Jira stream that uses the startAt pagination parameter."""
 
+    @override
     def get_url_params(
         self,
-        context: Context | None,  # noqa: ARG002
-        next_page_token: t.Any | None,  # noqa: ANN401
-    ) -> dict[str, t.Any]:
-        """Return a dictionary of values to be used in URL parameterization.
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
+        context: Context | None,
+        next_page_token: int | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization."""
+        params: dict[str, Any] = {}
         if next_page_token:
             params["startAt"] = next_page_token
         if self.replication_key:
@@ -80,9 +70,9 @@ class JiraStream(RESTStream):
 
     def get_next_page_token(
         self,
-        response: requests.Response,
-        previous_token: t.Any | None,  # noqa: ANN401
-    ) -> t.Any | None:  # noqa: ANN401
+        response: Response,
+        previous_token: int | None,
+    ) -> int | None:
         """Return a token for identifying next page or None if no more pages."""
         # If pagination is required, return a token which can be used to get the
         #       next page. If this is the final page, return "None" to end the
@@ -115,4 +105,5 @@ class JiraStream(RESTStream):
                 return None
         elif len(_value) == 0 or total <= previous_token + results:
             return None
+
         return previous_token + results
