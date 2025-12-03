@@ -8,7 +8,7 @@ updates:
   - package-ecosystem: pip
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: monthly
     commit-message:
       prefix: "chore(deps): "
       prefix-development: "chore(deps-dev): "
@@ -23,7 +23,7 @@ updates:
   - package-ecosystem: pip
     directory: "/.github/workflows"
     schedule:
-      interval: daily
+      interval: monthly
     commit-message:
       prefix: "ci: "
     groups:
@@ -33,7 +33,7 @@ updates:
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: monthly
     commit-message:
       prefix: "ci: "
     groups:
