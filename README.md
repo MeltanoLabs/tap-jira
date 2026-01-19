@@ -66,7 +66,7 @@ The licensor grants you a non-exclusive, royalty-free, worldwide, non-sublicensa
 ## Installation
 
 ```bash
-pipx install git+https://github.com/ryan-miranda-partners/tap-jira.git
+uv tool install git+https://github.com/ryan-miranda-partners/tap-jira.git
 ```
 
 ### Configure using environment variables
@@ -102,23 +102,22 @@ Follow these instructions to contribute to this project.
 ### Initialize your Development Environment
 
 ```bash
-pipx install poetry
-poetry install
+curl -LsSf https://astral.sh/uv/install.sh | sh  # see https://docs.astral.sh/uv/getting-started/installation/
+uv sync
 ```
 
 ### Create and Run Tests
 
-Create tests within the `tests` subfolder and
-  then run:
+Create tests within the `tests` subfolder and then run:
 
 ```bash
-poetry run pytest
+uv run pytest
 ```
 
-You can also test the `tap-jira` CLI interface directly using `poetry run`:
+You can also test the `tap-jira` CLI interface directly using `uv run`:
 
 ```bash
-poetry run tap-jira --help
+uv run tap-jira --help
 ```
 
 ### Testing with [Meltano](https://www.meltano.com)
@@ -133,7 +132,7 @@ Next, install Meltano (if you haven't already) and any needed plugins:
 
 ```bash
 # Install meltano
-pipx install meltano
+uv tool install meltano
 # Initialize meltano within this directory
 cd tap-jira
 meltano install
