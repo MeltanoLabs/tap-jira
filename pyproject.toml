@@ -2,23 +2,34 @@
 name = "tap-jira"
 version = "0.0.1"
 description = "Singer tap for tap-jira, built with the Meltano Singer SDK."
+authors = [{ name = "Ethan Stein" }]
+requires-python = ">=3.10"
 readme = "README.md"
-authors = [ { name = "Ethan Stein" } ]
-maintainers = [ { name = "MeltanoLabs", email = "hello@meltano.com" } ]
+license = "Apache-2.0"
+maintainers = [{ name = "MeltanoLabs", email = "hello@meltano.com" }]
 keywords = [
     "ELT",
     "tap-jira",
 ]
-license = "Apache-2.0"
-requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
 dependencies = [
     "requests~=2.32.2",
     "typing-extensions~=4.15.0; python_version < '3.12'",
     "singer-sdk~=0.53.0",
 ]
-optional-dependencies.s3 = [
-    "s3fs==2025.10.0",
-]
+
+[project.optional-dependencies]
+s3 = ["s3fs==2025.10.0"]
+
+[project.scripts]
+tap-jira = "tap_jira.tap:TapJira.cli"
 
 [dependency-groups]
 dev = [
@@ -30,8 +41,11 @@ dev = [
     "types-requests>=2.32.4",
 ]
 
-[tool.poetry]
-requires-poetry = ">=2.2.0"
+[build-system]
+requires = [
+    "hatchling==1.28",
+]
+build-backend = "hatchling.build"
 
 [tool.mypy]
 strict = true
@@ -54,11 +68,3 @@ known-first-party = ["tap_jira"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
-
-[build-system]
-requires = ["poetry-core>=1.0.8"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-# CLI declaration
-tap-jira = 'tap_jira.tap:TapJira.cli'
