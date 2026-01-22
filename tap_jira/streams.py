@@ -34,6 +34,7 @@ ArrayType = th.ArrayType
 BooleanType = th.BooleanType
 IntegerType = th.IntegerType
 NumberType = th.NumberType
+CustomType = th.CustomType
 
 
 ADFRootBlockNode = ObjectType(
@@ -714,7 +715,25 @@ class IssueStream(JiraStream[str]):
                 Property("labels", ArrayType(StringType)),  # ty: ignore[invalid-argument-type]
                 Property("timeestimate", IntegerType),
                 Property("aggregatetimeoriginalestimate", IntegerType),
-                Property("versions", ArrayType(StringType)),  # ty: ignore[invalid-argument-type]
+                Property(
+                    "versions",
+                    ArrayType(
+                        CustomType(
+                            {
+                                "type": ["object", "string", "null"],
+                                "properties": {
+                                    "self": {"type": ["string", "null"]},
+                                    "id": {"type": ["string", "null"]},
+                                    "description": {"type": ["string", "null"]},
+                                    "name": {"type": ["string", "null"]},
+                                    "archived": {"type": ["boolean", "null"]},
+                                    "released": {"type": ["boolean", "null"]},
+                                    "releaseDate": {"type": ["string", "null"]},
+                                },
+                            },
+                        ),
+                    ),
+                ),  # ty: ignore[invalid-argument-type]
                 Property(
                     "issuelinks",
                     ArrayType(
