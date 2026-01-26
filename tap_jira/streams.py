@@ -34,7 +34,6 @@ ArrayType = th.ArrayType
 BooleanType = th.BooleanType
 IntegerType = th.IntegerType
 NumberType = th.NumberType
-CustomType = th.CustomType
 
 
 ADFRootBlockNode = ObjectType(
