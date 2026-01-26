@@ -141,7 +141,7 @@ class FieldStream(JiraStartAtPaginatedStream):
         Property("orderable", BooleanType),
         Property("navigable", BooleanType),
         Property("searchable", BooleanType),
-        Property("clauseNames", ArrayType(StringType)),  # ty: ignore[invalid-argument-type]
+        Property("clauseNames", ArrayType(StringType)),
         Property(
             "scope",
             ObjectType(
@@ -200,7 +200,7 @@ class ServerInfoStream(JiraStartAtPaginatedStream):
     schema = PropertiesList(
         Property("baseUrl", StringType),
         Property("version", StringType),
-        Property("versionNumbers", ArrayType(IntegerType)),  # ty: ignore[invalid-argument-type]
+        Property("versionNumbers", ArrayType(IntegerType)),
         Property("deploymentType", StringType),
         Property("buildNumber", IntegerType),
         Property("buildDate", StringType),
@@ -426,7 +426,7 @@ class IssueStream(JiraStream[str]):
                     Property("timestamp", StringType),
                     Property(
                         "colwidth",
-                        ArrayType(IntegerType),  # ty: ignore[invalid-argument-type]
+                        ArrayType(IntegerType),
                     ),
                     Property("language", StringType),
                     Property("background", StringType),
@@ -479,7 +479,7 @@ class IssueStream(JiraStream[str]):
                                 ),
                                 Property(
                                     "colwidth",
-                                    ArrayType(IntegerType),  # ty: ignore[invalid-argument-type]
+                                    ArrayType(IntegerType),
                                 ),
                                 Property(
                                     "language",
@@ -711,7 +711,7 @@ class IssueStream(JiraStream[str]):
                         Property("id", StringType),
                     ),
                 ),
-                Property("labels", ArrayType(StringType)),  # ty: ignore[invalid-argument-type]
+                Property("labels", ArrayType(StringType)),
                 Property("timeestimate", IntegerType),
                 Property("aggregatetimeoriginalestimate", IntegerType),
                 Property(
@@ -727,7 +727,7 @@ class IssueStream(JiraStream[str]):
                             Property("releaseDate", StringType),
                         ),
                     ),
-                ),  # ty: ignore[invalid-argument-type]
+                ),
                 Property(
                     "issuelinks",
                     ArrayType(
@@ -961,7 +961,7 @@ class IssueStream(JiraStream[str]):
                                             Property("alt", StringType),
                                             Property(
                                                 "colwidth",
-                                                ArrayType(IntegerType),  # ty: ignore[invalid-argument-type]
+                                                ArrayType(IntegerType),
                                             ),
                                             Property("background", StringType),
                                             Property("color", StringType),
@@ -1011,7 +1011,7 @@ class IssueStream(JiraStream[str]):
                                                         ),
                                                         Property(
                                                             "colwidth",
-                                                            ArrayType(IntegerType),  # ty: ignore[invalid-argument-type]
+                                                            ArrayType(IntegerType),
                                                         ),
                                                         Property(
                                                             "background",
@@ -1080,7 +1080,7 @@ class IssueStream(JiraStream[str]):
                                                         ),
                                                         Property(
                                                             "colwidth",
-                                                            ArrayType(IntegerType),  # ty: ignore[invalid-argument-type]
+                                                            ArrayType(IntegerType),
                                                         ),
                                                         Property(
                                                             "language",
@@ -1157,7 +1157,7 @@ class IssueStream(JiraStream[str]):
                                                                     ),
                                                                     Property(
                                                                         "colwidth",
-                                                                        ArrayType(  # ty: ignore[invalid-argument-type]
+                                                                        ArrayType(
                                                                             IntegerType,
                                                                         ),
                                                                     ),
@@ -1291,7 +1291,7 @@ class IssueStream(JiraStream[str]):
                                                                                 ),
                                                                                 Property(
                                                                                     "colwidth",
-                                                                                    ArrayType(  # ty: ignore[invalid-argument-type]
+                                                                                    ArrayType(
                                                                                         IntegerType,
                                                                                     ),
                                                                                 ),
@@ -1406,7 +1406,7 @@ class IssueStream(JiraStream[str]):
                                                                                             ),
                                                                                             Property(
                                                                                                 "colwidth",
-                                                                                                ArrayType(  # ty: ignore[invalid-argument-type]
+                                                                                                ArrayType(
                                                                                                     IntegerType,
                                                                                                 ),
                                                                                             ),
@@ -1694,7 +1694,7 @@ class IssueStream(JiraStream[str]):
         return JSONPathPaginator(jsonpath=self.next_page_token_jsonpath)
 
     @override
-    def get_url_params(  # ty: ignore[invalid-method-override]
+    def get_url_params(
         self,
         context: Context | None,
         next_page_token: str | None,
@@ -2918,8 +2918,8 @@ class StatusesSearchStream(JiraStartAtPaginatedStream):
             ObjectType(Property("type", StringType)),
         ),
         Property("description", StringType),
-        Property("usages", ArrayType(StringType)),  # ty: ignore[invalid-argument-type]
-        Property("workflowUsages", ArrayType(StringType)),  # ty: ignore[invalid-argument-type]
+        Property("usages", ArrayType(StringType)),
+        Property("workflowUsages", ArrayType(StringType)),
     ).to_dict()
 
 
