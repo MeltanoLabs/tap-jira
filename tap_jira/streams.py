@@ -714,7 +714,20 @@ class IssueStream(JiraStream[str]):
                 Property("labels", ArrayType(StringType)),  # ty: ignore[invalid-argument-type]
                 Property("timeestimate", IntegerType),
                 Property("aggregatetimeoriginalestimate", IntegerType),
-                Property("versions", ArrayType(StringType)),  # ty: ignore[invalid-argument-type]
+                Property(
+                    "versions",
+                    ArrayType(
+                        ObjectType(
+                            Property("self", StringType),
+                            Property("id", StringType),
+                            Property("description", StringType),
+                            Property("name", StringType),
+                            Property("archived", BooleanType),
+                            Property("released", BooleanType),
+                            Property("releaseDate", StringType),
+                        ),
+                    ),
+                ),  # ty: ignore[invalid-argument-type]
                 Property(
                     "issuelinks",
                     ArrayType(
