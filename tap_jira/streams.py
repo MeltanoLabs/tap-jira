@@ -718,19 +718,14 @@ class IssueStream(JiraStream[str]):
                 Property(
                     "versions",
                     ArrayType(
-                        CustomType(
-                            {
-                                "type": ["object", "string", "null"],
-                                "properties": {
-                                    "self": {"type": ["string", "null"]},
-                                    "id": {"type": ["string", "null"]},
-                                    "description": {"type": ["string", "null"]},
-                                    "name": {"type": ["string", "null"]},
-                                    "archived": {"type": ["boolean", "null"]},
-                                    "released": {"type": ["boolean", "null"]},
-                                    "releaseDate": {"type": ["string", "null"]},
-                                },
-                            },
+                        ObjectType(
+                            Property("self", StringType),
+                            Property("id", StringType),
+                            Property("description", StringType),
+                            Property("name", StringType),
+                            Property("archived", BooleanType),
+                            Property("released", BooleanType),
+                            Property("releaseDate", StringType),
                         ),
                     ),
                 ),  # ty: ignore[invalid-argument-type]
