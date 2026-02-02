@@ -107,3 +107,98 @@ class JiraStartAtPaginatedStream(JiraStream[int]):
             return None
 
         return previous_token + results
+
+class JiraServiceManagementStream(RESTStream[_TNextPageToken]):
+    """Base stream class for Jira Service Management (JSM) API endpoints.
+
+    This class provides the foundation for all streams that interact with the
+    Jira Service Management REST API (servicedeskapi), which is separate from
+    the standard Jira REST API (api/3).
+
+    Key differences from JiraStream:
+        - Uses `/rest/servicedeskapi` as the base URL instead of `/rest/api/3`
+        - Handles 403 responses gracefully by logging a warning and skipping
+          the resource, rather than raising an exception
+
+    Attributes:
+        next_page_token_jsonpath: JSONPath to extract pagination token from response.
+        records_jsonpath: JSONPath to extract records from response.
+    """
+
+    next_page_token_jsonpath = "$.paging.start"  # noqa: S105
+    records_jsonpath = "$[*]"  # Or override `parse_response`.
+
+    @override
+    @property
+    def url_base(self) -> str:
+        """Returns base url."""
+        domain = self.config["domain"]
+        return f"https://{domain}:443/rest/servicedeskapi"
+
+    @override
+    @property
+    def authenticator(self) -> _Auth:
+        """Stream authenticator."""
+        return requests.auth.HTTPBasicAuth(
+            password=self.config["api_token"],
+            username=self.config["email"],
+        )
+
+    @override                                                                                                                                                
+    def validate_response(self, response: requests.Response) -> None:                                                                                        
+        """Validate HTTP response, allowing 403 to be skipped."""                                                                                            
+        if response.status_code == 403:                                                                                                                      
+            self.logger.warning(                                                                                                                             
+                f"Access denied (403) for {response.url}. Skipping."                                                                                         
+            )                                                                                                                                                
+            return  # Don't raise, just skip this resource                                                                                                   
+        super().validate_response(response)                                                                                                                  
+
+class JiraServiceManagementPaginatedStream(JiraServiceManagementStream[int]):
+    """Paginated stream class for Jira Service Management API endpoints.
+
+    Extends JiraServiceManagementStream with pagination support using the
+    `start` parameter. The JSM API uses offset-based pagination where:
+        - `start`: The starting index of the returned objects (0-based)
+        - `size`: The number of items returned per page
+        - `isLastPage`: Boolean indicating if this is the final page
+
+    Pagination continues until `isLastPage` is True, incrementing the start
+    offset by the page size for each subsequent request.
+    """
+
+    @override
+    def get_url_params(
+        self,
+        context: Context | None,
+        next_page_token: int | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization."""
+        params: dict[str, Any] = {}
+        if next_page_token:
+            params["start"] = next_page_token
+
+        return params
+
+    def get_next_page_token(
+        self,
+        response: Response,
+        previous_token: int | None,
+    ) -> int | None:
+        """Return a token for identifying next page or None if no more pages."""
+        # If pagination is required, return a token which can be used to get the
+        #       next page. If this is the final page, return "None" to end the
+        #       pagination loop.
+        resp_json = response.json()
+
+        if previous_token is None:
+            previous_token = 0
+
+        start = resp_json.get("start")
+        size = resp_json.get("size")
+        is_last = resp_json.get("isLastPage")
+
+        if is_last != True and isinstance(start, int) and isinstance(size, int):
+            return start + size
+
+        return None

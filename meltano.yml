@@ -39,6 +39,14 @@ plugins:
     - name: stream_options.issues.jql
       kind: string
       description: A JQL query to filter issues
+    - name: include_platform
+      kind: boolean
+      value: true
+      description: Enable Platform Jira Streams
+    - name: include_service_desk
+      kind: boolean
+      value: false
+      description: Enable JSM Streams
 environments:
 - name: dev
 - name: staging

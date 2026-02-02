@@ -9,6 +9,7 @@ from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
 from tap_jira import streams
+from tap_jira import jsm_streams
 
 if sys.version_info >= (3, 12):
     from typing import override
@@ -71,6 +72,18 @@ class TapJira(Tap):
             ),
         ),
         th.Property(
+            "include_service_desk",
+            th.BooleanType,
+            description="Enable JSM Streams",
+            default=False
+        ),
+        th.Property(
+            "include_platform",
+            th.BooleanType,
+            description="Enable Platform Jira Streams",
+            default=True
+        ),
+        th.Property(
             "stream_options",
             th.ObjectType(
                 th.Property(
@@ -94,6 +107,20 @@ class TapJira(Tap):
                     title="Issues Stream Options",
                     description="Options specific to the issues stream",
                 ),
+                th.Property(
+                    "knowledgebase",
+                    th.ObjectType(
+                        th.Property(
+                            "query",
+                            th.StringType,
+                            description="Search query for knowledgebase articles",
+                            title="Query",
+                            default="*",
+                        ),
+                    ),
+                    title="Knowledgebase Stream Options",
+                    description="Options specific to the knowledgebase stream",
+                ),
             ),
             description="Options for individual streams",
         ),
@@ -108,37 +135,60 @@ class TapJira(Tap):
     @override
     def discover_streams(self) -> Sequence[RESTStream[Any]]:
         """Return a list of discovered streams."""
-        stream_list: list[JiraStream[Any]] = [
-            streams.UsersStream(self),
-            streams.FieldStream(self),
-            streams.ServerInfoStream(self),
-            streams.IssueTypeStream(self),
-            streams.ProjectStream(self),
-            streams.WorkflowStatusStream(self),
-            streams.IssueStream(self),
-            streams.PermissionStream(self),
-            streams.ProjectRoleStream(self),
-            streams.PriorityStream(self),
-            streams.PermissionHolderStream(self),
-            streams.SprintStream(self),
-            streams.ProjectRoleActorStream(self),
-            streams.DashboardStream(self),
-            streams.FilterSearchStream(self),
-            streams.FilterDefaultShareScopeStream(self),
-            streams.GroupsPickerStream(self),
-            streams.LicenseStream(self),
-            streams.ScreensStream(self),
-            streams.ScreenSchemesStream(self),
-            streams.StatusesSearchStream(self),
-            streams.WorkflowStream(self),
-            streams.WorkflowSearchStream(self),
-            streams.Resolutions(self),
-            streams.IssueChangeLogStream(self),
-            streams.IssueComments(self),
-            streams.BoardStream(self),
-            streams.IssueWatchersStream(self),
-            streams.IssueWorklogs(self),
-        ]
+        stream_list: list[RESTStream[Any]] = []
+
+        if self.config.get("include_platform", False):
+            stream_list.extend([
+                streams.UsersStream(self),
+                streams.FieldStream(self),
+                streams.ServerInfoStream(self),
+                streams.IssueTypeStream(self),
+                streams.ProjectStream(self),
+                streams.WorkflowStatusStream(self),
+                streams.IssueStream(self),
+                streams.PermissionStream(self),
+                streams.ProjectRoleStream(self),
+                streams.PriorityStream(self),
+                streams.PermissionHolderStream(self),
+                streams.SprintStream(self),
+                streams.ProjectRoleActorStream(self),
+                streams.DashboardStream(self),
+                streams.FilterSearchStream(self),
+                streams.FilterDefaultShareScopeStream(self),
+                streams.GroupsPickerStream(self),
+                streams.LicenseStream(self),
+                streams.ScreensStream(self),
+                streams.ScreenSchemesStream(self),
+                streams.StatusesSearchStream(self),
+                streams.WorkflowStream(self),
+                streams.WorkflowSearchStream(self),
+                streams.Resolutions(self),
+                streams.IssueChangeLogStream(self),
+                streams.IssueComments(self),
+                streams.BoardStream(self),
+                streams.IssueWatchersStream(self),
+                streams.IssueWorklogs(self),
+            ])
+
+        if self.config.get("include_service_desk", False):
+            # Include Service Desk streams here
+            stream_list.extend([
+                jsm_streams.OrganizationStream(self),
+                jsm_streams.ServiceDeskStream(self),
+                jsm_streams.ServiceDeskCustomerStream(self),
+                jsm_streams.ServiceDeskQueuesStream(self),
+                jsm_streams.ServiceDeskRequestTypeStream(self),
+                jsm_streams.ServiceDeskRequestTypeFieldStream(self),
+                jsm_streams.ServiceDeskRequestTypeGroupStream(self),
+                jsm_streams.ServiceDeskKnowledgebaseArticleStream(self),
+                jsm_streams.RequestStream(self),
+                jsm_streams.RequestApprovalStream(self),
+                jsm_streams.RequestAttachmentStream(self),
+                jsm_streams.RequestCommentStream(self),
+                jsm_streams.RequestParticipantStream(self),
+                jsm_streams.RequestSlaStream(self),
+                jsm_streams.RequestStatusStream(self),
+            ])
 
         if self.config.get("include_audit_logs", False):
             stream_list.append(streams.AuditingStream(self))
