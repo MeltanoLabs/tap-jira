@@ -41,9 +41,7 @@ plugins:
       description: A JQL query to filter issues
 environments:
 - name: dev
-- name: development
-- name: sandbox
-- name: uat
-- name: production
+- name: staging
+- name: prod
 venv:
   backend: uv
