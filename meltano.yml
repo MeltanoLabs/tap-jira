@@ -49,7 +49,9 @@ plugins:
       description: Enable JSM Streams
 environments:
 - name: dev
-- name: staging
-- name: prod
+- name: development
+- name: sandbox
+- name: uat
+- name: production
 venv:
   backend: uv
