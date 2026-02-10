@@ -70,7 +70,7 @@ class UsersStream(JiraStartAtPaginatedStream):
     schema = PropertiesList(
         Property("self", StringType),
         Property("key", StringType),
-        Property("accountId", StringType),
+        Property("accountId", StringType, required=True),
         Property("accountType", StringType),
         Property("emailAddress", StringType),
         Property("name", StringType),
@@ -133,7 +133,7 @@ class FieldStream(JiraStartAtPaginatedStream):
     instance_name = ""
 
     schema = PropertiesList(
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("key", StringType),
         Property("name", StringType),
         Property("untranslatedName", StringType),
@@ -198,7 +198,7 @@ class ServerInfoStream(JiraStartAtPaginatedStream):
     instance_name = ""
 
     schema = PropertiesList(
-        Property("baseUrl", StringType),
+        Property("baseUrl", StringType, required=True),
         Property("version", StringType),
         Property("versionNumbers", ArrayType(IntegerType)),
         Property("deploymentType", StringType),
@@ -241,7 +241,7 @@ class IssueTypeStream(JiraStartAtPaginatedStream):
 
     schema = PropertiesList(
         Property("self", StringType),
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("description", StringType),
         Property("iconUrl", StringType),
         Property("name", StringType),
@@ -293,7 +293,7 @@ class WorkflowStatusStream(JiraStartAtPaginatedStream):
         Property("iconUrl", StringType),
         Property("name", StringType),
         Property("untranslatedName", StringType),
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property(
             "statusCategory",
             ObjectType(
@@ -345,7 +345,7 @@ class ProjectStream(JiraStartAtPaginatedStream):
     schema = PropertiesList(
         Property("expand", StringType),
         Property("self", StringType),
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("key", StringType),
         Property("name", StringType),
         Property(
@@ -568,7 +568,7 @@ class IssueStream(JiraStream[str]):
 
     schema = PropertiesList(
         Property("expand", StringType),
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("self", StringType),
         Property("key", StringType),
         Property(
@@ -2194,7 +2194,7 @@ class ProjectRoleStream(JiraStartAtPaginatedStream):
     schema = PropertiesList(
         Property("self", StringType),
         Property("name", StringType),
-        Property("id", IntegerType),
+        Property("id", IntegerType, required=True),
         Property("description", StringType),
         Property(
             "scope",
@@ -2263,7 +2263,7 @@ class PriorityStream(JiraStartAtPaginatedStream):
         Property("description", StringType),
         Property("iconUrl", StringType),
         Property("name", StringType),
-        Property("id", StringType),
+        Property("id", StringType, required=True),
     ).to_dict()
 
 
@@ -2292,7 +2292,7 @@ class PermissionHolderStream(JiraStartAtPaginatedStream):
 
     schema = PropertiesList(
         Property("expand", StringType),
-        Property("id", IntegerType),
+        Property("id", IntegerType, required=True),
         Property("self", StringType),
         Property("name", StringType),
         Property(
@@ -2354,7 +2354,7 @@ class BoardStream(JiraStartAtPaginatedStream):
     instance_name = "values"
 
     schema = PropertiesList(
-        Property("id", IntegerType),
+        Property("id", IntegerType, required=True),
         Property("self", StringType),
         Property("name", StringType),
         Property("type", StringType),
@@ -2410,7 +2410,7 @@ class SprintStream(JiraStartAtPaginatedStream):
     instance_name = "values"
 
     schema = PropertiesList(
-        Property("id", IntegerType),
+        Property("id", IntegerType, required=True),
         Property("self", StringType),
         Property("state", StringType),
         Property("name", StringType),
@@ -2490,7 +2490,7 @@ class ProjectRoleActorStream(JiraStartAtPaginatedStream):
     schema = PropertiesList(
         Property("self", StringType),
         Property("name", StringType),
-        Property("id", IntegerType),
+        Property("id", IntegerType, required=True),
         Property("description", StringType),
         Property(
             "actors",
@@ -2592,7 +2592,7 @@ class AuditingStream(JiraStartAtPaginatedStream):
     instance_name = "records"
 
     schema = PropertiesList(
-        Property("id", IntegerType),
+        Property("id", IntegerType, required=True),
         Property("summary", StringType),
         Property("created", StringType),
         Property("category", StringType),
@@ -2657,7 +2657,7 @@ class DashboardStream(JiraStartAtPaginatedStream):
     instance_name = "dashboards"
 
     schema = PropertiesList(
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("isFavourite", BooleanType),
         Property("name", StringType),
         Property("popularity", IntegerType),
@@ -2707,7 +2707,7 @@ class FilterSearchStream(JiraStartAtPaginatedStream):
     schema = PropertiesList(
         Property("expand", StringType),
         Property("self", StringType),
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("name", StringType),
     ).to_dict()
 
@@ -2734,7 +2734,7 @@ class FilterDefaultShareScopeStream(JiraStartAtPaginatedStream):
     instance_name = ""
 
     schema = PropertiesList(
-        Property("scope", StringType),
+        Property("scope", StringType, required=True),
     ).to_dict()
 
 
@@ -2774,7 +2774,7 @@ class GroupsPickerStream(JiraStartAtPaginatedStream):
                 ),
             ),
         ),
-        Property("groupId", StringType),
+        Property("groupId", StringType, required=True),
     ).to_dict()
 
 
@@ -2802,7 +2802,7 @@ class LicenseStream(JiraStartAtPaginatedStream):
     instance_name = "applications"
 
     schema = PropertiesList(
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("plan", StringType),
     ).to_dict()
 
@@ -2831,7 +2831,7 @@ class ScreensStream(JiraStartAtPaginatedStream):
     instance_name = "values"
 
     schema = PropertiesList(
-        Property("id", IntegerType),
+        Property("id", IntegerType, required=True),
         Property("name", StringType),
         Property("description", StringType),
         Property(
@@ -2873,7 +2873,7 @@ class ScreenSchemesStream(JiraStartAtPaginatedStream):
     instance_name = "values"
 
     schema = PropertiesList(
-        Property("id", IntegerType),
+        Property("id", IntegerType, required=True),
         Property("name", StringType),
         Property("description", StringType),
         Property(
@@ -2910,7 +2910,7 @@ class StatusesSearchStream(JiraStartAtPaginatedStream):
     instance_name = "values"
 
     schema = PropertiesList(
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("name", StringType),
         Property("statusCategory", StringType),
         Property(
@@ -2945,7 +2945,7 @@ class WorkflowStream(JiraStartAtPaginatedStream):
     instance_name = ""
 
     schema = PropertiesList(
-        Property("name", StringType),
+        Property("name", StringType, required=True),
         Property("description", StringType),
         Property("steps", IntegerType),
         Property("default", BooleanType),
@@ -2993,7 +2993,7 @@ class Resolutions(JiraStartAtPaginatedStream):
     instance_name = "values"
 
     schema = PropertiesList(
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("description", StringType),
         Property("name", StringType),
         Property("isDefault", BooleanType),
@@ -3024,8 +3024,8 @@ class WorkflowSearchStream(JiraStartAtPaginatedStream):
     instance_name = "values"
 
     schema = PropertiesList(
-        Property("name", StringType),
-        Property("entityId", StringType),
+        Property("name", StringType, required=True),
+        Property("entityId", StringType, required=True),
         Property("description", StringType),
         Property("created", StringType),
         Property("updated", StringType),
@@ -3069,7 +3069,7 @@ class IssueWatchersStream(JiraStartAtPaginatedStream):
     instance_name = ""
 
     schema = PropertiesList(
-        Property("accountId", StringType),
+        Property("accountId", StringType, required=True),
         Property("accountType", StringType),
         Property("active", BooleanType),
         Property("displayName", StringType),
@@ -3118,7 +3118,7 @@ class IssueChangeLogStream(JiraStartAtPaginatedStream):
     next_page_token_jsonpath = None  # type: ignore[assignment]
 
     schema = PropertiesList(
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("issueId", StringType),
         Property("author", ObjectType(Property("accountId", StringType))),
         Property("created", DateTimeType),
@@ -3178,7 +3178,7 @@ class IssueComments(JiraStartAtPaginatedStream):
     next_page_token_jsonpath = None  # type: ignore[assignment]
 
     schema = PropertiesList(
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("issueId", StringType),
         Property("self", StringType),
         Property(
@@ -3244,7 +3244,7 @@ class IssueWorklogs(JiraStartAtPaginatedStream):
     next_page_token_jsonpath = None  # type: ignore[assignment]
 
     schema = PropertiesList(
-        Property("id", StringType),
+        Property("id", StringType, required=True),
         Property("self", StringType),
         Property(
             "author",
