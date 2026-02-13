@@ -1,6 +1,6 @@
 [project]
 name = "tap-jira"
-version = "0.0.1"
+dynamic = ["version"]
 description = "Singer tap for tap-jira, built with the Meltano Singer SDK."
 authors = [{ name = "Ethan Stein" }]
 requires-python = ">=3.10"
@@ -44,8 +44,13 @@ dev = [
 [build-system]
 requires = [
     "hatchling>=1.28,<2",
+    "hatch-vcs>=0.5.0",
 ]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+fallback-version = "0.0.0.dev0"
+source = "vcs"
 
 [tool.mypy]
 strict = true
