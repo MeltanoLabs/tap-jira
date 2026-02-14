@@ -60,6 +60,12 @@ class TapJira(Tap):
             required=True,
         ),
         th.Property(
+            "cloud_id",
+            th.StringType,
+            description="The Cloud ID for your Jira account. Optional - if provided, uses cloud-based API URLs instead of domain-based URLs.",
+            required=False,
+        ),
+        th.Property(
             "page_size",
             th.ObjectType(
                 th.Property(

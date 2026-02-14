@@ -27,9 +27,10 @@ Built with the [Meltano Singer SDK](https://sdk.meltano.com).
 |:-----------------------------|:---------|:-----------|:---------------------------------------------------------------------------------|
 | start_date                   | False    | None       | Earliest record date to sync                                                     |
 | end_date                     | False    | None       | Latest record date to sync                                                       |
-| domain                       | True     | None       | The Domain for your Jira account, e.g. meltano.atlassian.net                     |
+| domain                       | True     | None       | The Domain for your Jira account, e.g. mycompany.atlassian.net                     |
 | api_token                    | True     | None       | Jira API Token.                                                                  |
 | email                        | True     | None       | The user email for your Jira account.                                            |
+| cloud_id                     | False    | None       | The Cloud ID for your Jira account. Optional - use with granular access tokens and OAuth to access Atlassian's cloud-based API URLs.        |
 | page_size                    | False    | None       |                                                                                  |
 | page_size.issues             | False    | 100        | Page size for issues stream                                                      |
 | stream_options               | False    | None       | Options for individual streams                                                   |
@@ -77,7 +78,59 @@ environment variable is set either in the terminal context or in the `.env` file
 
 ### Source Authentication and Authorization
 
-A Jira username and password are required to make API requests. (See [Jira API](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/) docs for more info)
+tap-jira uses **Basic Authentication** with Jira API tokens. All requests require your domain, email, and API token credentials.
+
+#### Basic Authentication (API Token)
+
+**Required Configuration:**
+- `domain`: Your Atlassian domain (e.g., `mycompany.atlassian.net`)
+- `email`: Your Atlassian account email
+- `api_token`: A Jira API token (see [Atlassian API Tokens](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/))
+
+**Standard Configuration Example:**
+```json
+{
+  "domain": "mycompany.atlassian.net",
+  "email": "user@example.com",
+  "api_token": "your_api_token_here"
+}
+```
+
+#### Cloud ID (Optional)
+
+For OAuth2.0 or granular access tokens, you need to use Atlassian's cloud-based API URLs instead of your domain. When provided, `cloud_id` changes the API URL structure from `https://{domain}/rest/api/3` to `https://api.atlassian.com/ex/jira/{cloud_id}/rest/api/3`. Authentication still uses your Basic Auth credentials.
+
+**Configuration with Cloud ID:**
+```json
+{
+  "domain": "mycompany.atlassian.net",
+  "email": "user@example.com",
+  "api_token": "your_api_token_here",
+  "cloud_id": "11223344-a1b2-3b33-c444-def123456789"
+}
+```
+
+**When to use cloud_id:**
+- Required when using OAuth-based or granular access token-based Atlassian integrations that require the scoped API
+- Specified by your Atlassian administrator or integration documentation
+- See [Atlassian Community Discussion](https://community.atlassian.com/t5/Jira-questions/Scoped-API-quot-Client-must-be-authenticated-to-access-this/qaq-p/3043426) for more context
+
+**How to find your Cloud ID:**
+
+With a granular access token, you can find your cloud ID using the Atlassian tenant info endpoint:
+
+```bash
+# Get your accessible resources
+curl -u "your-email@example.com:your-api-token" \
+  https://mycompany.atlassian.net/_edge/tenant_info
+```
+
+The response will include your cloud ID:
+```json
+  {"cloudId": "11223344-a1b2-3b33-c444-def123456789"}
+```
+
+Use the `cloudId` field as your `cloud_id` configuration value.
 
 ## Usage
 
