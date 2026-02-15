@@ -19,7 +19,7 @@ class TestCloudIdURLConstruction:
                 "email": "test@example.com",
                 "api_token": "test-token",
                 "cloud_id": "test-cloud-id",
-            }
+            },
         )
         stream = IssueStream(tap)
         expected_url = "https://api.atlassian.com/ex/jira/test-cloud-id/rest/api/3"
@@ -32,7 +32,7 @@ class TestCloudIdURLConstruction:
                 "domain": "test.atlassian.net",
                 "email": "test@example.com",
                 "api_token": "test-token",
-            }
+            },
         )
         stream = IssueStream(tap)
         expected_url = "https://test.atlassian.net/rest/api/3"
@@ -45,7 +45,7 @@ class TestCloudIdURLConstruction:
                 "domain": "test.atlassian.net",
                 "email": "test@example.com",
                 "api_token": "test-token",
-            }
+            },
         )
         stream = IssueStream(tap)
         assert ":443" not in stream.url_base
@@ -58,7 +58,7 @@ class TestCloudIdURLConstruction:
                 "email": "test@example.com",
                 "api_token": "test-token",
                 "cloud_id": "test-cloud-id",
-            }
+            },
         )
         board_stream = BoardStream(tap)
         sprint_stream = SprintStream(tap)
@@ -74,7 +74,7 @@ class TestCloudIdURLConstruction:
                 "domain": "test.atlassian.net",
                 "email": "test@example.com",
                 "api_token": "test-token",
-            }
+            },
         )
         board_stream = BoardStream(tap)
         sprint_stream = SprintStream(tap)
@@ -90,7 +90,7 @@ class TestCloudIdURLConstruction:
                 "domain": "test.atlassian.net",
                 "email": "test@example.com",
                 "api_token": "test-token",
-            }
+            },
         )
         board_stream = BoardStream(tap)
         assert ":443" not in board_stream.url_base
@@ -106,7 +106,7 @@ class TestBasicAuthentication:
                 "domain": "test.atlassian.net",
                 "email": "test@example.com",
                 "api_token": "test-token",
-            }
+            },
         )
         stream = IssueStream(tap)
         authenticator = stream.authenticator
@@ -123,7 +123,7 @@ class TestBasicAuthentication:
                 "email": "test@example.com",
                 "api_token": "test-token",
                 "cloud_id": "test-cloud-id",
-            }
+            },
         )
         stream = IssueStream(tap)
         authenticator = stream.authenticator
