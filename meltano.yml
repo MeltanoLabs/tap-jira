@@ -32,6 +32,9 @@ plugins:
     - name: email
       kind: string
       description: The user email for your Jira account
+    - name: cloud_id
+      kind: string
+      description: The Cloud ID for your Jira account (optional - uses cloud-based API URLs)
     - name: page_size.issues
       kind: integer
       value: 100

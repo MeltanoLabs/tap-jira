@@ -2375,8 +2375,11 @@ class BoardStream(JiraStartAtPaginatedStream):
     @property
     def url_base(self) -> str:
         """Return the base URL for the API requests."""
+        cloud_id = self.config.get("cloud_id")
+        if cloud_id:
+            return f"https://api.atlassian.com/ex/jira/{cloud_id}/rest/agile/1.0"
         domain = self.config["domain"]
-        return f"https://{domain}:443/rest/agile/1.0"
+        return f"https://{domain}/rest/agile/1.0"
 
     @override
     def get_child_context(self, record: Record, context: Context | None) -> Context:
@@ -2426,8 +2429,11 @@ class SprintStream(JiraStartAtPaginatedStream):
     @property
     def url_base(self) -> str:
         """Return the base URL for the API requests."""
+        cloud_id = self.config.get("cloud_id")
+        if cloud_id:
+            return f"https://api.atlassian.com/ex/jira/{cloud_id}/rest/agile/1.0"
         domain = self.config["domain"]
-        return f"https://{domain}:443/rest/agile/1.0"
+        return f"https://{domain}/rest/agile/1.0"
 
     @override
     def post_process(

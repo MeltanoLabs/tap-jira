@@ -36,8 +36,11 @@ class JiraStream(RESTStream[_TNextPageToken]):
     @property
     def url_base(self) -> str:
         """Returns base url."""
+        cloud_id = self.config.get("cloud_id")
+        if cloud_id:
+            return f"https://api.atlassian.com/ex/jira/{cloud_id}/rest/api/3"
         domain = self.config["domain"]
-        return f"https://{domain}:443/rest/api/3"
+        return f"https://{domain}/rest/api/3"
 
     @override
     @property

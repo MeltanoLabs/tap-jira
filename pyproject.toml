@@ -22,7 +22,7 @@ classifiers = [
 dependencies = [
     "requests~=2.32.2",
     "typing-extensions~=4.15.0; python_version < '3.12'",
-    "singer-sdk~=0.53.0",
+    "singer-sdk~=0.53.5",
 ]
 
 [project.optional-dependencies]
@@ -43,7 +43,7 @@ dev = [
 
 [build-system]
 requires = [
-    "hatchling>=1.28,<2",
+    "hatchling>=1,<2",
     "hatch-vcs>=0.5.0",
 ]
 build-backend = "hatchling.build"
@@ -73,3 +73,6 @@ known-first-party = ["tap_jira"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S105"]  # Allow asserts and hardcoded passwords in tests
