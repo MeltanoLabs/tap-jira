@@ -23,6 +23,7 @@ dependencies = [
     "requests~=2.32.2",
     "typing-extensions~=4.15.0; python_version < '3.12'",
     "singer-sdk~=0.53.5",
+    "backports-datetime-fromisoformat>=2.0.3; python_version < '3.11'",
 ]
 
 [project.optional-dependencies]
