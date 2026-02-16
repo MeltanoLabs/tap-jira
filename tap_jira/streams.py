@@ -5,6 +5,7 @@ from __future__ import annotations
 import functools
 import operator
 import sys
+from datetime import datetime
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any
 
@@ -1715,11 +1716,15 @@ class IssueStream(JiraStream[str]):
             params["nextPageToken"] = next_page_token
 
         if "start_date" in self.config:
-            start_date = self.config["start_date"]
+            start_date = datetime.fromisoformat(self.config["start_date"])
+            start_date = start_date.strftime(r"%Y-%m-%d %H:%M")
+
             jql.append(f"(created>='{start_date}' or updated>='{start_date}')")
 
         if "end_date" in self.config:
-            end_date = self.config["end_date"]
+            end_date = datetime.fromisoformat(self.config["end_date"])
+            end_date = end_date.strftime(r"%Y-%m-%d %H:%M")
+
             jql.append(f"(created<'{end_date}' or updated<'{end_date}')")
 
         base_jql = (self.config.get("stream_options", {}).get("issues", {})).get(
