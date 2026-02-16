@@ -1717,15 +1717,15 @@ class IssueStream(JiraStream[str]):
 
         if "start_date" in self.config:
             start_date = datetime.fromisoformat(self.config["start_date"])
-            start_date = start_date.strftime(r"%Y-%m-%d %H:%M")
+            start_date_fmt = start_date.strftime(r"%Y-%m-%d %H:%M")
 
-            jql.append(f"(created>='{start_date}' or updated>='{start_date}')")
+            jql.append(f"(created>='{start_date_fmt}' or updated>='{start_date_fmt}')")
 
         if "end_date" in self.config:
             end_date = datetime.fromisoformat(self.config["end_date"])
-            end_date = end_date.strftime(r"%Y-%m-%d %H:%M")
+            end_date_fmt = end_date.strftime(r"%Y-%m-%d %H:%M")
 
-            jql.append(f"(created<'{end_date}' or updated<'{end_date}')")
+            jql.append(f"(created<'{end_date_fmt}' or updated<'{end_date_fmt}')")
 
         base_jql = (self.config.get("stream_options", {}).get("issues", {})).get(
             "jql",
