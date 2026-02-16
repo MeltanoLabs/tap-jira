@@ -1571,6 +1571,7 @@ wheels = [
 name = "tap-jira"
 source = { editable = "." }
 dependencies = [
+    { name = "backports-datetime-fromisoformat", marker = "python_full_version < '3.11'" },
     { name = "requests" },
     { name = "singer-sdk" },
     { name = "typing-extensions", marker = "python_full_version < '3.12'" },
@@ -1593,6 +1594,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "backports-datetime-fromisoformat", marker = "python_full_version < '3.11'", specifier = ">=2.0.3" },
     { name = "requests", specifier = "~=2.32.2" },
     { name = "s3fs", marker = "extra == 's3'", specifier = ">=2026.1.0" },
     { name = "singer-sdk", specifier = "~=0.53.5" },
