@@ -76,4 +76,9 @@ known-first-party = ["tap_jira"]
 convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "S105"]  # Allow asserts and hardcoded passwords in tests
+"tests/*" = [
+    "ANN201",  # missing-return-type-undocumented-public-function
+    "D",       # pydocstyle
+    "S101",    # assert
+    "S105",    # hardcoded-password-string
+]
