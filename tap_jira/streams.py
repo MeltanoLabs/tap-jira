@@ -409,6 +409,7 @@ class IssueStream(JiraStream[str]):
     primary_keys = ("id",)
     replication_key = "updated"
     replication_method = "INCREMENTAL"
+    is_sorted = True
     records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
     next_page_token_jsonpath = "$.nextPageToken"  # noqa: S105
     instance_name = "issues"
