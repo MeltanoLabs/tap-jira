@@ -2401,7 +2401,7 @@ class SprintStream(JiraStartAtPaginatedStream):
     """
 
     name = "sprints"
-    primary_keys = ("id",)
+    primary_keys = ("id", "boardId",)
     parent_stream_type = BoardStream
     path = "/board/{board_id}/sprint?maxResults=100"
     replication_method = "INCREMENTAL"
@@ -3064,7 +3064,7 @@ class IssueWatchersStream(JiraStartAtPaginatedStream):
     path = "/issue/{issue_id}/watchers"
     parent_stream_type = IssueStream
     ignore_parent_replication_keys = True
-    primary_keys = ("accountId",)
+    primary_keys = ("accountId", "issueId")
     records_jsonpath = "$[watchers][*]"
     instance_name = ""
 
@@ -3109,7 +3109,7 @@ class IssueChangeLogStream(JiraStartAtPaginatedStream):
 
     replication_key = "created"
 
-    primary_keys = ("id",)
+    primary_keys = ("id", "issueId")
 
     records_jsonpath = "$[values][*]"
 
@@ -3169,7 +3169,7 @@ class IssueComments(JiraStartAtPaginatedStream):
 
     path = "/issue/{issue_id}/comment"
 
-    primary_keys = ("id",)
+    primary_keys = ("id", "issueId")
 
     records_jsonpath = "$[comments][*]"
 
@@ -3235,7 +3235,7 @@ class IssueWorklogs(JiraStartAtPaginatedStream):
 
     path = "/issue/{issue_id}/worklog"
 
-    primary_keys = ("id",)
+    primary_keys = ("id", "issueId")
 
     records_jsonpath = "$[worklogs][*]"
 

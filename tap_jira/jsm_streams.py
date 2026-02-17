@@ -149,7 +149,7 @@ class ServiceDeskCustomerStream(JiraServiceManagementPaginatedStream):
 
     name = "customer"
     path = "/servicedesk/{servicedesk_id}/customer"
-    primary_keys = ("accountId",)
+    primary_keys = ("accountId", "servicedeskId")
     records_jsonpath = "$.values[*]"
     parent_stream_type = ServiceDeskStream
 
@@ -198,7 +198,7 @@ class ServiceDeskQueuesStream(JiraServiceManagementPaginatedStream):
 
     name = "queue"
     path = "/servicedesk/{servicedesk_id}/queue"
-    primary_keys = ("id",)
+    primary_keys = ("id", "servicedeskId")
     records_jsonpath = "$.values[*]"
     parent_stream_type = ServiceDeskStream
 
