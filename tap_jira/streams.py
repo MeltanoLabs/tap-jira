@@ -411,7 +411,7 @@ class IssueStream(JiraStream[str]):
     replication_method = "INCREMENTAL"
     is_sorted = True
 
-    # API returns more granular timestamps than JSQL support querying with
+    # API returns more granular timestamps than JQL support querying with
     check_sorted = False
 
     records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
