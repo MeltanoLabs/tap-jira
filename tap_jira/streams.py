@@ -410,6 +410,10 @@ class IssueStream(JiraStream[str]):
     replication_key = "updated"
     replication_method = "INCREMENTAL"
     is_sorted = True
+
+    # API returns more granular timestamps than JSQL support querying with
+    check_sorted = False
+
     records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
     next_page_token_jsonpath = "$.nextPageToken"  # noqa: S105
     instance_name = "issues"
