@@ -1748,7 +1748,7 @@ class IssueStream(JiraStream[str]):
 
         - Add top-level `created` field.
         """
-        fields: dict = row["fields"]
+        fields: dict[str, Any] = row["fields"]
         row["created"] = fields.pop("created")
         row["updated"] = fields.pop("updated")
         return row
