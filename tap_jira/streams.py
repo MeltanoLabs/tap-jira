@@ -407,8 +407,13 @@ class IssueStream(JiraStream[str]):
     name = "issues"
     path = "/search/jql"
     primary_keys = ("id",)
-    replication_key = "id"
+    replication_key = "updated"
     replication_method = "INCREMENTAL"
+    is_sorted = True
+
+    # API returns more granular timestamps than JQL support querying with
+    check_sorted = False
+
     records_jsonpath = "$[issues][*]"  # Or override `parse_response`.
     next_page_token_jsonpath = "$.nextPageToken"  # noqa: S105
     instance_name = "issues"
@@ -1685,8 +1690,8 @@ class IssueStream(JiraStream[str]):
                 additional_properties=True,
             ),
         ),
-        Property("created", StringType),
-        Property("updated", StringType),
+        Property("created", DateTimeType),
+        Property("updated", DateTimeType),
     ).to_dict()
 
     @override
@@ -1715,8 +1720,7 @@ class IssueStream(JiraStream[str]):
         if next_page_token:
             params["nextPageToken"] = next_page_token
 
-        if "start_date" in self.config:
-            start_date = datetime.fromisoformat(self.config["start_date"])
+        if start_date := self.get_starting_timestamp(context):
             start_date_fmt = start_date.strftime("%Y-%m-%d %H:%M")
 
             jql.append(f"(created>='{start_date_fmt}' or updated>='{start_date_fmt}')")
@@ -1744,8 +1748,9 @@ class IssueStream(JiraStream[str]):
 
         - Add top-level `created` field.
         """
-        created = row.get("fields", {}).pop("created", None)
-        row["created"] = created
+        fields: dict[str, Any] = row["fields"]
+        row["created"] = fields.pop("created")
+        row["updated"] = fields.pop("updated")
         return row
 
     @override
