@@ -77,7 +77,6 @@ convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = [
-    "ANN201",  # missing-return-type-undocumented-public-function
     "D",       # pydocstyle
     "S101",    # assert
     "S105",    # hardcoded-password-string
