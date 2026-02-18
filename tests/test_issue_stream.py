@@ -6,7 +6,7 @@ from tap_jira.streams import IssueStream
 from tap_jira.tap import TapJira
 
 
-def test_get_url_params_jql_start_date():
+def test_get_url_params_jql_start_date() -> None:
     tap = TapJira(
         config={
             "domain": "test.atlassian.net",
@@ -31,7 +31,7 @@ def test_get_url_params_jql_start_date():
     )
 
 
-def test_get_url_params_jql_start_and_end_date():
+def test_get_url_params_jql_start_and_end_date() -> None:
     tap = TapJira(
         config={
             "domain": "test.atlassian.net",
