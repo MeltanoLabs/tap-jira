@@ -48,6 +48,15 @@ class JiraStream(RESTStream[_TNextPageToken]):
             username=self.config["email"],
         )
 
+    @override
+    def validate_response(self, response: requests.Response) -> None:
+        """Validate HTTP response, allowing 403 to be skipped."""
+        if response.status_code == 403:
+            self.logger.warning(
+                f"Access denied (403) for {response.url}. Skipping."
+            )
+            return  # Don't raise, just skip this resource
+        super().validate_response(response)
 
 class JiraStartAtPaginatedStream(JiraStream[int]):
     """Jira stream that uses the startAt pagination parameter."""
@@ -144,15 +153,15 @@ class JiraServiceManagementStream(RESTStream[_TNextPageToken]):
             username=self.config["email"],
         )
 
-    @override                                                                                                                                                
-    def validate_response(self, response: requests.Response) -> None:                                                                                        
-        """Validate HTTP response, allowing 403 to be skipped."""                                                                                            
-        if response.status_code == 403:                                                                                                                      
-            self.logger.warning(                                                                                                                             
-                f"Access denied (403) for {response.url}. Skipping."                                                                                         
-            )                                                                                                                                                
-            return  # Don't raise, just skip this resource                                                                                                   
-        super().validate_response(response)                                                                                                                  
+    @override
+    def validate_response(self, response: requests.Response) -> None:
+        """Validate HTTP response, allowing 403 to be skipped."""
+        if response.status_code == 403:
+            self.logger.warning(
+                f"Access denied (403) for {response.url}. Skipping."
+            )
+            return  # Don't raise, just skip this resource
+        super().validate_response(response)
 
 class JiraServiceManagementPaginatedStream(JiraServiceManagementStream[int]):
     """Paginated stream class for Jira Service Management API endpoints.
