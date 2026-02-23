@@ -3079,7 +3079,7 @@ class IssueWatchersStream(JiraStartAtPaginatedStream):
     name = "issue_watchers"
     path = "/issue/{issue_id}/watchers"
     parent_stream_type = IssueStream
-    state_partitioning_keys = ()
+    state_partitioning_keys = ()  # type: ignore[assignment]
     primary_keys = ("accountId",)
     records_jsonpath = "$[watchers][*]"
     instance_name = ""
@@ -3119,7 +3119,7 @@ class IssueChangeLogStream(JiraStartAtPaginatedStream):
 
     parent_stream_type = IssueStream
 
-    state_partitioning_keys = ()
+    state_partitioning_keys = ()  # type: ignore[assignment]
 
     path = "/issue/{issue_id}/changelog"
 
@@ -3179,7 +3179,7 @@ class IssueComments(JiraStartAtPaginatedStream):
 
     parent_stream_type = IssueStream
 
-    state_partitioning_keys = ()
+    state_partitioning_keys = ()  # type: ignore[assignment]
 
     path = "/issue/{issue_id}/comment"
 
@@ -3245,7 +3245,7 @@ class IssueWorklogs(JiraStartAtPaginatedStream):
 
     parent_stream_type = IssueStream
 
-    state_partitioning_keys = ()
+    state_partitioning_keys = ()  # type: ignore[assignment]
 
     path = "/issue/{issue_id}/worklog"
 
