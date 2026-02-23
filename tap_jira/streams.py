@@ -3120,8 +3120,6 @@ class IssueChangeLogStream(JiraStartAtPaginatedStream):
 
     path = "/issue/{issue_id}/changelog"
 
-    replication_key = "created"
-
     primary_keys = ("id",)
 
     records_jsonpath = "$[values][*]"
