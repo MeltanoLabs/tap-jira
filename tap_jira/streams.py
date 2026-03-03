@@ -453,6 +453,7 @@ class ProjectVersionStream(JiraStartAtPaginatedStream):
         th.Property("projectId", th.IntegerType),
     ).to_dict()
 
+
 class IssueStream(JiraStream[str]):
     """Issue stream.
 
