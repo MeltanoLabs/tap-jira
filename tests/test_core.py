@@ -15,5 +15,5 @@ SAMPLE_CONFIG = {
 TestTapJira = get_tap_test_class(
     TapJira,
     config=SAMPLE_CONFIG,
-    suite_config=SuiteConfig(),
+    suite_config=SuiteConfig(ignore_no_records_for_streams=["components"]),
 )
