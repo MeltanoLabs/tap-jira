@@ -3347,3 +3347,23 @@ class IssueWorklogs(JiraStartAtPaginatedStream):
         Property("timeSpentSeconds", IntegerType),
         Property("issueId", StringType),
     ).to_dict()
+
+
+class ComponentStream(JiraStartAtPaginatedStream):
+    """Components stream.
+
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-get
+    """
+
+    name = "components"
+    path = "/component"
+    primary_keys = ("id",)
+    records_jsonpath = "$[values][*]"
+    instance_name = "values"
+
+    schema = th.PropertiesList(
+        th.Property("self", th.StringType),
+        th.Property("id", th.StringType),
+        th.Property("name", th.StringType),
+        th.Property("description", th.StringType),
+    ).to_dict()
