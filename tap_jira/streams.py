@@ -424,7 +424,11 @@ class ProjectStream(JiraStartAtPaginatedStream):
     ).to_dict()
 
     @override
-    def get_child_context(self, record: Record, context: Context) -> dict[str, Any]:
+    def get_child_context(
+        self,
+        record: Record,
+        context: Context | None,
+    ) -> dict[str, Any]:
         return {"projectId": record["id"]}
 
 
