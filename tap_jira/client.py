@@ -14,7 +14,7 @@ else:
     from typing_extensions import override
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Iterable
 
     from requests import Response
     from singer_sdk.helpers.types import Context
@@ -23,6 +23,15 @@ if TYPE_CHECKING:
 
 
 _TNextPageToken = TypeVar("_TNextPageToken")
+
+
+class ResumableAPIError(Exception):
+    """Exception raised for resumable API errors."""
+
+    @override
+    def __init__(self, message: str, response: requests.Response) -> None:
+        super().__init__(message)
+        self.response = response
 
 
 class JiraStream(RESTStream[_TNextPageToken]):
@@ -50,6 +59,13 @@ class JiraStream(RESTStream[_TNextPageToken]):
             password=self.config["api_token"],
             username=self.config["email"],
         )
+
+    @override
+    def get_records(self, context: Context | None) -> Iterable[dict[str, Any]]:
+        try:
+            yield from super().get_records(context)
+        except ResumableAPIError as e:
+            self.logger.warning(e)
 
 
 class JiraStartAtPaginatedStream(JiraStream[int]):

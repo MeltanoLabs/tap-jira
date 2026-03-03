@@ -120,9 +120,11 @@ class TapJira(Tap):
         stream_list: list[JiraStream[Any]] = [
             streams.UsersStream(self),
             streams.FieldStream(self),
+            streams.CustomFieldOptionStream(self),
             streams.ServerInfoStream(self),
             streams.IssueTypeStream(self),
             streams.ProjectStream(self),
+            streams.ProjectVersionStream(self),
             streams.WorkflowStatusStream(self),
             streams.IssueStream(self),
             streams.PermissionStream(self),
@@ -147,6 +149,7 @@ class TapJira(Tap):
             streams.BoardStream(self),
             streams.IssueWatchersStream(self),
             streams.IssueWorklogs(self),
+            streams.ComponentStream(self),
         ]
 
         if self.config.get("include_audit_logs", False):

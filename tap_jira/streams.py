@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Any
 from singer_sdk import typing as th  # JSON Schema typing helpers
 from singer_sdk.pagination import JSONPathPaginator
 
-from tap_jira.client import JiraStartAtPaginatedStream, JiraStream
+from tap_jira.client import JiraStartAtPaginatedStream, JiraStream, ResumableAPIError
 
 if sys.version_info >= (3, 12):
     from typing import override
@@ -175,6 +175,45 @@ class FieldStream(JiraStartAtPaginatedStream):
             ),
         ),
     ).to_dict()
+
+    @override
+    def get_child_context(
+        self,
+        record: Record,
+        context: Context | None,
+    ) -> dict[str, Any] | None:
+        custom_id: int | None = record.get("schema", {}).get("customId")
+        return {"customId": custom_id} if custom_id is not None else None
+
+
+class CustomFieldOptionStream(JiraStream[None]):
+    """Custom field options stream.
+
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-customfieldoption-id-get
+    """
+
+    parent_stream_type = FieldStream
+    name = "custom_field_options"
+    path = "/customFieldOption/{customId}"
+    primary_keys = ("customId",)
+
+    schema = th.PropertiesList(
+        th.Property("customId", th.IntegerType),
+        th.Property("self", th.StringType),
+        th.Property("value", th.StringType),
+    ).to_dict()
+
+    @override
+    def validate_response(self, response: requests.Response) -> None:
+        # some custom field options return 404 Not Found with the error message
+        # "A custom field option with id '<id>' does not exist", despite being actively
+        # referenced by fields
+        # we should skip these errors
+        if response.status_code == HTTPStatus.NOT_FOUND:
+            msg = self.response_error_message(response)
+            raise ResumableAPIError(msg, response)
+
+        super().validate_response(response)
 
 
 class ServerInfoStream(JiraStartAtPaginatedStream):
@@ -386,6 +425,36 @@ class ProjectStream(JiraStartAtPaginatedStream):
                 Property("lastIssueUpdateTime", StringType),
             ),
         ),
+    ).to_dict()
+
+    @override
+    def get_child_context(
+        self,
+        record: Record,
+        context: Context | None,
+    ) -> dict[str, Any]:
+        return {"projectId": record["id"]}
+
+
+class ProjectVersionStream(JiraStartAtPaginatedStream):
+    """Project versions stream.
+
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-project-projectidorkey-version-get
+    """
+
+    parent_stream_type = ProjectStream
+    name = "project_versions"
+    path = "/project/{projectId}/versions"
+    primary_keys = ("id",)
+
+    schema = th.PropertiesList(
+        th.Property("self", th.StringType),
+        th.Property("id", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("name", th.StringType),
+        th.Property("archived", th.BooleanType),
+        th.Property("released", th.BooleanType),
+        th.Property("projectId", th.IntegerType),
     ).to_dict()
 
 
@@ -3282,4 +3351,24 @@ class IssueWorklogs(JiraStartAtPaginatedStream):
         Property("started", DateTimeType),
         Property("timeSpentSeconds", IntegerType),
         Property("issueId", StringType),
+    ).to_dict()
+
+
+class ComponentStream(JiraStartAtPaginatedStream):
+    """Components stream.
+
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-get
+    """
+
+    name = "components"
+    path = "/component"
+    primary_keys = ("id",)
+    records_jsonpath = "$[values][*]"
+    instance_name = "values"
+
+    schema = th.PropertiesList(
+        th.Property("self", th.StringType),
+        th.Property("id", th.StringType),
+        th.Property("name", th.StringType),
+        th.Property("description", th.StringType),
     ).to_dict()
