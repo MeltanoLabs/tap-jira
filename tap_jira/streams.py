@@ -205,6 +205,10 @@ class CustomFieldOptionStream(JiraStream):
 
     @override
     def validate_response(self, response: requests.Response) -> None:
+        # some custom field options return 404 Not Found with the error message
+        # "A custom field option with id '<id>' does not exist", despite being actively
+        # referenced by fields
+        # we should skip these errors
         if response.status_code == HTTPStatus.NOT_FOUND:
             msg = self.response_error_message(response)
             raise ResumableAPIError(msg, response)
