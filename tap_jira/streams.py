@@ -186,7 +186,7 @@ class FieldStream(JiraStartAtPaginatedStream):
         return {"customId": custom_id} if custom_id is not None else None
 
 
-class CustomFieldOptionStream(JiraStream):
+class CustomFieldOptionStream(JiraStream[None]):
     """Custom field options stream.
 
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-customfieldoption-id-get
