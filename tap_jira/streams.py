@@ -388,6 +388,31 @@ class ProjectStream(JiraStartAtPaginatedStream):
         ),
     ).to_dict()
 
+    @override
+    def get_child_context(self, record: Record, context: Context) -> dict[str, Any]:
+        return {"projectId": record["id"]}
+
+
+class ProjectVersionStream(JiraStartAtPaginatedStream):
+    """Project versions stream.
+
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-project-projectidorkey-version-get
+    """
+
+    parent_stream_type = ProjectStream
+    name = "project_versions"
+    path = "/project/{projectId}/versions"
+    primary_keys = ("id",)
+
+    schema = th.PropertiesList(
+        th.Property("self", th.StringType),
+        th.Property("id", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("name", th.StringType),
+        th.Property("archived", th.BooleanType),
+        th.Property("released", th.BooleanType),
+        th.Property("projectId", th.IntegerType),
+    ).to_dict()
 
 class IssueStream(JiraStream[str]):
     """Issue stream.
