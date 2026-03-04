@@ -454,6 +454,11 @@ class ProjectVersionStream(JiraStartAtPaginatedStream):
         th.Property("name", th.StringType),
         th.Property("archived", th.BooleanType),
         th.Property("released", th.BooleanType),
+        th.Property("startDate", th.DateType),
+        th.Property("releaseDate", th.DateType),
+        th.Property("overdue", th.BooleanType),
+        th.Property("userStartDate", th.StringType),  # not ISO 8601
+        th.Property("userReleaseDate", th.StringType),  # not ISO 8601
         th.Property("projectId", th.IntegerType),
     ).to_dict()
 
