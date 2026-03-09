@@ -55,6 +55,7 @@ WorkflowRuleConfigurationType = ObjectType(
     Property("ruleKey", StringType),
 )
 
+
 class UsersStream(JiraStartAtPaginatedStream):
     """Users stream.
 
