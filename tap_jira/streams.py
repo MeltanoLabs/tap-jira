@@ -3013,50 +3013,6 @@ class StatusStream(JiraStartAtPaginatedStream):
     ).to_dict()
 
 
-class WorkflowStream(JiraStartAtPaginatedStream):
-    """Workflow stream.
-
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
-    """
-
-    """
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    """
-
-    name = "workflows"
-    path = "/workflow"
-    primary_keys = ("name",)
-    replication_key = "name"
-    replication_method = "INCREMENTAL"
-    instance_name = ""
-
-    schema = PropertiesList(
-        Property("name", StringType),
-        Property("description", StringType),
-        Property("steps", IntegerType),
-        Property("default", BooleanType),
-        Property("lastModifiedDate", StringType),
-        Property("lastModifiedUser", StringType),
-        Property("lastModifiedUserAccountId", StringType),
-        Property(
-            "scope",
-            ObjectType(
-                Property("type", StringType),
-                Property(
-                    "project",
-                    ObjectType(
-                        Property("id", StringType),
-                    ),
-                ),
-            ),
-        ),
-    ).to_dict()
-
-
 class Resolutions(JiraStartAtPaginatedStream):
     """Resolution stream.
 

@@ -142,7 +142,6 @@ class TapJira(Tap):
             streams.ScreenSchemesStream(self),
             streams.StatusStream(self),
             streams.WorkflowStream(self),
-            streams.WorkflowStream(self),
             streams.Resolutions(self),
             streams.IssueChangeLogStream(self),
             streams.IssueComments(self),
