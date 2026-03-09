@@ -46,6 +46,14 @@ ADFRootBlockNode = ObjectType(
     ),
 )
 
+WorkflowRuleConfigurationType = ObjectType(
+    Property("id", StringType),
+    Property(
+        "parameters",
+        ObjectType(additional_properties=True),
+    ),
+    Property("ruleKey", StringType),
+)
 
 class UsersStream(JiraStartAtPaginatedStream):
     """Users stream.
@@ -3062,30 +3070,140 @@ class WorkflowStream(JiraStartAtPaginatedStream):
     """
 
     name = "workflow"
-    path = "/workflow/search"
-    primary_keys = ("name", "entityId")
+    path = "/workflows/search"
+    primary_keys = ("id",)
     replication_key = "updated"
     replication_method = "INCREMENTAL"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
     schema = PropertiesList(
-        Property("name", StringType),
-        Property("entityId", StringType),
+        Property("created", DateTimeType),
         Property("description", StringType),
-        Property("created", StringType),
-        Property("updated", StringType),
+        Property("id", StringType),
+        Property("isEditable", BooleanType),
+        Property(
+            "loopedTransitionContainerLayout",
+            ObjectType(
+                Property("x", NumberType),
+                Property("y", NumberType),
+            ),
+        ),
+        Property("name", StringType),
+        Property(
+            "scope",
+            ObjectType(
+                Property(
+                    "project",
+                    ObjectType(
+                        Property("id", StringType),
+                    ),
+                ),
+                Property("type", StringType),
+            ),
+        ),
+        Property(
+            "startPointLayout",
+            ObjectType(
+                Property("x", NumberType),
+                Property("y", NumberType),
+            ),
+        ),
+        Property(
+            "statuses",
+            ArrayType(
+                ObjectType(
+                    Property(
+                        "approvalConfiguration",
+                        ObjectType(
+                            Property("active", StringType),
+                            Property("conditionType", StringType),
+                            Property("conditionValue", StringType),
+                            Property("exclude", ArrayType(StringType)),
+                            Property("fieldId", StringType),
+                            Property("prePopulatedFieldId", StringType),
+                            Property("transitionApproved", StringType),
+                            Property("transitionRejected", StringType),
+                        ),
+                    ),
+                    Property("deprecated", BooleanType),
+                    Property(
+                        "layout",
+                        ObjectType(
+                            Property("x", NumberType),
+                            Property("y", NumberType),
+                        ),
+                    ),
+                    Property("properties", ObjectType(additional_properties=True)),
+                    Property("statusReference", StringType),
+                ),
+            ),
+        ),
+        Property("taskId", StringType),
+        Property(
+            "transitions",
+            ArrayType(
+                ObjectType(
+                    Property("actions", ArrayType(WorkflowRuleConfigurationType)),
+                    Property(
+                        "conditions",
+                        ObjectType(
+                            Property(
+                                "conditionGroups",
+                                # nested condition groups
+                                ArrayType(ObjectType(additional_properties=True)),
+                            ),
+                            Property(
+                                "conditions",
+                                ArrayType(WorkflowRuleConfigurationType),
+                            ),
+                            Property("operation", StringType),
+                        ),
+                    ),
+                    Property("customIssueEventId", StringType),
+                    Property("description", StringType),
+                    Property("id", StringType),
+                    Property(
+                        "links",
+                        ArrayType(
+                            ObjectType(
+                                Property("fromPort", IntegerType),
+                                Property("fromStatusReference", StringType),
+                                Property("toPort", IntegerType),
+                            ),
+                        ),
+                    ),
+                    Property("name", StringType),
+                    Property("properties", ObjectType(additional_properties=True)),
+                    Property("toStatusReference", StringType),
+                    Property("transitionScreen", WorkflowRuleConfigurationType),
+                    Property(
+                        "triggers",
+                        ArrayType(
+                            ObjectType(
+                                Property("id", StringType),
+                                Property(
+                                    "parameters",
+                                    ObjectType(additional_properties=True),
+                                ),
+                                Property("ruleKey", StringType),
+                            ),
+                        ),
+                    ),
+                    Property("type", StringType),
+                    Property("validators", ArrayType(WorkflowRuleConfigurationType)),
+                ),
+            ),
+        ),
+        Property("updated", DateTimeType),
+        Property(
+            "version",
+            ObjectType(
+                Property("id", StringType),
+                Property("versionNumber", IntegerType),
+            ),
+        ),
     ).to_dict()
-
-    @override
-    def post_process(self, row: Record, context: Context | None = None) -> Record:
-        """Post-process the record before it is returned."""
-        if "id" in row:
-            # Extract values from the id object
-            id_obj = row.pop("id")
-            row["name"] = id_obj.get("name")
-            row["entityId"] = id_obj.get("entityId")
-        return row
 
 
 # Child Streams
