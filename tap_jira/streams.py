@@ -3070,7 +3070,7 @@ class WorkflowStream(JiraStartAtPaginatedStream):
     records_jsonpath = json response body
     """
 
-    name = "workflow"
+    name = "workflows"
     path = "/workflows/search"
     primary_keys = ("id",)
     replication_key = "updated"
