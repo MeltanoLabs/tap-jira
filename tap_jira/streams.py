@@ -2773,8 +2773,8 @@ class DashboardStream(JiraStartAtPaginatedStream):
     ).to_dict()
 
 
-class FilterSearchStream(JiraStartAtPaginatedStream):
-    """Filter search stream.
+class FilterStream(JiraStartAtPaginatedStream):
+    """Filters stream.
 
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get
 
@@ -2786,7 +2786,7 @@ class FilterSearchStream(JiraStartAtPaginatedStream):
     records_jsonpath = json response body
     """
 
-    name = "filter_searches"
+    name = "filters"
     path = "/filter/search"
     primary_keys = ("id",)
     replication_key = "id"
@@ -2976,8 +2976,8 @@ class ScreenSchemesStream(JiraStartAtPaginatedStream):
     ).to_dict()
 
 
-class StatusesSearchStream(JiraStartAtPaginatedStream):
-    """Statuses search stream.
+class StatusStream(JiraStartAtPaginatedStream):
+    """Statuses stream.
 
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-get
     """
@@ -2991,7 +2991,7 @@ class StatusesSearchStream(JiraStartAtPaginatedStream):
     records_jsonpath = json response body
     """
 
-    name = "statuses_searches"
+    name = "statuses"
     path = "/statuses/search"
     primary_keys = ("id",)
     replication_key = "id"
@@ -3090,8 +3090,8 @@ class Resolutions(JiraStartAtPaginatedStream):
     ).to_dict()
 
 
-class WorkflowSearchStream(JiraStartAtPaginatedStream):
-    """Workflow search stream.
+class WorkflowStream(JiraStartAtPaginatedStream):
+    """Workflows stream.
 
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
     """
@@ -3105,7 +3105,7 @@ class WorkflowSearchStream(JiraStartAtPaginatedStream):
     records_jsonpath = json response body
     """
 
-    name = "workflow_searches"
+    name = "workflow"
     path = "/workflow/search"
     primary_keys = ("name", "entityId")
     replication_key = "updated"
