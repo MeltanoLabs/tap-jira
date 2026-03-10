@@ -191,38 +191,96 @@ class FieldStream(JiraStartAtPaginatedStream):
         record: Record,
         context: Context | None,
     ) -> dict[str, Any] | None:
-        custom_id: int | None = record.get("schema", {}).get("customId")
-        return {"customId": custom_id} if custom_id is not None else None
+        # custom fields only
+        if not record["custom"]:
+            return None
+
+        schema: dict[str, Any] | None = record.get("schema")
+
+        if schema:
+            type_: str = schema.get("items") or schema["type"]
+            supports_options = type_.startswith("option")
+        else:
+            supports_options = False
+
+        return {
+            "fieldId": record["id"],
+            "supports_options": supports_options,
+        }
 
 
-class CustomFieldOptionStream(JiraStream[None]):
+class CustomFieldContextStream(JiraStartAtPaginatedStream):
     """Custom field options stream.
 
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-customfieldoption-id-get
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-get
     """
 
     parent_stream_type = FieldStream
-    name = "custom_field_options"
-    path = "/customFieldOption/{customId}"
-    primary_keys = ("customId",)
+    name = "custom_field_contexts"
+    path = "/field/{fieldId}/context"
+    primary_keys = ("id",)
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
+    instance_name = "values"
+    state_partitioning_keys = ()  # type: ignore[assignment]
 
     schema = th.PropertiesList(
-        th.Property("customId", th.IntegerType),
-        th.Property("self", th.StringType),
-        th.Property("value", th.StringType),
+        th.Property("fieldId", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("id", th.StringType),
+        th.Property("isAnyIssueType", th.BooleanType),
+        th.Property("isGlobalContext", th.BooleanType),
+        th.Property("name", th.StringType),
     ).to_dict()
 
     @override
     def validate_response(self, response: requests.Response) -> None:
-        # some custom field options return 404 Not Found with the error message
-        # "A custom field option with id '<id>' does not exist", despite being actively
-        # referenced by fields
+        # some custom fields return 404 Not Found with the error message "The custom
+        # field was not found", despite being actively referenced by fields
         # we should skip these errors
         if response.status_code == HTTPStatus.NOT_FOUND:
             msg = self.response_error_message(response)
             raise ResumableAPIError(msg, response)
 
         super().validate_response(response)
+
+    @override
+    def get_child_context(
+        self,
+        record: Record,
+        context: Context | None,
+    ) -> dict[str, Any] | None:
+        assert context is not None  # noqa: S101
+
+        if not context["supports_options"]:
+            return None
+
+        return {
+            "fieldId": context["fieldId"],
+            "contextId": record["id"],
+        }
+
+
+class CustomFieldOptionStream(JiraStartAtPaginatedStream):
+    """Custom field options stream.
+
+    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-get
+    """
+
+    parent_stream_type = CustomFieldContextStream
+    name = "custom_field_options"
+    path = "/field/{fieldId}/context/{contextId}/option"
+    primary_keys = ("id",)
+    records_jsonpath = "$[values][*]"  # Or override `parse_response`.
+    instance_name = "values"
+    state_partitioning_keys = ()  # type: ignore[assignment]
+
+    schema = th.PropertiesList(
+        th.Property("fieldId", th.StringType),
+        th.Property("contextId", th.StringType),
+        th.Property("id", th.StringType),
+        th.Property("value", th.StringType),
+        th.Property("disabled", th.BooleanType),
+    ).to_dict()
 
 
 class ServerInfoStream(JiraStartAtPaginatedStream):

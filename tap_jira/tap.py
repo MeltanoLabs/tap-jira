@@ -120,6 +120,7 @@ class TapJira(Tap):
         stream_list: list[JiraStream[Any]] = [
             streams.UsersStream(self),
             streams.FieldStream(self),
+            streams.CustomFieldContextStream(self),
             streams.CustomFieldOptionStream(self),
             streams.ServerInfoStream(self),
             streams.IssueTypeStream(self),
