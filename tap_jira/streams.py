@@ -186,7 +186,7 @@ class FieldStream(JiraStartAtPaginatedStream):
         if not record["custom"]:
             return None
 
-        schema: dict = record.get("schema")
+        schema: dict[str, Any] = record.get("schema")
 
         if schema:
             type_: str = schema.get("items") or schema["type"]
