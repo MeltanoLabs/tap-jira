@@ -46,6 +46,15 @@ ADFRootBlockNode = ObjectType(
     ),
 )
 
+WorkflowRuleConfigurationType = ObjectType(
+    Property("id", StringType),
+    Property(
+        "parameters",
+        ObjectType(additional_properties=True),
+    ),
+    Property("ruleKey", StringType),
+)
+
 
 class UsersStream(JiraStartAtPaginatedStream):
     """Users stream.
@@ -2831,8 +2840,8 @@ class DashboardStream(JiraStartAtPaginatedStream):
     ).to_dict()
 
 
-class FilterSearchStream(JiraStartAtPaginatedStream):
-    """Filter search stream.
+class FilterStream(JiraStartAtPaginatedStream):
+    """Filters stream.
 
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get
 
@@ -2844,7 +2853,7 @@ class FilterSearchStream(JiraStartAtPaginatedStream):
     records_jsonpath = json response body
     """
 
-    name = "filter_searches"
+    name = "filters"
     path = "/filter/search"
     primary_keys = ("id",)
     replication_key = "id"
@@ -3034,8 +3043,8 @@ class ScreenSchemesStream(JiraStartAtPaginatedStream):
     ).to_dict()
 
 
-class StatusesSearchStream(JiraStartAtPaginatedStream):
-    """Statuses search stream.
+class StatusStream(JiraStartAtPaginatedStream):
+    """Statuses stream.
 
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-get
     """
@@ -3049,7 +3058,7 @@ class StatusesSearchStream(JiraStartAtPaginatedStream):
     records_jsonpath = json response body
     """
 
-    name = "statuses_searches"
+    name = "statuses"
     path = "/statuses/search"
     primary_keys = ("id",)
     replication_key = "id"
@@ -3068,50 +3077,6 @@ class StatusesSearchStream(JiraStartAtPaginatedStream):
         Property("description", StringType),
         Property("usages", ArrayType(StringType)),
         Property("workflowUsages", ArrayType(StringType)),
-    ).to_dict()
-
-
-class WorkflowStream(JiraStartAtPaginatedStream):
-    """Workflow stream.
-
-    https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
-    """
-
-    """
-    name: stream name
-    path: path which will be added to api url in client.py
-    schema: instream schema
-    primary_keys = primary keys for the table
-    replication_key = datetime keys for replication
-    """
-
-    name = "workflows"
-    path = "/workflow"
-    primary_keys = ("name",)
-    replication_key = "name"
-    replication_method = "INCREMENTAL"
-    instance_name = ""
-
-    schema = PropertiesList(
-        Property("name", StringType),
-        Property("description", StringType),
-        Property("steps", IntegerType),
-        Property("default", BooleanType),
-        Property("lastModifiedDate", StringType),
-        Property("lastModifiedUser", StringType),
-        Property("lastModifiedUserAccountId", StringType),
-        Property(
-            "scope",
-            ObjectType(
-                Property("type", StringType),
-                Property(
-                    "project",
-                    ObjectType(
-                        Property("id", StringType),
-                    ),
-                ),
-            ),
-        ),
     ).to_dict()
 
 
@@ -3148,8 +3113,8 @@ class Resolutions(JiraStartAtPaginatedStream):
     ).to_dict()
 
 
-class WorkflowSearchStream(JiraStartAtPaginatedStream):
-    """Workflow search stream.
+class WorkflowStream(JiraStartAtPaginatedStream):
+    """Workflows stream.
 
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-get
     """
@@ -3163,31 +3128,141 @@ class WorkflowSearchStream(JiraStartAtPaginatedStream):
     records_jsonpath = json response body
     """
 
-    name = "workflow_searches"
-    path = "/workflow/search"
-    primary_keys = ("name", "entityId")
+    name = "workflows"
+    path = "/workflows/search"
+    primary_keys = ("id",)
     replication_key = "updated"
     replication_method = "INCREMENTAL"
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
 
     schema = PropertiesList(
-        Property("name", StringType),
-        Property("entityId", StringType),
+        Property("created", DateTimeType),
         Property("description", StringType),
-        Property("created", StringType),
-        Property("updated", StringType),
+        Property("id", StringType),
+        Property("isEditable", BooleanType),
+        Property(
+            "loopedTransitionContainerLayout",
+            ObjectType(
+                Property("x", NumberType),
+                Property("y", NumberType),
+            ),
+        ),
+        Property("name", StringType),
+        Property(
+            "scope",
+            ObjectType(
+                Property(
+                    "project",
+                    ObjectType(
+                        Property("id", StringType),
+                    ),
+                ),
+                Property("type", StringType),
+            ),
+        ),
+        Property(
+            "startPointLayout",
+            ObjectType(
+                Property("x", NumberType),
+                Property("y", NumberType),
+            ),
+        ),
+        Property(
+            "statuses",
+            ArrayType(
+                ObjectType(
+                    Property(
+                        "approvalConfiguration",
+                        ObjectType(
+                            Property("active", StringType),
+                            Property("conditionType", StringType),
+                            Property("conditionValue", StringType),
+                            Property("exclude", ArrayType(StringType)),
+                            Property("fieldId", StringType),
+                            Property("prePopulatedFieldId", StringType),
+                            Property("transitionApproved", StringType),
+                            Property("transitionRejected", StringType),
+                        ),
+                    ),
+                    Property("deprecated", BooleanType),
+                    Property(
+                        "layout",
+                        ObjectType(
+                            Property("x", NumberType),
+                            Property("y", NumberType),
+                        ),
+                    ),
+                    Property("properties", ObjectType(additional_properties=True)),
+                    Property("statusReference", StringType),
+                ),
+            ),
+        ),
+        Property("taskId", StringType),
+        Property(
+            "transitions",
+            ArrayType(
+                ObjectType(
+                    Property("actions", ArrayType(WorkflowRuleConfigurationType)),
+                    Property(
+                        "conditions",
+                        ObjectType(
+                            Property(
+                                "conditionGroups",
+                                # nested condition groups
+                                ArrayType(ObjectType(additional_properties=True)),
+                            ),
+                            Property(
+                                "conditions",
+                                ArrayType(WorkflowRuleConfigurationType),
+                            ),
+                            Property("operation", StringType),
+                        ),
+                    ),
+                    Property("customIssueEventId", StringType),
+                    Property("description", StringType),
+                    Property("id", StringType),
+                    Property(
+                        "links",
+                        ArrayType(
+                            ObjectType(
+                                Property("fromPort", IntegerType),
+                                Property("fromStatusReference", StringType),
+                                Property("toPort", IntegerType),
+                            ),
+                        ),
+                    ),
+                    Property("name", StringType),
+                    Property("properties", ObjectType(additional_properties=True)),
+                    Property("toStatusReference", StringType),
+                    Property("transitionScreen", WorkflowRuleConfigurationType),
+                    Property(
+                        "triggers",
+                        ArrayType(
+                            ObjectType(
+                                Property("id", StringType),
+                                Property(
+                                    "parameters",
+                                    ObjectType(additional_properties=True),
+                                ),
+                                Property("ruleKey", StringType),
+                            ),
+                        ),
+                    ),
+                    Property("type", StringType),
+                    Property("validators", ArrayType(WorkflowRuleConfigurationType)),
+                ),
+            ),
+        ),
+        Property("updated", DateTimeType),
+        Property(
+            "version",
+            ObjectType(
+                Property("id", StringType),
+                Property("versionNumber", IntegerType),
+            ),
+        ),
     ).to_dict()
-
-    @override
-    def post_process(self, row: Record, context: Context | None = None) -> Record:
-        """Post-process the record before it is returned."""
-        if "id" in row:
-            # Extract values from the id object
-            id_obj = row.pop("id")
-            row["name"] = id_obj.get("name")
-            row["entityId"] = id_obj.get("entityId")
-        return row
 
 
 # Child Streams
