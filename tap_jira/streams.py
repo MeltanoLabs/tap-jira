@@ -186,7 +186,7 @@ class FieldStream(JiraStartAtPaginatedStream):
         if not record["custom"]:
             return None
 
-        schema: dict[str, Any] = record.get("schema")
+        schema: dict[str, Any] | None = record.get("schema")
 
         if schema:
             type_: str = schema.get("items") or schema["type"]
@@ -212,7 +212,7 @@ class CustomFieldContextStream(JiraStartAtPaginatedStream):
     primary_keys = ("id",)
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
-    state_partitioning_keys = ()
+    state_partitioning_keys = ()  # type: ignore[assignment]
 
     schema = th.PropertiesList(
         th.Property("fieldId", th.StringType),
@@ -240,6 +240,8 @@ class CustomFieldContextStream(JiraStartAtPaginatedStream):
         record: Record,
         context: Context | None,
     ) -> dict[str, Any] | None:
+        assert context is not None  # noqa: S101
+
         if not context["supports_options"]:
             return None
 
@@ -261,7 +263,7 @@ class CustomFieldOptionStream(JiraStartAtPaginatedStream):
     primary_keys = ("id",)
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
-    state_partitioning_keys = ()
+    state_partitioning_keys = ()  # type: ignore[assignment]
 
     schema = th.PropertiesList(
         th.Property("fieldId", th.StringType),
