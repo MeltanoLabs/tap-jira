@@ -221,7 +221,6 @@ class CustomFieldContextStream(JiraStartAtPaginatedStream):
     primary_keys = ("id",)
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
-    state_partitioning_keys = ()  # type: ignore[assignment]
 
     schema = th.PropertiesList(
         th.Property("fieldId", th.StringType),
@@ -272,7 +271,6 @@ class CustomFieldOptionStream(JiraStartAtPaginatedStream):
     primary_keys = ("id",)
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
-    state_partitioning_keys = ()  # type: ignore[assignment]
 
     schema = th.PropertiesList(
         th.Property("fieldId", th.StringType),
