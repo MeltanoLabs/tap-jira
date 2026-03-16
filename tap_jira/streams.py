@@ -198,8 +198,11 @@ class FieldStream(JiraStartAtPaginatedStream):
         schema: dict[str, Any] | None = record.get("schema")
 
         if schema:
-            type_: str = schema.get("items") or schema["type"]
-            supports_options = type_.startswith("option")
+            type_ = schema.get("items") or schema["type"]
+            if isinstance(type_, str):
+                supports_options = type_ == "option"
+            else:
+                supports_options = "option" in type_
         else:
             supports_options = False
 
