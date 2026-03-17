@@ -199,7 +199,7 @@ class FieldStream(JiraStartAtPaginatedStream):
 
         if schema:
             type_: str = schema.get("items") or schema["type"]
-            supports_options = type_.startswith("option")
+            supports_options = type_ in {"option", "option-with-child"}
         else:
             supports_options = False
 
