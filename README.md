@@ -96,6 +96,45 @@ tap-jira uses **Basic Authentication** with Jira API tokens. All requests requir
 }
 ```
 
+#### Required Scopes
+
+Stream | Classic scopes | Granular scopes
+------ | -------------- | ---------------
+`users` | `read:jira-user` | `read:application-role:jira`<br>`read:avatar:jira`<br>`read:group:jira`<br>`read:user:jira`
+`fields` | `read:jira-work` | `read:avatar:jira`<br>`read:field-configuration:jira`<br>`read:field:jira`<br>`read:project-category:jira`<br>`read:project:jira`
+`custom_field_contexts` | `manage:jira-configuration` | `read:custom-field-contextual-configuration:jira`<br>`read:field:jira`
+`custom_field_options` | `manage:jira-configuration` | `read:field.option:jira`
+`server_info` | Any | Any
+`issue_types` | `read:jira-work` | `read:avatar:jira`<br>`read:issue-type:jira`<br>`read:project-category:jira`<br>`read:project:jira`
+`workflow_statuses` | `read:jira-work` | `read:status:jira`
+`projects` | `read:jira-work` | `read:application-role:jira`<br>`read:avatar:jira`<br>`read:group:jira`<br>`read:issue-type-hierarchy:jira`<br>`read:issue-type:jira`<br>`read:project-category:jira`<br>`read:project-version:jira`<br>`read:project.component:jira`<br>`read:project.property:jira`<br>`read:project:jira`<br>`read:user:jira`
+`project_versions` | `read:jira-work` | `read:project-version:jira`
+`issues` | `read:jira-work` | `read:audit-log:jira`<br>`read:avatar:jira`<br>`read:field-configuration:jira`<br>`read:issue-details:jira`<br>`read:issue-meta:jira`
+`permissions` | `manage:jira-configuration` | `read:permission:jira`
+`project_roles` | `manage:jira-configuration` | `read:avatar:jira`<br>`read:group:jira`<br>`read:project-category:jira`<br>`read:project-role:jira`<br>`read:project:jira`<br>`read:user:jira`
+`priorities` | `read:jira-work` | `read:priority:jira`
+`permission_holders` | `read:jira-work` | `read:application-role:jira`<br>`read:avatar:jira`<br>`read:field:jira`<br>`read:group:jira`<br>`read:permission-scheme:jira`<br>`read:permission:jira`<br>`read:project-category:jira`<br>`read:project-role:jira`<br>`read:project:jira`<br>`read:user:jira`
+`boards` | N/A | `read:board-scope:jira-software`<br>`read:project:jira`
+`sprints` | N/A | `read:sprint:jira-software`
+`project_role_actors` | `read:jira-work`<br>`manage:jira-configuration` | `read:application-role:jira`<br>`read:avatar:jira`<br>`read:group:jira`<br>`read:issue-type-hierarchy:jira`<br>`read:issue-type:jira`<br>`read:project-category:jira`<br>`read:project-role:jira`<br>`read:project-version:jira`<br>`read:project.component:jira`<br>`read:project.property:jira`<br>`read:project:jira`<br>`read:user:jira`
+`audit_records` | `manage:jira-configuration` | `read:audit-log:jira`<br>`read:user:jira`
+`dashboards` | `read:jira-work` | `read:application-role:jira`<br>`read:avatar:jira`<br>`read:dashboard:jira`<br>`read:group:jira`<br>`read:issue-type-hierarchy:jira`<br>`read:issue-type:jira`<br>`read:project-category:jira`<br>`read:project-role:jira`<br>`read:project-version:jira`<br>`read:project.component:jira`<br>`read:project:jira`<br>`read:user:jira`
+`filters` | `read:jira-work` | `read:application-role:jira`<br>`read:avatar:jira`<br>`read:filter:jira`<br>`read:group:jira`<br>`read:issue-type-hierarchy:jira`<br>`read:jql:jira`<br>`read:project-role:jira`<br>`read:project:jira`<br>`read:user:jira`
+`filter_default_share_scopes` | `read:jira-work` | `read:filter.default-share-scope:jira`
+`groups_pickers` | `read:jira-user` | `read:group:jira`
+`licenses` | `manage:jira-configuration` | `read:license:jira`
+`screens` | `manage:jira-project` | `read:avatar:jira`<br>`read:project-category:jira`<br>`read:project:jira`<br>`read:screen:jira`
+`screen_schemes` | `manage:jira-project` | `read:issue-type-screen-scheme:jira`<br>`read:screen-scheme:jira`
+`statuses` | `manage:jira-configuration` | `read:workflow:jira`
+`resolutions` | `read:jira-work` | `read:resolution:jira`
+`workflows` | `manage:jira-configuration` | `read:workflow:jira`
+`issue_watchers` | `read:jira-work` | `read:avatar:jira`<br>`read:issue.watcher:jira`<br>`read:user:jira`
+`issue_changelog` | `read:jira-work` | `read:avatar:jira`<br>`read:issue-meta:jira`<br>`read:issue.changelog:jira`
+`issue_comments` | `read:jira-work` | `read:avatar:jira`<br>`read:comment.property:jira`<br>`read:comment:jira`<br>`read:group:jira`<br>`read:project-role:jira`<br>`read:project:jira`<br>`read:user:jira`
+`issue_worklogs` | `read:jira-work` | `read:avatar:jira`<br>`read:group:jira`<br>`read:issue-worklog.property:jira`<br>`read:issue-worklog:jira`<br>`read:project-role:jira`<br>`read:user:jira`
+`components` | `read:jira-work` | `read:application-role:jira`<br>`read:avatar:jira`<br>`read:group:jira`<br>`read:project.component:jira`<br>`read:project:jira`<br>`read:user:jira`
+
+
 #### Cloud ID (Optional)
 
 For OAuth2.0 or granular access tokens, you need to use Atlassian's cloud-based API URLs instead of your domain. When provided, `cloud_id` changes the API URL structure from `https://{domain}/rest/api/3` to `https://api.atlassian.com/ex/jira/{cloud_id}/rest/api/3`. Authentication still uses your Basic Auth credentials.
