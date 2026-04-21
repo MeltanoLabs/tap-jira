@@ -1664,7 +1664,15 @@ class IssueStream(JiraStream[str]):
                     ),
                 ),
                 Property("timetracking", ObjectType(additional_properties=True)),
-                Property("security", StringType),
+                Property(
+                    "security",
+                    ObjectType(
+                        Property("self", StringType),
+                        Property("id", StringType),
+                        Property("description", StringType),
+                        Property("name", StringType),
+                    ),
+                ),
                 Property("aggregatetimeestimate", IntegerType),
                 Property(
                     "attachment",
