@@ -1,0 +1,11 @@
+[pytest]
+addopts = ["-ra"]
+filterwarnings = [
+  "error",
+  'once:`RESTStream.get_next_page_token` is deprecated:DeprecationWarning',
+  "once:Fields in transformed catalog but not in records:UserWarning",
+]
+log_level = "INFO"
+minversion = "9"
+strict = true
+testpaths = ["tests"]
