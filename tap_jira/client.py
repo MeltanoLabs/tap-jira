@@ -61,6 +61,21 @@ class JiraStream(RESTStream[_TNextPageToken]):
         )
 
     @override
+    @property
+    def http_headers(self) -> dict[str, str]:
+        """Force English-language responses from the Jira Cloud API.
+
+        Without this, error messages (e.g. "The board does not support
+        sprints") are localized to the API user's profile language, which
+        breaks string-matching in ``validate_response`` overrides.
+        See https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/#special-request-headers
+        """
+        headers: dict[str, str] = super().http_headers
+        headers["Accept-Language"] = "en"
+        headers["X-Force-Accept-Language"] = "true"
+        return headers
+
+    @override
     def get_records(self, context: Context | None) -> Iterable[dict[str, Any]]:
         try:
             yield from super().get_records(context)
