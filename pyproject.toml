@@ -27,7 +27,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-s3 = ["s3fs>=2026.1.0"]
+s3 = ["s3fs>=2026.4.0"]
 
 [project.scripts]
 tap-jira = "tap_jira.tap:TapJira.cli"
