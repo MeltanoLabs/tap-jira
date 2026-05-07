@@ -44,7 +44,7 @@ plugins:
       description: A JQL query to filter issues
     - name: include_audit_logs
       kind: boolean
-      value: true
+      value: false
       description: Include the audit logs stream
 environments:
 - name: dev
