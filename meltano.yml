@@ -42,6 +42,10 @@ plugins:
     - name: stream_options.issues.jql
       kind: string
       description: A JQL query to filter issues
+    - name: include_audit_logs
+      kind: boolean
+      value: true
+      description: Include the audit logs stream
 environments:
 - name: dev
 - name: staging
