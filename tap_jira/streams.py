@@ -5,7 +5,7 @@ from __future__ import annotations
 import functools
 import operator
 import sys
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any
 
@@ -2757,6 +2757,47 @@ class AuditingStream(JiraStartAtPaginatedStream):
     replication_method = "INCREMENTAL"
     records_jsonpath = "$[records][*]"  # Or override `parse_response`.
     instance_name = "records"
+
+    @override
+    def get_records(self, context: Context | None) -> Iterable[dict[str, Any]]:
+        """Yield records in 20-day batches, defaulting to 1 year ago if no start_date."""
+        today = date.today()
+        state_value = self.get_starting_replication_key_value(context)
+        start_date_str = self.config.get("start_date")
+        end_date_str = self.config.get("end_date")
+
+        current = (
+            date.fromisoformat(str(state_value)[:10])
+            if state_value
+            else date.fromisoformat(start_date_str[:10])
+            if start_date_str
+            else today.replace(year=today.year - 1)
+        )
+        end = date.fromisoformat(end_date_str[:10]) if end_date_str else today
+
+        while current < end:
+            batch_end = min(current + timedelta(days=20), end)
+            self._batch_from = current.isoformat()
+            self._batch_to = batch_end.isoformat()
+            yield from super().get_records(context)
+            current = batch_end
+
+        self._batch_from = None
+        self._batch_to = None
+
+    @override
+    def get_url_params(
+        self,
+        context: Context | None,
+        next_page_token: int | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization."""
+        params = super().get_url_params(context, next_page_token)
+        if getattr(self, "_batch_from", None):
+            params["from"] = self._batch_from
+        if getattr(self, "_batch_to", None):
+            params["to"] = self._batch_to
+        return params
 
     schema = PropertiesList(
         Property("id", IntegerType),
