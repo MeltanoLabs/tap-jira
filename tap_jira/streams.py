@@ -2758,10 +2758,18 @@ class AuditingStream(JiraStartAtPaginatedStream):
     records_jsonpath = "$[records][*]"  # Or override `parse_response`.
     instance_name = "records"
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the stream."""
+        super().__init__(*args, **kwargs)
+        self._batch_range: tuple[str, str] | None = None
+
     @override
     def get_records(self, context: Context | None) -> Iterable[dict[str, Any]]:
-        """Yield records in 20-day batches, defaulting to 1 year ago if no start_date."""
-        today = date.today()
+        """Yield records in 20-day batches.
+
+        Defaults to 1 year ago if no start_date.
+        """
+        today = date.today()  # noqa: DTZ011
         state_value = self.get_starting_replication_key_value(context)
         start_date_str = self.config.get("start_date")
         end_date_str = self.config.get("end_date")
@@ -2776,14 +2784,13 @@ class AuditingStream(JiraStartAtPaginatedStream):
         end = date.fromisoformat(end_date_str[:10]) if end_date_str else today
 
         while current < end:
-            batch_end = min(current + timedelta(days=20), end)
-            self._batch_from = current.isoformat()
-            self._batch_to = batch_end.isoformat()
+            self._batch_range = (
+                current.isoformat(),
+                min(current + timedelta(days=20), end).isoformat(),
+            )
             yield from super().get_records(context)
-            current = batch_end
 
-        self._batch_from = None
-        self._batch_to = None
+        self._batch_range = None
 
     @override
     def get_url_params(
@@ -2793,10 +2800,9 @@ class AuditingStream(JiraStartAtPaginatedStream):
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization."""
         params = super().get_url_params(context, next_page_token)
-        if getattr(self, "_batch_from", None):
-            params["from"] = self._batch_from
-        if getattr(self, "_batch_to", None):
-            params["to"] = self._batch_to
+        if self._batch_range:
+            params["from"] = self._batch_range[0]
+            params["to"] = self._batch_range[1]
         return params
 
     schema = PropertiesList(
