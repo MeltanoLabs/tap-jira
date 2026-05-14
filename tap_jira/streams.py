@@ -2775,8 +2775,8 @@ class AuditingStream(JiraStream[int]):
         if next_page_token:
             params["offset"] = next_page_token
 
-        if start_date := self.get_starting_timestamp(context):
-            params["from"] = start_date.isoformat()
+        if start_date := self.get_starting_replication_key_value(context):
+            params["from"] = start_date
 
         return params
 
