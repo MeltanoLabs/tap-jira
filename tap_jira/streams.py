@@ -5,12 +5,12 @@ from __future__ import annotations
 import functools
 import operator
 import sys
-from datetime import date, datetime, timedelta
+from datetime import datetime
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
-from singer_sdk.pagination import JSONPathPaginator
+from singer_sdk.pagination import BaseOffsetPaginator, JSONPathPaginator
 
 from tap_jira.client import JiraStartAtPaginatedStream, JiraStream, ResumableAPIError
 
@@ -2737,7 +2737,7 @@ class ProjectRoleActorStream(JiraStartAtPaginatedStream):
         )
 
 
-class AuditingStream(JiraStartAtPaginatedStream):
+class AuditingStream(JiraStream[int]):
     """Auditing stream.
 
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-audit-records/#api-rest-api-3-auditing-record-get
@@ -2756,41 +2756,13 @@ class AuditingStream(JiraStartAtPaginatedStream):
     replication_key = "created"
     replication_method = "INCREMENTAL"
     records_jsonpath = "$[records][*]"  # Or override `parse_response`.
-    instance_name = "records"
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the stream."""
-        super().__init__(*args, **kwargs)
-        self._batch_range: tuple[str, str] | None = None
+    _page_size: int = 1000
 
     @override
-    def get_records(self, context: Context | None) -> Iterable[dict[str, Any]]:
-        """Yield records in 20-day batches.
-
-        Defaults to 1 year ago if no start_date.
-        """
-        today = date.today()  # noqa: DTZ011
-        state_value = self.get_starting_replication_key_value(context)
-        start_date_str = self.config.get("start_date")
-        end_date_str = self.config.get("end_date")
-
-        current = (
-            date.fromisoformat(str(state_value)[:10])
-            if state_value
-            else date.fromisoformat(start_date_str[:10])
-            if start_date_str
-            else today.replace(year=today.year - 1)
-        )
-        end = date.fromisoformat(end_date_str[:10]) if end_date_str else today
-
-        while current < end:
-            self._batch_range = (
-                current.isoformat(),
-                min(current + timedelta(days=20), end).isoformat(),
-            )
-            yield from super().get_records(context)
-
-        self._batch_range = None
+    def get_new_paginator(self) -> BaseOffsetPaginator:
+        """Return a new paginator for this stream."""
+        return BaseOffsetPaginator(start_value=0, page_size=self._page_size)
 
     @override
     def get_url_params(
@@ -2799,10 +2771,13 @@ class AuditingStream(JiraStartAtPaginatedStream):
         next_page_token: int | None,
     ) -> dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization."""
-        params = super().get_url_params(context, next_page_token)
-        if self._batch_range:
-            params["from"] = self._batch_range[0]
-            params["to"] = self._batch_range[1]
+        params: dict[str, Any] = {"limit": self._page_size}
+        if next_page_token:
+            params["offset"] = next_page_token
+
+        if start_date := self.get_starting_timestamp(context):
+            params["from"] = start_date.isoformat()
+
         return params
 
     schema = PropertiesList(
