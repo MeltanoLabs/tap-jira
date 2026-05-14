@@ -10,7 +10,7 @@ from http import HTTPStatus
 from typing import TYPE_CHECKING, Any
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
-from singer_sdk.pagination import JSONPathPaginator
+from singer_sdk.pagination import BaseOffsetPaginator, JSONPathPaginator
 
 from tap_jira.client import JiraStartAtPaginatedStream, JiraStream, ResumableAPIError
 
@@ -2737,7 +2737,7 @@ class ProjectRoleActorStream(JiraStartAtPaginatedStream):
         )
 
 
-class AuditingStream(JiraStartAtPaginatedStream):
+class AuditingStream(JiraStream[int]):
     """Auditing stream.
 
     https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-audit-records/#api-rest-api-3-auditing-record-get
@@ -2756,7 +2756,29 @@ class AuditingStream(JiraStartAtPaginatedStream):
     replication_key = "created"
     replication_method = "INCREMENTAL"
     records_jsonpath = "$[records][*]"  # Or override `parse_response`.
-    instance_name = "records"
+
+    _page_size: int = 1000
+
+    @override
+    def get_new_paginator(self) -> BaseOffsetPaginator:
+        """Return a new paginator for this stream."""
+        return BaseOffsetPaginator(start_value=0, page_size=self._page_size)
+
+    @override
+    def get_url_params(
+        self,
+        context: Context | None,
+        next_page_token: int | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization."""
+        params: dict[str, Any] = {"limit": self._page_size}
+        if next_page_token:
+            params["offset"] = next_page_token
+
+        if start_date := self.get_starting_replication_key_value(context):
+            params["from"] = start_date
+
+        return params
 
     schema = PropertiesList(
         Property("id", IntegerType),
