@@ -847,7 +847,7 @@ class IssueStream(JiraStream[str]):
                 ),
                 Property("issuerestriction", ObjectType(additional_properties=True)),
                 Property("lastViewed", StringType),
-                Property("created", StringType),
+                Property("created", DateTimeType),
                 Property(
                     "priority",
                     ObjectType(
@@ -1052,7 +1052,7 @@ class IssueStream(JiraStream[str]):
                         Property("emailAddress", StringType),
                     ),
                 ),
-                Property("updated", StringType),
+                Property("updated", DateTimeType),
                 Property(
                     "status",
                     ObjectType(
@@ -2783,7 +2783,7 @@ class AuditingStream(JiraStream[int]):
     schema = PropertiesList(
         Property("id", IntegerType),
         Property("summary", StringType),
-        Property("created", StringType),
+        Property("created", DateTimeType),
         Property("category", StringType),
         Property("eventSource", StringType),
         Property("remoteAddress", StringType),

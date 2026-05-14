@@ -13,6 +13,7 @@ plugins:
     - discover
     - about
     - stream-maps
+    - structured-logging
     settings_group_validation:
     - [domain, api_token, email]
     settings:
