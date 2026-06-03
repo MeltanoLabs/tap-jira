@@ -10,7 +10,7 @@ from http import HTTPStatus
 from typing import TYPE_CHECKING, Any
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
-from singer_sdk.pagination import BaseOffsetPaginator, JSONPathPaginator
+from singer_sdk.pagination import JSONPathPaginator, OffsetPaginator
 
 from tap_jira.client import JiraStartAtPaginatedStream, JiraStream, ResumableAPIError
 
@@ -221,7 +221,7 @@ class CustomFieldContextStream(JiraStartAtPaginatedStream):
     primary_keys = ("id",)
     records_jsonpath = "$[values][*]"  # Or override `parse_response`.
     instance_name = "values"
-    state_partitioning_keys = ("fieldId",)  # type: ignore[assignment]
+    state_partitioning_keys = ("fieldId",)
 
     schema = th.PropertiesList(
         th.Property("fieldId", th.StringType),
@@ -2760,9 +2760,9 @@ class AuditingStream(JiraStream[int]):
     _page_size: int = 1000
 
     @override
-    def get_new_paginator(self) -> BaseOffsetPaginator:
+    def get_new_paginator(self) -> OffsetPaginator:
         """Return a new paginator for this stream."""
-        return BaseOffsetPaginator(start_value=0, page_size=self._page_size)
+        return OffsetPaginator(start_value=0, page_size=self._page_size)
 
     @override
     def get_url_params(
@@ -3318,7 +3318,7 @@ class IssueWatchersStream(JiraStartAtPaginatedStream):
     name = "issue_watchers"
     path = "/issue/{issue_id}/watchers"
     parent_stream_type = IssueStream
-    state_partitioning_keys = ()  # type: ignore[assignment]
+    state_partitioning_keys = ()
     primary_keys = ("accountId",)
     records_jsonpath = "$[watchers][*]"
     instance_name = ""
@@ -3358,7 +3358,7 @@ class IssueChangeLogStream(JiraStartAtPaginatedStream):
 
     parent_stream_type = IssueStream
 
-    state_partitioning_keys = ()  # type: ignore[assignment]
+    state_partitioning_keys = ()
 
     path = "/issue/{issue_id}/changelog"
 
@@ -3418,7 +3418,7 @@ class IssueComments(JiraStartAtPaginatedStream):
 
     parent_stream_type = IssueStream
 
-    state_partitioning_keys = ()  # type: ignore[assignment]
+    state_partitioning_keys = ()
 
     path = "/issue/{issue_id}/comment"
 
@@ -3484,7 +3484,7 @@ class IssueWorklogs(JiraStartAtPaginatedStream):
 
     parent_stream_type = IssueStream
 
-    state_partitioning_keys = ()  # type: ignore[assignment]
+    state_partitioning_keys = ()
 
     path = "/issue/{issue_id}/worklog"
 
