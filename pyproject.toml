@@ -43,10 +43,10 @@ tap-jira = "tap_jira.tap:TapJira.cli"
 [dependency-groups]
 dev = [
   "mypy>=1.20.2",
-  "pytest>=9.0.3",
-  "ruff>=0.15.12",
+  "pytest>=9.1.1",
+  "ruff>=0.15.20",
   "singer-sdk[testing]",
-  "ty>=0.0.42",
+  "ty>=0.0.55",
   "types-requests>=2.33.0.20260408",
 ]
 
