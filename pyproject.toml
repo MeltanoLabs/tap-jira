@@ -36,7 +36,7 @@ name = "Ethan Stein"
 name = "MeltanoLabs"
 email = "hello@meltano.com"
 [project.optional-dependencies]
-s3 = [ "s3fs>=2026.4" ]
+s3 = [ "s3fs>=2026.6.0" ]
 [project.scripts]
 tap-jira = "tap_jira.tap:TapJira.cli"
 
