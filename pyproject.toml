@@ -58,15 +58,18 @@ source = "vcs"
 line-length = 88
 [tool.ruff.lint]
 select = [ "ALL" ]
+ignore = [
+  "CPY001", # missing-copyright-notice
+]
 [tool.ruff.lint.flake8-annotations]
 allow-star-arg-any = true
 [tool.ruff.lint.isort]
 known-first-party = [ "tap_jira" ]
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = [
-  "D",    # pydocstyle
-  "S101", # assert
-  "S105", # hardcoded-password-string
+  "D",      # pydocstyle
+  "S101",   # assert
+  "S105",   # hardcoded-password-string
 ]
 [tool.ruff.lint.pydocstyle]
 convention = "google"
