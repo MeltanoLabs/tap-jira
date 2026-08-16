@@ -56,3 +56,34 @@ def test_get_url_params_jql_start_and_end_date() -> None:
         "(created<'2026-02-01 00:00' or updated<'2026-02-01 00:00') and (id != null) "
         "order by updated asc"
     )
+
+
+def test_get_url_params_expand_not_set() -> None:
+    tap = TapJira(
+        config={
+            "domain": "test.atlassian.net",
+            "email": "test@example.com",
+            "api_token": "test-token",
+        },
+    )
+
+    stream = IssueStream(tap)
+    params = stream.get_url_params(context=None, next_page_token=None)
+
+    assert "expand" not in params
+
+
+def test_get_url_params_expand() -> None:
+    tap = TapJira(
+        config={
+            "domain": "test.atlassian.net",
+            "email": "test@example.com",
+            "api_token": "test-token",
+            "stream_options": {"issues": {"expand": "renderedFields"}},
+        },
+    )
+
+    stream = IssueStream(tap)
+    params = stream.get_url_params(context=None, next_page_token=None)
+
+    assert params["expand"] == "renderedFields"
