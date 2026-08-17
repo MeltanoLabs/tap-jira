@@ -99,9 +99,34 @@ class TapJira(Tap):
                             title="Fields",
                             default="*all",
                         ),
+                        th.Property(
+                            "expand",
+                            th.StringType,
+                            description=(
+                                "A comma-separated list of entities to expand, "
+                                "e.g. renderedFields"
+                            ),
+                            title="Expand",
+                        ),
                     ),
                     title="Issues Stream Options",
                     description="Options specific to the issues stream",
+                ),
+                th.Property(
+                    "issue_comments",
+                    th.ObjectType(
+                        th.Property(
+                            "expand",
+                            th.StringType,
+                            description=(
+                                "A comma-separated list of entities to expand, "
+                                "e.g. renderedBody"
+                            ),
+                            title="Expand",
+                        ),
+                    ),
+                    title="Issue Comments Stream Options",
+                    description="Options specific to the issue comments stream",
                 ),
             ),
             description="Options for individual streams",
