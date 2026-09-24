@@ -40,6 +40,18 @@ class TapJira(Tap):
             description="Latest record date to sync",
         ),
         th.Property(
+            "timezone",
+            th.StringType,
+            description=(
+                "IANA timezone name used to render date literals in JQL queries, "
+                "e.g. Europe/Amsterdam. Jira evaluates JQL date literals in the "
+                "timezone of the authenticated user, so this should match the "
+                "timezone configured in that user's Jira profile."
+            ),
+            title="Timezone",
+            default="UTC",
+        ),
+        th.Property(
             "domain",
             th.StringType,
             description="The Domain for your Jira account, e.g. meltano.atlassian.net",

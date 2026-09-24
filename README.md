@@ -27,6 +27,7 @@ Built with the [Meltano Singer SDK](https://sdk.meltano.com).
 |:-----------------------------|:---------|:-----------|:---------------------------------------------------------------------------------|
 | start_date                   | False    | None       | Earliest record date to sync                                                     |
 | end_date                     | False    | None       | Latest record date to sync                                                       |
+| timezone                     | False    | UTC        | IANA timezone name used to render date literals in JQL queries, e.g. Europe/Amsterdam. Should match the timezone of the authenticated Jira user. |
 | domain                       | True     | None       | The Domain for your Jira account, e.g. mycompany.atlassian.net                     |
 | api_token                    | True     | None       | Jira API Token.                                                                  |
 | email                        | True     | None       | The user email for your Jira account.                                            |

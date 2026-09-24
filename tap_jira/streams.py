@@ -5,9 +5,10 @@ from __future__ import annotations
 import functools
 import operator
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any
+from zoneinfo import ZoneInfo
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
 from singer_sdk.pagination import JSONPathPaginator, OffsetPaginator
@@ -1847,6 +1848,18 @@ class IssueStream(JiraStream[str]):
         """Return a new paginator for this stream."""
         return JSONPathPaginator(jsonpath=self.next_page_token_jsonpath)
 
+    def _format_jql_datetime(self, value: datetime) -> str:
+        """Format a datetime as a JQL date literal.
+
+        Jira evaluates JQL date literals in the timezone of the authenticated
+        user, so values are converted to the configured timezone first. Naive
+        values are assumed to be UTC.
+        """
+        tz = ZoneInfo(self.config.get("timezone") or "UTC")
+        if value.tzinfo is None:
+            value = value.replace(tzinfo=timezone.utc)
+        return value.astimezone(tz).strftime("%Y-%m-%d %H:%M")
+
     @override
     def get_url_params(
         self,
@@ -1869,13 +1882,13 @@ class IssueStream(JiraStream[str]):
             params["nextPageToken"] = next_page_token
 
         if start_date := self.get_starting_timestamp(context):
-            start_date_fmt = start_date.strftime("%Y-%m-%d %H:%M")
+            start_date_fmt = self._format_jql_datetime(start_date)
 
             jql.append(f"(created>='{start_date_fmt}' or updated>='{start_date_fmt}')")
 
         if "end_date" in self.config:
             end_date = datetime.fromisoformat(self.config["end_date"])
-            end_date_fmt = end_date.strftime("%Y-%m-%d %H:%M")
+            end_date_fmt = self._format_jql_datetime(end_date)
 
             jql.append(f"(created<'{end_date_fmt}' or updated<'{end_date_fmt}')")
 
