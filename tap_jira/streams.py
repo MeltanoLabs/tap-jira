@@ -1840,6 +1840,7 @@ class IssueStream(JiraStream[str]):
         ),
         Property("created", DateTimeType),
         Property("updated", DateTimeType),
+        Property("renderedFields", ObjectType(additional_properties=True)),
     ).to_dict()
 
     @override
@@ -1862,6 +1863,11 @@ class IssueStream(JiraStream[str]):
             .get("issues", {})
             .get("fields", "*all")
         )
+
+        if expand := (
+            self.config.get("stream_options", {}).get("issues", {}).get("expand")
+        ):
+            params["expand"] = expand
 
         jql: list[str] = []
 
@@ -3455,7 +3461,27 @@ class IssueComments(JiraStartAtPaginatedStream):
                 Property("active", BooleanType),
             ),
         ),
+        Property("renderedBody", StringType),
+        Property("jsdPublic", BooleanType),
     ).to_dict()
+
+    @override
+    def get_url_params(
+        self,
+        context: Context | None,
+        next_page_token: int | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization."""
+        params = super().get_url_params(context, next_page_token)
+
+        if expand := (
+            self.config.get("stream_options", {})
+            .get("issue_comments", {})
+            .get("expand")
+        ):
+            params["expand"] = expand
+
+        return params
 
     @override
     def post_process(self, row: Record, context: Context | None = None) -> Record:

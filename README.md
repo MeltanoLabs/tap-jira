@@ -37,6 +37,9 @@ Built with the [Meltano Singer SDK](https://sdk.meltano.com).
 | stream_options.issues        | False    | None       | Options specific to the issues stream                                            |
 | stream_options.issues.jql    | False    | id != null | A JQL query to filter issues                                                     |
 | stream_options.issues.fields | False    | *all       | A comma-separated list of fields to include. All fields are included by default. |
+| stream_options.issues.expand | False    | None       | A comma-separated list of entities to expand for issues, e.g. `renderedFields`.  |
+| stream_options.issue_comments | False   | None       | Options specific to the issue comments stream                                    |
+| stream_options.issue_comments.expand | False | None  | A comma-separated list of entities to expand for comments, e.g. `renderedBody`.  |
 | include_audit_logs           | False    | False      | Include the audit logs stream                                                    |
 
 ### Built-in capabilities
