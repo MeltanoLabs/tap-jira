@@ -56,3 +56,31 @@ def test_get_url_params_jql_start_and_end_date() -> None:
         "(created<'2026-02-01 00:00' or updated<'2026-02-01 00:00') and (id != null) "
         "order by updated asc"
     )
+
+
+def test_get_url_params_jql_timezone() -> None:
+    tap = TapJira(
+        config={
+            "domain": "test.atlassian.net",
+            "email": "test@example.com",
+            "api_token": "test-token",
+            "timezone": "Europe/Amsterdam",
+            "end_date": "2026-02-01T00:00:00",
+        },
+        state={
+            "bookmarks": {
+                "issues": {
+                    "starting_replication_value": "2026-01-01T12:34:56",
+                },
+            },
+        },
+    )
+
+    stream = IssueStream(tap)
+    params = stream.get_url_params(context=None, next_page_token=None)
+
+    assert params["jql"] == (
+        "(created>='2026-01-01 13:34' or updated>='2026-01-01 13:34') and "
+        "(created<'2026-02-01 01:00' or updated<'2026-02-01 01:00') and (id != null) "
+        "order by updated asc"
+    )
